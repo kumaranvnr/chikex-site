@@ -1,0 +1,180 @@
+<app-header></app-header>
+
+<!-- Page Title-->
+<div class="page-title-overlap bg-dark pt-4">
+  <div class="container d-lg-flex justify-content-between py-2 py-lg-3">
+    <div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
+          <li class="breadcrumb-item"><a class="text-nowrap" routerLink="/fashion-store-v1"><i
+                class="ci-home"></i>Home</a></li>
+          <li class="breadcrumb-item text-nowrap"><a href="javascript:void(0);">Account</a>
+          </li>
+          <li class="breadcrumb-item text-nowrap active" aria-current="p
+            age">Addresses</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="order-lg-1 pe-lg-4 text-center text-lg-start">
+      <h1 class="h3 text-light mb-0">My addresses</h1>
+    </div>
+  </div>
+</div>
+<div class="container pb-5 mb-2 mb-md-4 d-flex flex-column">
+  <div class="row ">
+    <!-- Sidebar-->
+    <aside class="col-lg-4 pt-4 pt-lg-0 pe-xl-5">
+      <app-account-sidebar></app-account-sidebar>
+    </aside>
+
+
+    <!-- Content  -->
+    <section class="col-lg-8">
+      <!-- Toolbar-->
+      <div class="d-none d-lg-flex justify-content-between align-items-center pt-lg-3 pb-4 pb-lg-5 mb-lg-3">
+        <h6 class="fs-base text-light mb-0">List of your registered addresses:</h6>
+        <!-- <a class="btn btn-primary btn-sm"
+          routerLink="/account/signin"><i class="ci-sign-out me-2"></i>Sign out</a> -->
+      </div>
+      <!-- Addresses list-->
+      <div class="table-responsive fs-md">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Address</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of tables$ | async;let i=index">
+              <td class="py-3 align-middle">{{data.given_name}} {{data.street1}}, {{data.street2}}, {{data.city}}
+                {{data.emirate}}, {{data.mobile}}</td>
+              <td class="py-3 align-middle">
+                <a class="nav-link-style me-2" href="javascript:void(0);" data-bs-toggle="tooltip" title="Edit"
+                  (click)="editModal(content,i)"><i class="ci-edit"></i></a>
+                <a class="nav-link-style text-danger" href="javascript:void(0);" data-bs-toggle="tooltip" title="Remove"
+                  (click)="removeData($event,data._id)">
+                  <div class="ci-trash"></div>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Pagination-->
+      <!--   <nav class="d-flex justify-content-between pt-2" aria-label="Page navigation">
+        <ul class="pagination"></ul>
+        <ul class="pagination">
+          <ngb-pagination [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
+          </ngb-pagination>
+        </ul>
+        <ul class="pagination"></ul>
+      </nav> -->
+      <div class="text-sm-end pt-4"><a class="btn btn-primary" href="javascript:void(0);" data-bs-toggle="modal"
+          (click)="OpenModal(content)">Add new address</a></div>
+    </section>
+  </div>
+</div>
+
+<!-- Footer-->
+<app-footer></app-footer>
+
+<!--Modal-->
+<ng-template #content let-modal>
+  <div class="modal-content">
+    <form (ngSubmit)="saveUser()" [formGroup]="userForm">
+      <input type="hidden" name="id" value="" formControlName="_id" />
+      <div class="modal-header">
+        <div *ngIf="!this.userForm.value._id">
+          <h5 class="modal-title">Add a new address</h5>
+        </div>
+        <div *ngIf="this.userForm.value._id">
+          <h5 class="modal-title">Update address</h5>
+        </div>
+
+
+        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
+          (click)="modal.dismiss('Cross click')"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row gx-4 gy-3">
+          <div class="col-sm-6">
+            <label class="form-label" for="address-fn">First name</label>
+            <input class="form-control" type="text" id="address-fn" required formControlName="given_name"
+              [ngClass]="{'is-invalid': submitted && form['given_name'].errors}">
+            <div class="invalid-feedback">Please fill in you first name!</div>
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label" for="address-ln">Last name</label>
+            <input class="form-control" type="text" id="address-ln" required formControlName="family_name"
+              [ngClass]="{'is-invalid': submitted && form['family_name'].errors}">
+            <div class="invalid-feedback">Please fill in you last name!</div>
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label" for="address-company">Shop No/Plot No/Building No</label>
+            <input class="form-control" type="text" id="address-city" required formControlName="street1"
+              [ngClass]="{'is-invalid': submitted && form['street1'].errors}">
+            <div class="invalid-feedback">Please fill in your Shop No/Plot No/Building No!</div>
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label" for="address-company">Street</label>
+            <input class="form-control" type="text" id="address-city" required formControlName="street2"
+              [ngClass]="{'is-invalid': submitted && form['street2'].errors}">
+            <div class="invalid-feedback">Please fill in your Street!</div>
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label" for="address-country">LandMark</label>
+            <input class="form-control" type="text" id="address-city" required formControlName="landmark"
+              [ngClass]="{'is-invalid': submitted && form['landmark'].errors}">
+            <div class="invalid-feedback">Please fill in your LandMark!</div>
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label" for="address-city">Area/City</label>
+            <input class="form-control" type="text" id="address-city" required formControlName="city"
+              [ngClass]="{'is-invalid': submitted && form['city'].errors}">
+            <div class="invalid-feedback">Please fill in your city!</div>
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label" for="address-line1">Emirate</label>
+            <select class="form-select" id="address-country" required formControlName="emirate"
+              [ngClass]="{'is-invalid': submitted && form['emirate'].errors}">
+              <option value>Select emirate</option>
+              <option value="AJMAN">AJMAN</option>
+              <option value="SHARJAH">SHARJAH</option>
+              <option value="ABU DHABI">ABU DHABI</option>
+              <option value="DUBAI">DUBAI</option>
+              <option value="FUJAIRAH">FUJAIRAH</option>
+              <option value="RAS AL KHAIMAH">RAS AL KHAIMAH</option>
+              <option value="UMM AL QAIWAIN">UMM AL QAIWAIN</option>
+            </select>
+            <div class="invalid-feedback">Please select your emirate!</div>
+
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label" for="address-line2">Mobile</label>
+            <input class="form-control" type="text" id="address-line2" formControlName="mobile"
+              [ngClass]="{'is-invalid': submitted && form['mobile'].errors}">
+          </div>
+
+          <div class="col-12">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="address-primary" formControlName="primary">
+              <label class="form-check-label" for="address-primary">Make this address primary</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"
+          (click)="userAddressClose()">Close</button>
+
+        <div *ngIf="!this.userForm.value._id">
+          <button class="btn btn-primary btn-shadow" type="submit">Add address</button>
+        </div>
+        <div *ngIf="this.userForm.value._id">
+          <button class="btn btn-primary btn-shadow" type="submit">Update address</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

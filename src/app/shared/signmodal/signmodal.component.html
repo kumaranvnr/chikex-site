@@ -1,0 +1,106 @@
+<!-- Sign in / sign up modal-->
+<!-- <ng-template role="document" let-modal> -->
+<div class="modal-content">
+  <div class="modal-header bg-secondary">
+    <ul ngbNav #nav="ngbNav" [activeId]="1" class="nav nav-tabs card-header-tabs" role="tablist">
+      <li class="nav-item" [ngbNavItem]="1">
+        <a ngbNavLink class="nav-link fw-medium" href="javascript:void(0);" data-bs-toggle="tab" role="tab"
+          aria-selected="true"><i class="ci-unlocked me-2 mt-n1"></i>Sign in</a>
+        <ng-template ngbNavContent>
+
+          <form (ngSubmit)="signin()" [formGroup]="signinformData" class="needs-validation tab-pane fade show"
+            id="signin-tab">
+            <div class="mb-3">
+              <label class="form-label" for="si-email">Email address</label>
+              <input class="form-control" type="email" id="si-email" placeholder="johndoe@example.com"
+                formControlName="email" [ngClass]="{ 'is-invalid': submitted && form['email'].errors }">
+              <div *ngIf="submitted && form['email'].errors" class="invalid-feedback">
+                <span *ngIf="form['email'].errors['required']">Please provide a valid email address.</span>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="si-password">Password</label>
+              <div class="password-toggle">
+                <input class="form-control" [type]="fieldTextType ? 'text' : 'password'" id="si-password"
+                  formControlName="password" [ngClass]="{ 'is-invalid': submitted && form['password'].errors }">
+                <div *ngIf="submitted && form['password'].errors" class="invalid-feedback">
+                  <span *ngIf="form['password'].errors['required']">Please provide a valid password.</span>
+                </div>
+                <label class="password-toggle-btn" aria-label="Show/hide password">
+                  <!-- <i class="mdi mdi-eye"></i> -->
+                  <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"
+                    [ngClass]="fieldTextType ? 'mdi-eye-off-outline':'mdi-eye-off-outline'"
+                    (click)="toggleFieldTextType()"></span>
+                </label>
+              </div>
+
+            </div>
+            <div class="mb-3 d-flex flex-wrap justify-content-between">
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="si-remember">
+                <label class="form-check-label" for="si-remember">Remember me</label>
+              </div><a class="fs-sm" href="javascript:void(0);">Forgot password?</a>
+            </div>
+            <button class="btn btn-primary btn-shadow d-block w-100" type="submit">Sign in</button>
+          </form>
+        </ng-template>
+      </li>
+      <li class="nav-item" [ngbNavItem]="2">
+        <a ngbNavLink class="nav-link fw-medium" href="javascript:void(0);" data-bs-toggle="tab" role="tab"
+          aria-selected="false"><i class="ci-user me-2 mt-n1"></i>Sign up</a>
+
+        <ng-template ngbNavContent>
+          <form (ngSubmit)="signup()" [formGroup]="signupformData" class="needs-validation tab-pane fade show"
+            autocomplete="off" novalidate id="signup-tab">
+            <div class="mb-3">
+              <label class="form-label" for="su-name">Full name</label>
+              <input class="form-control" type="text" id="su-name" placeholder="John Doe" formControlName="user_name"
+                [ngClass]="{ 'is-invalid': signupsubmit && signupform['user_name'].errors }">
+              <div *ngIf="signupsubmit && signupform['user_name'].errors" class="invalid-feedback">
+                <span *ngIf="signupform['user_name'].errors['required']">Please fill in your name.</span>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="su-email">Email address</label>
+              <!-- <input class="form-control" type="email" id="su-email" placeholder="johndoe@example.com" required> -->
+              <input class="form-control" type="email" id="si-email" placeholder="johndoe@example.com"
+                formControlName="email" [ngClass]="{ 'is-invalid': signupsubmit && signupform['email'].errors }"
+                required>
+              <div *ngIf="signupsubmit && signupform['email'].errors" class="invalid-feedback">
+                <span *ngIf="signupform['email'].errors['required']">Please provide a valid email address.</span>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="su-password">Password</label>
+              <div class="password-toggle">
+                <input class="form-control" [type]="signupPassfield ? 'text' : 'password'" id="su-password" required
+                  formControlName="password"
+                  [ngClass]="{ 'is-invalid': signupsubmit && signupform['password'].errors }">
+                <label class="password-toggle-btn" aria-label="Show/hide password">
+                  <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"
+                    [ngClass]="{'mdi-eye-off-outline': !signupPassfield, 'mdi-eye-outline': fieldTextType
+                    }" (click)="togglesignupPassfield()"></span>
+                </label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="su-password-confirm">Confirm password</label>
+              <div class="password-toggle">
+                <input class="form-control" type="password" id="su-password-confirm" required>
+                <label class="password-toggle-btn" aria-label="Show/hide password">
+                  <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                </label>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-shadow d-block w-100" type="submit">Sign up</button>
+          </form>
+        </ng-template>
+      </li>
+    </ul>
+    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" (click)="closemodal()"></button>
+  </div>
+  <div class="modal-body tab-content py-4">
+    <div [ngbNavOutlet]="nav"></div>
+  </div>
+</div>
+<!-- </ng-template> -->

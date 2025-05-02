@@ -1,0 +1,19 @@
+{
+  "MENUITEMS": {
+    "CUISINE": {
+      "TEXT": "KEUKEN",
+      "LIST": {
+        "Burgers&Fries": "Hamburgers & Friet",
+        "Noodles": "Noedels",
+        "Pizza&Pasta": "Pizza & Pasta",
+        "Grill&Steaks": "Grill & Steaks",
+        "Fish&Seafood": "Vis & Zeevruchten",
+        "HealthyFood": "Gezond eten",
+        "HauteCuisine": "Haute Cuisine",
+        "Chicken&Snaks": "Kip & Snacks",
+        "Coffee&Desserts": "Koffie & Desserts"
+      }
+    },
+    "BaACKTOMAINDEMO":"Terug naar hoofddemo"
+  }
+}

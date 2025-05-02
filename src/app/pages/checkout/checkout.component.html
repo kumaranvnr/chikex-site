@@ -1,0 +1,132 @@
+<app-header></app-header>
+
+<section class="bg-darker bg-size-cover bg-position-center py-5"
+    style="background-image: url(assets/img/food-delivery/restaurants/single/pt-bg.jpg);">
+    <div class="container py-md-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
+                <li class="breadcrumb-item"><a class="text-nowrap" routerLink="/"><i class="ci-home"></i>Home</a>
+                </li>
+                <li class="breadcrumb-item text-nowrap"><a href="/cart">Cart</a>
+                </li>
+            </ol>
+        </nav>
+        <h1 class="text-light text-center text-lg-start py-3">Order Confirmation</h1>
+    </div>
+</section>
+
+<div class="activation-area">
+    <div class="container pt-4 pb-3 py-sm-4">
+        <!--   <nav aria-label="breadcrumb">
+            <ol class="breadcrumb flex-lg-nowrap justify-content-center justify-content-lg-start">
+                <li class="breadcrumb-item"><a class="text-nowrap" routerLink="/"><i class="ci-home"></i>Home</a></li>
+                <li class="breadcrumb-item text-nowrap"><a href="/cart">Cart</a>
+                </li>
+                <li class="breadcrumb-item text-nowrap active" aria-current="page">Checkout</li>
+            </ol>
+        </nav> -->
+        <div class="rounded-3 shadow-lg mt-4 mb-5">
+            <ul class="nav nav-tabs nav-justified mb-sm-4">
+                <li class="nav-item"><a class="nav-link fs-lg fw-medium py-4" href="/cart">1. Your
+                        order</a></li>
+                <li class="nav-item"><a class="nav-link fs-lg fw-medium py-4 active" href="javascript:void(0)">2.
+                        Checkout</a></li>
+            </ul>
+            <form (ngSubmit)="completeorder()" [formGroup]="formData"
+                class="needs-validation px-3 px-sm-4 px-xl-5 pt-sm-1 pb-4 pb-sm-5">
+                <div class="row pb-4 pt-3">
+                    <div class="col-sm-6 mb-4">
+                        <label class="form-label" for="fd-name">Your name<sup class="text-danger ms-1">*</sup></label>
+                        <input class="form-control" type="text" required id="fd-name" formControlName="name"
+                            [ngClass]="{ 'is-invalid': submitted && form['name'].errors }">
+                        <div class="invalid-feedback">Please enter your name!</div>
+                    </div>
+                    <div class="col-sm-6 mb-4">
+                        <label class="form-label" for="fd-phone">Phone number<sup
+                                class="text-danger ms-1">*</sup></label>
+                        <input class="form-control" type="text" required id="fd-phone" formControlName="phone"
+                            [ngClass]="{ 'is-invalid': submitted && form['phone'].errors }">
+                        <div class="invalid-feedback">Please enter your phone number!</div>
+                    </div>
+                    <div class="col-sm-6 mb-4">
+                        <label class="form-label" for="fd-time">Delivery time<sup
+                                class="text-danger ms-1">*</sup></label>
+                        <input class="form-control" type="text" required id="fd-deliverytime"
+                            formControlName="delivery_time"
+                            [ngClass]="{ 'is-invalid': submitted && form['delivery_time'].errors }">
+                        <div class="invalid-feedback">Please enter your delivery time!</div>
+                    </div>
+                </div>
+                <h2 class="h5 pb-3">Delivery address</h2>
+                <div class="row mb-4">
+                    <div class="col-sm-6 mb-4">
+                        <label class="form-label" for="fd-city">City<sup class="text-danger ms-1">*</sup></label>
+                        <input class="form-control" type="text" required id="fd-city" formControlName="city"
+                            [ngClass]="{ 'is-invalid': submitted && form['city'].errors }">
+                        <div class="invalid-feedback">Please enter your delivery address!</div>
+                    </div>
+                    <div class="col-sm-6 mb-4">
+                        <label class="form-label" for="fd-address">Address<sup class="text-danger ms-1">*</sup></label>
+                        <input class="form-control" type="text" placeholder="Street, Apartment number or suite" required
+                            id="fd-address" formControlName="address"
+                            [ngClass]="{ 'is-invalid': submitted && form['address'].errors }">
+                        <div class="invalid-feedback">Please enter your address!</div>
+                    </div>
+                    <div class="col-12 mb-4">
+                        <label class="form-label mb-3" for="fd-comments"><span
+                                class="badge bg-info fs-xs me-2">Note</span>Additional comments</label>
+                        <textarea class="form-control" rows="5" id="fd-comments" formControlName="comments"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 mb-4 mb-sm-0">
+                        <h2 class="h5 pb-2">Cash on delivery</h2>
+                        <div class="form-check form-check-inline mb-3">
+                            <input class="form-check-input" type="radio" name="payment" checked id="cash">
+                            <label class="form-check-label" for="cash">Pay with cash to the courier</label>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <label class="form-label fw-normal text-nowrap me-3 mb-0" for="fd-change">I need change
+                                from</label>
+                            <div class="input-group flex-nowrap" style="width: 8rem;"><span class="input-group-text"><!-- <i
+                                        class="ci-dollar"></i> -->AED</span>
+                                <input class="form-control bg-none pe-3" type="text" id="fd-change"
+                                    formControlName="need_change_from">
+                            </div>
+                        </div>
+                        <h2 class="h5 mt-3 pt-4 pb-2">Online payment</h2>
+                        <div class="form-check form-check-inline pb-4">
+                            <input class="form-check-input" type="radio" name="payment" id="online">
+                            <label class="form-check-label" for="online">Pay with:&nbsp;&nbsp;&nbsp;<img
+                                    class="d-inline-block align-middle" src="assets/img/cards.png" style="width: 187px;"
+                                    alt="Cerdit Cards"></label>
+                        </div>
+                        <button class="btn btn-primary d-block w-100 mt-3" type="submit">Complete order</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="d-fle flex-column h-100 rounded-3 bg-secondary px-3 px-sm-4 py-4">
+                            <h2 class="h5 pb-3">Your total</h2>
+                            <div class="d-flex justify-content-between fs-md border-bottom pb-3 mb-3">
+                                <span>Subtotal:</span><span class="text-heading">AED
+                                    {{checkoutInfo?.price}}.<small>00</small></span>
+                            </div>
+                            <div *ngIf="checkoutInfo?.coupon_applied"
+                                class="d-flex justify-content-between fs-md border-bottom pb-3 mb-3">
+                                <span>Discount:</span><span class="text-heading">AED
+                                    {{checkoutInfo?.discount}}.<small>00</small></span>
+                            </div>
+                            <div class="d-flex justify-content-between fs-md border-bottom pb-3 mb-3">
+                                <span>Delivery Charges:</span><span class="text-heading">AED 0.<small>00</small></span>
+                            </div>
+                            <div class="d-flex justify-content-between fs-md mb-2"><span>Total:</span><span
+                                    class="text-heading fw-medium">AED
+                                    {{checkoutInfo?.total_price}}.<small>00</small></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<app-footer></app-footer>

@@ -1,0 +1,13 @@
+// Rating
+.star {
+    position: relative;
+    display: inline-block;
+    font-size: 18px;
+    color: #FEA569;
+}
+.half {
+    position: absolute;
+    display: inline-block;
+    overflow: hidden;
+    color: #FEA569;
+}

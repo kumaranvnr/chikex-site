@@ -1,0 +1,113 @@
+<app-header></app-header>
+<section class="bg-darker bg-size-cover bg-position-center py-5"
+  style="background-image: url(assets/img/food-delivery/restaurants/single/pt-bg.jpg);">
+  <div class="container py-md-4">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
+        <li class="breadcrumb-item"><a class="text-nowrap" routerLink="/"><i class="ci-home"></i>Home</a>
+        </li>
+        <li class="breadcrumb-item text-nowrap"><a href="/orders">Orders</a>
+        </li>
+      </ol>
+    </nav>
+    <h1 class="text-light text-center text-lg-start py-3">Order Tracking</h1>
+  </div>
+</section>
+
+<!-- Page Title (Dark)-->
+
+<div class="bg-none py-4">
+  <div class="container d-lg-flex justify-content-between py-2 py-lg-3">
+    <div class="order-lg-1 pe-lg-4 text-center text-lg-start">
+      <h1 class="h3 text-dark mb-0">Tracking order: <span class="h4 fw-normal text-dark">{{orderDatas.order_no}}</span>
+      </h1>
+    </div>
+  </div>
+</div>
+<div class="container py-2 mb-2 mb-md-3">
+  <!-- Details-->
+  <div class="row gx-4 mb-4">
+    <div class="col-md-4 mb-2">
+      <div class="bg-secondary h-100 p-4 text-center rounded-3"><span class="fw-medium text-dark me-2">Delivered
+          via:</span>Chikex Delivery</div>
+    </div>
+    <div class="col-md-4 mb-2">
+      <div class="bg-secondary h-100 p-4 text-center rounded-3"><span
+          class="fw-medium text-dark me-2">Status:</span>{{this.orderDatas.status.split('_').join(" ")| titlecase}}
+      </div>
+    </div>
+    <div class="col-md-4 mb-2">
+      <div class="bg-secondary h-100 p-4 text-center rounded-3"><span class="fw-medium text-dark me-2">Expected Delivery
+          time:</span> - </div>
+    </div>
+  </div>
+  <!-- Progress-->
+  <div class="card border-0 shadow-lg">
+    <div class="card-body pb-2">
+      <ul class="nav nav-tabs media-tabs nav-justified">
+        <li class="nav-item" *ngFor="let order of order_status.slice(0,4); let i = index">
+          <div class="nav-link {{order.flag}}">
+            <div class="d-flex align-items-center">
+              <div class="media-tab-media"><i class="{{order.icon_text}}"></i></div>
+              <div class="ps-3">
+                <div class="media-tab-subtitle text-muted fs-xs mb-1">First step</div>
+                <h6 class="media-tab-title text-nowrap mb-0">{{order.text}}</h6>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- Footer-->
+  <div class="d-sm-flex flex-wrap justify-content-between align-items-center text-center pt-4">
+    <div class="form-check mt-2 me-3">
+      <input class="form-check-input" type="checkbox" id="notify-me" checked>
+      <label class="form-check-label" for="notify-me">Notify me when order is delivered</label>
+    </div><a class="btn btn-primary btn-sm mt-2" href="javascript:void(0);" data-bs-toggle="modal"
+      (click)="centerModal(centerDataModal)">View Order Details</a>
+  </div>
+</div>
+
+<!-- Footer-->
+<app-footer></app-footer>
+
+<!-- Order Details Modal-->
+<ng-template #centerDataModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Order No - {{orderDatas.order_no}}</h5>
+    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
+      (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body pb-0">
+    <!-- Item-->
+    <div class="d-sm-flex justify-content-between mb-4 pb-3 pb-sm-2 border-bottom"
+      *ngFor="let data of orderDatas.cart_items; let i = index">
+      <div class="d-sm-flex text-center text-sm-start"><a class="d-inline-block flex-shrink-0 mx-auto"
+          routerLink="/shop/single-v1" style="width: 10rem;"><img src="{{data.img_link}}" alt="Product"></a>
+        <div class="ps-sm-4 pt-2">
+          <h3 class="product-title fs-base mb-2"><a routerLink="/shop/single-v1">{{data.title}}</a></h3>
+          <div class="fs-sm"><span class="text-muted me-2"></span>{{data.description}}</div>
+          <div class="fs-lg text-accent pt-2">AED {{data.price}}</div>
+        </div>
+      </div>
+      <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
+        <div class="text-muted mb-2">Quantity:</div>{{data.qty}}
+      </div>
+      <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
+        <div class="text-muted mb-2">Subtotal</div>AED {{data.total_price}}.<small>00</small>
+      </div>
+    </div>
+  </div>
+  <!-- Footer-->
+  <div class="modal-footer flex-wrap justify-content-between bg-secondary fs-md">
+    <div class="px-2 py-1"><span class="text-muted">Subtotal:&nbsp;</span><span>AED
+        {{orderDatas.total_price}}.<small>00</small></span></div>
+    <div class="px-2 py-1"><span class="text-muted">Delivery:&nbsp;</span><span>AED 0.<small>00</small></span></div>
+    <div class="px-2 py-1"><span class="text-muted">Discount:&nbsp;</span><span>AED
+        {{orderDatas.discount}}.<small>00</small></span></div>
+    <div class="px-2 py-1"><span class="text-muted">Total:&nbsp;</span><span class="fs-lg">AED
+        {{orderDatas.total_price}}.<small>00</small></span>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,268 @@
+<app-header></app-header>
+<!-- Page title-->
+<section class="bg-darker bg-size-cover bg-position-center py-5"
+    style="background-image: url(assets/img/food-delivery/restaurants/single/pt-bg.jpg);">
+    <div class="container py-md-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
+                <li class="breadcrumb-item"><a class="text-nowrap" href="javascript:void(0);" routerLink="/"><i
+                            class="ci-home"></i>Home</a>
+                </li>
+                <li class="breadcrumb-item text-nowrap"><a href="javascript:void(0);">Menu</a>
+                </li>
+                <ng-container *ngIf="category_name_header">
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page">
+                        {{getCategoryDescription(category_name_header) |
+                        titlecase}}</li>
+                </ng-container>
+            </ol>
+        </nav>
+        <ng-container *ngIf="category_name_header">
+            <h1 class="text-light text-center text-lg-start py-3">{{getCategoryDescription(category_name_header)}}</h1>
+        </ng-container>
+
+    </div>
+</section>
+
+<!-- Page navigation-->
+<nav class="container mt-n5 ">
+    <div class="d-flex align-items-center bg-white rounded-3 shadow-lg py-2 ps-sm-2 pe-4 pe-lg-2"><img
+            class="d-block rounded-3" src="assets/img/side-logo.png" width="150" alt="Chikex">
+        <div class="ps-lg-3 w-100 text-end">
+            <!-- For desktop-->
+            <ul class="nav nav-tabs d-none d-lg-flex border-0 mb-0 filter-list">
+                <li class="nav-item" *ngFor="let category of category_list;let i = index"
+                    (click)="selectcategory(category._id,$event)">
+                    <a class="nav-link" href="javascript:void(0);">{{category.title}}</a>
+                </li>
+            </ul>
+            <!-- For mobile-->
+            <div ngbDropdown class="btn-group dropdown d-lg-none ms-auto">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    ngbDropdownToggle aria-haspopup="true" aria-expanded="false"><i
+                        class="ci-menu fs-base me-2"></i>Menu</button>
+                <div ngbDropdownMenu class="dropdown-menu dropdown-menu-end">
+                    <a class="dropdown-item fs-base" *ngFor="let category of category_list;let j = index"
+                        (click)="selectcategory(category._id,$event)" href="javascript:void(0);">{{category.title}} </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<!-- Menu (Products grid)-->
+<div class="activation-area">
+
+    <section class="container tab-content py-4 py-sm-5 ">
+        <div class="row pt-3 pt-sm-0">
+            <!-- Item-->
+            <div *ngFor="let item of products;let i = index;" class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter">
+                <div class="card product-card border pb-2" style="background-color: transparent;"><a class="d-block"
+                        data-bs-target="#quick-view" data-bs-toggle="modal" (click)="openModal(content,i)"><img
+                            class="card-img-top" src="{{item.img_url}}" alt="{{item.title}}" style="height: 250px;"></a>
+                    <div class="card-body pt-1 pb-2" style="background-color: transparent;">
+                        <h3 class="product-title fs-md">
+                            <a href="#quick-view" data-bs-toggle="modal">{{item.title}}</a>
+                        </h3>
+                        <p class="fs-ms text-muted">{{item.description}}</p>
+
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="product-price"><span class="text-accent">{{item.price | number: '1.2-2'}}
+                                    AED</span></div>
+                            <button *ngIf="!getItemStatus(item._id)" class="btn btn-primary btn-sm" type="button"
+                                (click)="openModal(content,i)">
+                                <i class="ci-cart fs-base ms-1"></i>
+
+                            </button>
+
+                            <div class="d-flex" *ngIf="getItemStatus(item._id)">
+                                <!-- <button class="btn btn-outline-secondary" style="margin-left: 5px;margin-right: 5px;"
+                                    (click)="decreaseQuantity(item)">-</button>
+                                <div class="d-flex justify-content-center align-items-center"
+                                    style="border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+                                    <input type="text" class="form-control mx-3  text-center" min="1"
+                                        style="text-decoration-color: black; width: 50px; border: none; background: transparent; outline: none;margin-left: 5px;margin-right: 5px;"
+                                        value="{{item.qty}}" [(ngModel)]="item.qty" (change)="onQuantityChange(item)"
+                                        aria-label="Quantity">
+                                </div>
+                                <button class="btn btn-outline-secondary" style="margin-left: 5px;margin-right: 5px;"
+                                    (click)="increaseQuantity(item)">+</button> -->
+
+                                <div class="container text-center my-2">
+
+                                    <div
+                                        class="d-flex justify-content-center align-items-center   border border-secondary rounded">
+                                        <button class="btn btn-outline-secondary">-</button>
+                                        <span class="mx-3 fw-bold fs-4">13</span>
+                                        <button class="btn btn-outline-secondary">+</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Item-->
+        </div>
+
+
+        <!-- Load more button-->
+        <!--  <nav class="d-md-flex justify-content-between align-items-center text-center text-md-start pt-2 pb-4 mb-md-2"
+        aria-label="Page navigation">
+        <div class="d-md-flex align-items-center w-100"><span class="fs-sm text-muted me-md-3">Showing 8 of 24 items
+            </span>
+            <ngb-progressbar type="dark" [value]="8" class="progress w-100 my-3 mx-auto mx-md-0"
+                style="max-width: 10rem; height: 4px;"></ngb-progressbar>
+        </div>
+        <button class="btn btn-outline-secondary" type="button">Load more items</button>
+    </nav> -->
+    </section>
+
+</div>
+<app-footer></app-footer>
+
+<!-- Quick View Modal-->
+<ng-template #content role="document" let-modal>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">{{productdetail.title}}</h4>
+            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
+                (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <!-- <div class="modal-body">
+            <div class="row">
+             
+                <div class="col-lg-6 col-md-6 pe-lg-0"><img class="img-responsive" src="{{productdetail.img_url}}"
+                        alt="{{productdetail.title}}">
+                </div>
+              
+                <div class="col-lg-6 col-md-6 pt-4 pt-lg-0">
+                    <div class="product-details ms-auto pb-3">
+                        <h5 class="h6 mb-3 pb-3 border-bottom"><i
+                                class="ci-announcement text-muted fs-lg align-middle mt-n1 me-2"></i>Product
+                            info</h5>
+                        <h6 class="fs-sm mb-2">Contents:</h6>
+                        <p class="fs-sm">{{productdetail.description}}</p>
+                        <form class="mb-grid-gutter">
+                            <div class="row">
+                                <div class="col-6 px-2">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="pizza-size">Size:</label>
+                                        <select class="form-select" id="pizza-size">
+                                            <option *ngFor="let s of productdetail.size" value="small">{{s}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3"><span class="h3 fw-normal text-accent me-1">{{productdetail.price |
+                                    number:
+                                    '1.2-2'}} AED</span>
+                            </div>
+                            <div class="mb-3 d-flex align-items-center">
+                                <select class="form-select me-3" style="width: 5rem;" (change)="onChange($event)">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                                <button class="btn btn-primary btn-shadow d-block w-100" type="submit"
+                                    (click)="modal.dismiss('Cross click')" (click)="addcart(productdetail)"><i
+                                        class="ci-cart fs-lg me-2"></i>Add to Cart</button>
+                            </div>
+                        </form>
+ 
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div class="modal-body d-flex">
+            <div class="me-3">
+                <img src="{{ productdetail.img_url }}" alt="{{ productdetail.title }}" class="img-fluid"
+                    style="max-width: 200px;">
+            </div>
+            <div>
+                <h5 class="h6 mb-3 pb-3 border-bottom"><i
+                        class="ci-announcement text-muted fs-lg align-middle mt-n1 me-2"></i>Product
+                    info</h5>
+                <p class="fs-sm">{{productdetail.description}}</p>
+                <ng-container *ngIf="productdetail.group_modifiers_list.length>0">
+                    <div *ngFor="let group_modifier of productdetail.group_modifiers_list">
+                        <div class="mb-3" *ngIf="group_modifier.mtype == 0">
+                            <label class="form-label">{{ group_modifier.title }}</label>
+                            <div class="d-flex flex-wrap overflow-auto"
+                                style="max-height: 200px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                                <div *ngFor="let modifier of group_modifier.modifiers_list" class="form-check"
+                                    style="flex: 1 1 calc(33.33% - 10px); margin: 5px;">
+                                    <input type="radio" id="{{ modifier.id }}" name="{{ group_modifier.title }}"
+                                        value="{{ modifier.price }}" class="form-check-input"
+                                        (change)="onModifierChange(productdetail,group_modifier,modifier)">
+                                    <label id="{{ modifier.id }}-label" for="{{ modifier.id }}"
+                                        class="form-check-label">
+                                        {{ modifier.title }} + ({{ modifier.price | number: '1.2-2' }} AED)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3" *ngIf="group_modifier.mtype == 1">
+                            <label class="form-label">{{ group_modifier.title }}</label>
+                            <div class="d-flex flex-wrap overflow-auto"
+                                style="max-height: 200px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                                <div *ngFor="let modifier of group_modifier.modifiers_list" class="form-check"
+                                    style="flex: 1 1 calc(33.33% - 10px); margin: 5px;">
+                                    <input type="checkbox" id="{{ modifier.id }}" name="{{ group_modifier.title }}"
+                                        value="{{ modifier.price }}" class="form-check-input"
+                                        (change)="onModifierChange(productdetail,group_modifier,modifier)">
+                                    <label id="{{ modifier.id }}-label" for="{{ modifier.id }}"
+                                        class="form-check-label">
+                                        {{ modifier.title }} + ({{ modifier.price | number: '1.2-2' }} AED)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+
+                <div class="mb-3">
+                    <label class="form-label">Special Instructions</label>
+                    <!-- <input type="text" class="form-control" [(ngModel)]="specialInstructions"
+                        placeholder="Instructions"> -->
+                    <input type="text" class="form-control" placeholder="Instructions">
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="row col-lg-12 d-flex flex-row align-items-center">
+                <div class="mb-3 col-md-4">
+                    <strong>Total Price: <span class="text-accent">{{productdetail.total_price|number:'1.2-2'}}
+                            AED</span></strong>
+                </div>
+                <div class="col-md-4 d-flex flex-row align-items-center">
+                    <div class="mb-3">
+                        <strong>Quantity:</strong>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <button class="btn btn-outline-secondary" style="margin-left: 5px;margin-right: 5px;"
+                            (click)="decreaseQuantity(productdetail)">-</button>
+                        <div class="d-flex justify-content-center align-items-center"
+                            style="border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+                            <input type="number" class="form-control mx-3  text-center" min="1"
+                                style="text-decoration-color: black; width: 100px; border: none; background: transparent; outline: none;margin-left: 5px;margin-right: 5px;"
+                                value="{{productdetail.qty}}" [(ngModel)]="productdetail.qty"
+                                (change)="onQuantityChange(productdetail)" aria-label="
+                                            Quantity">
+                        </div>
+                        <button class="btn btn-outline-secondary" style="margin-left: 5px;margin-right: 5px;"
+                            (click)="increaseQuantity(productdetail)">+</button>
+                    </div>
+                </div>
+                <div class="d-flex  mb-3 col-md-4 justify-content-end"><button type="button" class="btn btn-primary"
+                        (click)="addnewitem(productdetail)">Add
+                        to
+                        Cart</button></div>
+            </div>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,220 @@
+<div (window:scroll)="windowScroll()" id="home">
+  <header class="navbar d-block navbar-sticky navbar-expand-lg navbar-light bg-light activation-area">
+    <div class="container">
+      <a class="navbar-brand d-none d-sm-block me-4 order-lg-1" routerLink="/">
+        <img src="assets/img/side-logo.png" width="142" alt="Chikex"></a>
+      <a class="navbar-brand d-sm-none me-2 order-lg-1" routerLink="/">
+        <img src="assets/img/side-logo.png" width="74" alt="Chikex"></a>
+      <div class="navbar-toolbar d-flex align-items-center order-lg-3">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+          <span class="navbar-toggler-icon" (click)="collapse.toggle()"></span></button>
+        <a class="navbar-tool d-none d-lg-flex" href="javascript:void(0)" data-bs-toggle="collapse"
+          data-bs-target="#searchBox" role="button" aria-expanded="false" aria-controls="searchBox">
+          <span class="navbar-tool-tooltip">Search</span>
+          <div class="navbar-tool-icon-box" (click)="collapse.toggle()">
+            <i class="navbar-tool-icon ci-search"></i>
+          </div>
+        </a>
+        <!--  <a class="navbar-tool ms-2" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#showModal"
+          (click)="checkSignInStatus()"><span class="navbar-tool-tooltip">Account</span>
+          <div class="navbar-tool-icon-box"><i class="navbar-tool-icon ci-user"></i></div>
+        </a> -->
+        <div class="navbar-tool dropdown ms-3" *ngIf="!loginstatus">
+          <a class="navbar-tool-icon-box bg-secondary dropdown-toggle" data-bs-toggle="modal"
+            data-bs-target="#showModal" (click)="checkSignInStatus()">
+            <span class="navbar-tool-tooltip">Account</span><i class="navbar-tool-icon ci-user"></i></a>
+        </div>
+
+        <div class="navbar-tool dropdown ms-3" *ngIf="loginstatus">
+          <a class="navbar-tool-icon-box bg-secondary dropdown-toggle" routerLink="/account/orders">
+            <span class="navbar-tool-tooltip">Account</span><i class="navbar-tool-icon ci-user"></i></a>
+          <!-- Account dropdown-->
+          <!--  <div class="dropdown-menu dropdown-menu-end">
+            <div class="widget widget-cart px-3 pt-2 pb-3" style="width: 200px">
+              <div style="height: auto;" data-simplebar data-simplebar-auto-hide="false">
+
+                <div class="d-flex align-items-center">
+                  <a class="d-block" href="javascript:void(0);">
+                    <div class="ps-2">
+                      <h6 class="widget-product-title "><a href="javascript:void(0);">Account Profile</a></h6>
+                      <h6 class="widget-product-title"><a href="javascript:void(0);">Order History</a></h6>
+                      <h6 class="widget-product-title"><a href="javascript:void(0);">Track Order</a></h6>
+                      <h6 class="widget-product-title"><a href="javascript:void(0);">wish List</a></h6>
+                      <h6 class="widget-product-title"><a href="javascript:void(0);">Submit Request</a></h6>
+                      <h6 class="widget-product-title"><a href="javascript:void(0);">Password Recovery</a></h6>
+                    </div>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+          </div> -->
+        </div>
+
+        <ng-container>
+          <div class="navbar-tool dropdown ms-3">
+            <a class="navbar-tool-icon-box bg-secondary dropdown-toggle" *ngIf="carts.length!=0" href="/cart"><span
+                class="navbar-tool-label">{{carts.length}}</span><i class="navbar-tool-icon ci-cart"></i></a>
+            <!-- Cart dropdown-->
+            <div class="dropdown-menu dropdown-menu-end">
+              <div class="widget widget-cart px-3 pt-2 pb-3" style="width: 20rem;">
+                <div style="height: 15rem;" data-simplebar data-simplebar-auto-hide="false" *ngIf="carts.length!=0">
+                  <div *ngFor="let cart of carts;let i = index" class="widget-cart-item pb-2 border-bottom">
+                    <button class="btn-close text-danger" type="button" aria-label="Remove"
+                      (click)="removecart(cart)"><span aria-hidden="true">&times;</span></button>
+                    <div class="d-flex align-items-center"><a class="d-block" href="javascript:void(0);"><img
+                          src="{{cart.img_url}}" width="64" alt="{{cart.title}}"></a>
+                      <div class="ps-2">
+                        <h6 class="widget-product-title"><a href="javascript:void(0);">{{cart.title}}</a></h6>
+                        <div class="widget-product-meta"><span class="text-accent me-2">{{cart.price + cart.addon_total
+                            |number:'1.2-2'}}</span><span class="text-muted">x {{cart.qty}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex flex-wrap justify-content-between align-items-center py-3">
+                  <div class="fs-sm me-2 py-2"><span class="text-muted">Total:</span><span
+                      class="text-accent fs-base ms-1">AED {{calculatetotal(total)}}</span></div><a
+                    class="btn btn-outline-secondary btn-sm" href="javascript:void(0);" routerLink="/cart">Expand cart<i
+                      class="ci-arrow-right ms-1 me-n1"></i></a>
+                </div><a class="btn btn-primary btn-sm d-block w-100" href="javascript:void(0);"
+                  (click)="openMapModal()" routerLink="/checkout"><i
+                    class="ci-card me-2 fs-base align-middle"></i>Checkout</a>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+
+      </div>
+      <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed" class="collapse navbar-collapse me-auto order-lg-2"
+        id="navbarCollapse">
+        <!-- Search (mobile)-->
+        <div class="d-lg-none py-3">
+          <div class="input-group"><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+            <input class="form-control rounded-start" type="text" [(ngModel)]="term" placeholder="What do you need?">
+          </div>
+        </div>
+        <!-- Location dropdown-->
+        <ul class="navbar-nav navbar-mega-nav ms-lg-4 pe-lg-2 me-lg-2">
+          <li ngbDropdown class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle ps-lg-0" href="javascript:void(0);" data-bs-toggle="dropdown"
+              ngbDropdownToggle><i class="ci-location me-2"></i>{{selectedLocation}}</a>
+            <ul ngbDropdownMenu class="dropdown-menu">
+              <li (click)="ChangeLocation(location)" *ngFor="let location of location_List;let i = index">
+                <a class="dropdown-item" href="javascript:void(0);">{{location.loc_name}}</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <!-- Primary menu-->
+        <ul class="navbar-nav">
+          <!-- <li ngbDropdown class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="javascript:void(0);"
+              data-bs-toggle="dropdown" ngbDropdownToggle>{{ "MENUITEMS.CUISINE.TEXT" | translate }}</a>
+            <div class="dropdown-menu px-2 ps-0 pb-4" ngbDropdownMenu>
+              <div class="d-flex">
+                <div class="mega-dropdown-column pt-4 px-3" style="width: 12rem;">
+                  <div class="widget mb-3"><a class="d-block" href="javascript:void(0);" routerLink="/menu/fried"><img
+                        class="d-block mx-auto mb-3" src="assets/img/food-delivery/icons/burger.svg" width="60"
+                        alt="Burgers &amp; Fries">
+                      <h6 class="fs-base text-center">{{ "MENUITEMS.CUISINE.LIST.Fried&Chicken" | translate }}</h6>
+                    </a></div>
+                </div>
+                <div class="mega-dropdown-column pt-4 px-3" style="width: 12rem;">
+                  <div class="widget mb-3"><a class="d-block" href="javascript:void(0);" routerLink="/menu/kds"><img
+                        class="d-block mx-auto mb-3" src="assets/img/food-delivery/icons/noodles.svg" width="60"
+                        alt="Noodles">
+                      <h6 class="fs-base text-center">{{ "MENUITEMS.CUISINE.LIST.Kids&Corner" | translate }}</h6>
+                    </a></div>
+                </div>
+                <div class="mega-dropdown-column pt-4 px-3" style="width: 12rem;">
+                  <div class="widget mb-3"><a class="d-block" href="javascript:void(0);" routerLink="/menu/mox"><img
+                        class="d-block mx-auto mb-3" src="assets/img/food-delivery/icons/pizza.svg" width="60"
+                        alt="Pizza &amp; Pasta">
+                      <h6 class="fs-base text-center">{{ "MENUITEMS.CUISINE.LIST.Moxitos" | translate }}</h6>
+                    </a></div>
+                </div>
+              </div>
+              <div class="d-flex">
+                <div class="mega-dropdown-column pt-4 px-3" style="width: 12rem;">
+                  <div class="widget mb-3"><a class="d-block" href="javascript:void(0);" routerLink="/menu/side"><img
+                        class="d-block mx-auto mb-3" src="assets/img/food-delivery/icons/steak.svg" width="60"
+                        alt="Grill &amp; Steaks">
+                      <h6 class="fs-base text-center">{{ "MENUITEMS.CUISINE.LIST.Sides" | translate }}</h6>
+                    </a></div>
+                </div>
+                <div class="mega-dropdown-column pt-4 px-3" style="width: 12rem;">
+                  <div class="widget mb-3"><a class="d-block" href="javascript:void(0);" routerLink="/menu/burger"><img
+                        class="d-block mx-auto mb-3" src="assets/img/food-delivery/icons/fish.svg" width="60"
+                        alt="Fish &amp; Seafood">
+                      <h6 class="fs-base text-center">{{ "MENUITEMS.CUISINE.LIST.Burger&Combo" | translate }}</h6>
+                    </a></div>
+                </div>
+                <div class="mega-dropdown-column pt-4 px-3" style="width: 12rem;">
+                  <div class="widget mb-3"><a class="d-block" href="javascript:void(0);" routerLink="/menu/wrap"><img
+                        class="d-block mx-auto mb-3" src="assets/img/food-delivery/icons/healthy.svg" width="60"
+                        alt="Healthy Food">
+                      <h6 class="fs-base text-center">{{ "MENUITEMS.CUISINE.LIST.Wraps" | translate }}</h6>
+                    </a></div>
+                </div>
+                
+              </div>
+            </div>
+          </li> -->
+          <li class="nav-item"><a class="nav-link" routerLink="/menu">{{
+              "MENUITEMS.Menu" | translate }}</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="/pages/about">{{
+              "MENUITEMS.About" | translate }}</a></li>
+
+          <li class="nav-item"><a class="nav-link" routerLink="/pages/contacts">{{
+              "MENUITEMS.ContactUs" | translate }}</a></li>
+        </ul>
+      </div>
+    </div>
+    <!-- Search collapse-->
+    <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed" class="search-box collapse" id="searchBox">
+      <div class="container py-2">
+        <div class="input-group"><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+          <input class="form-control rounded-start" type="text" placeholder="What do you need?">
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+
+<div class="handheld-toolbar">
+  <div class="d-table table-layout-fixed w-100">
+    <!--  <div class="navbar-tool dropdown ms-3" *ngIf="!loginstatus">
+      <a class="navbar-tool-icon-box bg-secondary dropdown-toggle" data-bs-toggle="modal"
+        data-bs-target="#showModal" (click)="checkSignInStatus()">
+        <span class="navbar-tool-tooltip">Account</span><i class="navbar-tool-icon ci-user"></i></a>
+    </div>
+
+    <div class="navbar-tool dropdown ms-3" *ngIf="loginstatus">
+      <a class="navbar-tool-icon-box bg-secondary dropdown-toggle" routerLink="/account/orders">
+        <span class="navbar-tool-tooltip">Account</span><i class="navbar-tool-icon ci-user"></i></a> -->
+
+    <a *ngIf="!loginstatus" class="d-table-cell handheld-toolbar-item" href="javascript:void(0)" data-bs-toggle="modal"
+      (click)="checkSignInStatus()">
+      <span class="handheld-toolbar-icon"><i class="ci-user"></i></span>
+      <span class="handheld-toolbar-label">Account</span>
+    </a>
+    <a *ngIf="loginstatus" class="d-table-cell handheld-toolbar-item" data-bs-toggle="modal"
+      routerLink="/account/orders">
+      <span class="handheld-toolbar-icon"><i class="ci-user"></i></span>
+      <span class="handheld-toolbar-label">Account</span>
+    </a>
+    <a class="d-table-cell handheld-toolbar-item" href="javascript:void(0)" data-bs-toggle="collapse"
+      data-bs-target="#navbarCollapse" (click)="collapse.toggle()" onclick="window.scrollTo(0, 0)">
+      <span class="handheld-toolbar-icon"><i class="ci-menu"></i></span>
+      <span class="handheld-toolbar-label">Menu</span>
+    </a>
+    <a class="d-table-cell handheld-toolbar-item" href="javascript:void(0)" href="/cart">
+      <span class="handheld-toolbar-icon"><i class="ci-cart"></i>
+        <span class="badge bg-primary rounded-pill ms-1">{{carts.length}}</span>
+      </span>
+      <span class="handheld-toolbar-label">${{calculatetotal(total)}}</span>
+    </a>
+  </div>
+</div>

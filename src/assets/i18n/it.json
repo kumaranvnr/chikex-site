@@ -1,0 +1,19 @@
+{
+  "MENUITEMS": {
+    "CUISINE": {
+      "TEXT": "Cucina",
+      "LIST": {
+        "Burgers&Fries": "Hamburger e patatine fritte",
+        "Noodles": "Tagliatelle",
+        "Pizza&Pasta": "Pizza & Pasta",
+        "Grill&Steaks": "Bistecca alla griglia",
+        "Fish&Seafood": "Pesce e Frutti di Mare",
+        "HealthyFood": "Cibo salutare",
+        "HauteCuisine": "Alta cucina",
+        "Chicken&Snaks": "Pollo & Snak",
+        "Coffee&Desserts": "Dolci Al Caffè"
+      }
+    },
+    "BaACKTOMAINDEMO":"torna alla demo principale"
+  }
+}

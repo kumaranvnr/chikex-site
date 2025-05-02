@@ -1,0 +1,128 @@
+<app-header></app-header>
+
+<!-- Page Title-->
+<div class="page-title-overlap bg-dark pt-4">
+  <div class="container d-lg-flex justify-content-between py-2 py-lg-3">
+    <div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
+          <li class="breadcrumb-item"><a class="text-nowrap" routerLink="/fashion-store-v1"><i
+                class="ci-home"></i>Home</a></li>
+          <li class="breadcrumb-item text-nowrap"><a href="javascript:void(0);">Account</a>
+          </li>
+          <li class="breadcrumb-item text-nowrap active" aria-current="page">Payment methods</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="order-lg-1 pe-lg-4 text-center text-lg-start">
+      <h1 class="h3 text-light mb-0">My payment methods</h1>
+    </div>
+  </div>
+</div>
+<div class="container pb-5 mb-2 mb-md-4">
+  <div class="row">
+    <!-- Sidebar-->
+    <aside class="col-lg-4 pt-4 pt-lg-0 pe-xl-5">
+      <app-account-sidebar></app-account-sidebar>
+    </aside>
+    <!-- Content  -->
+    <section class="col-lg-8">
+      <!-- Toolbar-->
+      <div class="d-none d-lg-flex justify-content-between align-items-center pt-lg-3 pb-4 pb-lg-5 mb-lg-3">
+        <h6 class="fs-base text-light mb-0">Primary payment method is used by default</h6>
+        <!-- <a
+          class="btn btn-primary btn-sm" routerLink="/account/signin"><i class="ci-sign-out me-2"></i>Sign out</a> -->
+      </div>
+      <!-- Payment methods list-->
+      <div class="table-responsive fs-md mb-4">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Your credit / debit cards</th>
+              <th>Name on card</th>
+              <th>Expires on</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of tableData;let i=index">
+              <td class="py-3 align-middle">
+                <div class="d-flex align-items-center"><img src="{{data.image}}" width="39" alt="Visa">
+                  <div class="ps-2">
+                    <span class="fw-medium text-heading me-1">{{data.title}}</span>ending in {{data.card_no}}
+                  </div>
+                </div>
+              </td>
+              <td class="py-3 align-middle">{{data.card_name}}</td>
+              <td class="py-3 align-middle">{{data.expire_date}}</td>
+              <td class="py-3 align-middle">
+                <a class="nav-link-style me-2" href="javascript:void(0);" placement="top" data-bs-toggle="tooltip"
+                  ngbTooltip="Edit" (click)="editModal(content,i)"><i class="ci-edit"></i></a>
+                <a class="nav-link-style text-danger" href="javascript:void(0);" placement="top"
+                  data-bs-toggle="tooltip" ngbTooltip="Remove" (click)="removeData($event)">
+                  <div class="ci-trash"></div>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="text-sm-end"><a class="btn btn-primary" href="javascript:void(0);" data-bs-toggle="modal"
+          (click)="OpenModal(content)">Add payment method</a></div>
+    </section>
+  </div>
+</div>
+
+<!--Modal-->
+<ng-template #content let-modal>
+  <div class="modal-content">
+    <form (ngSubmit)="saveUser()" [formGroup]="userForm">
+      <input type="hidden" name="id" value="" formControlName="ids" />
+      <div class="modal-header">
+        <h5 class="modal-title">Add a payment method</h5>
+        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
+          (click)="modal.dismiss('Cross click')"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-check mb-4">
+          <input class="form-check-input" type="radio" id="paypal" value="paypal" formControlName="method">
+          <label class="form-check-label" for="paypal">PayPal<img class="d-inline-block align-middle ms-2"
+              src="assets/img/card-paypal.png" width="39" alt="PayPal"></label>
+        </div>
+        <div class="form-check mb-4">
+          <input class="form-check-input" type="radio" id="card" value="credit" checked formControlName="method">
+          <label class="form-check-label" for="card">Credit / Debit card<img class="d-inline-block align-middle ms-2"
+              src="assets/img/cards.png" width="187" alt="Credit card"></label>
+        </div>
+        <div class="row g-3 mb-2">
+          <div class="col-sm-6">
+            <input class="form-control" type="text" name="number" placeholder="Card Number" required
+              formControlName="title" [ngClass]="{'is-invalid': submitted && form['title'].errors}">
+            <div class="invalid-feedback">Please fill in the card number!</div>
+          </div>
+          <div class="col-sm-6">
+            <input class="form-control" type="text" name="name" placeholder="Full Name" required
+              formControlName="card_name" [ngClass]="{'is-invalid': submitted && form['card_name'].errors}">
+            <div class="invalid-feedback">Please provide name on the card!</div>
+          </div>
+          <div class="col-sm-3">
+            <input class="form-control" type="text" name="expiry" placeholder="MM/YY" required
+              formControlName="expire_date" [ngClass]="{'is-invalid': submitted && form['expire_date'].errors}">
+            <div class="invalid-feedback">Please provide card expiration date!</div>
+          </div>
+          <div class="col-sm-3">
+            <input class="form-control" type="text" name="cvc" placeholder="CVC" required formControlName="card_no"
+              [ngClass]="{'is-invalid': submitted && form['card_no'].errors}">
+            <div class="invalid-feedback">Please provide card CVC code!</div>
+          </div>
+          <div class="col-sm-6">
+            <button class="btn btn-primary d-block w-100" type="submit">Register this card</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<!-- Footer-->
+<app-footer></app-footer>

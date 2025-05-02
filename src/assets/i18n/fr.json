@@ -1,0 +1,19 @@
+{
+  "MENUITEMS": {
+    "CUISINE": {
+      "TEXT": "Cuisine",
+      "LIST": {
+        "Burgers&Fries": "Burgers & Frites",
+        "Noodles": "Nouilles",
+        "Pizza&Pasta": "Pizzas & Pâtes",
+        "Grill&Steaks": "Grillades et steaks",
+        "Fish&Seafood": "Poissons & Fruits de Mer",
+        "HealthyFood": "Nourriture saine",
+        "HauteCuisine": "Haute cuisine",
+        "Chicken&Snaks": "Poulet et collations",
+        "Coffee&Desserts": "Café & Desserts"
+      }
+    },
+    "BaACKTOMAINDEMO":"retour à la démo principale"
+  }
+}

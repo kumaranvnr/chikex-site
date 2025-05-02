@@ -1,0 +1,128 @@
+<app-header></app-header>
+<div class="activation-area">
+  <div class="container pt-4 pb-3 py-sm-4">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb flex-lg-nowrap justify-content-center justify-content-lg-start">
+        <li class="breadcrumb-item"><a class="text-nowrap" routerLink=""><i class="ci-home"></i>Home</a></li>
+        <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap"> Cart</a></li>
+      </ol>
+    </nav>
+    <div class="rounded-3 shadow-lg mt-4 mb-5">
+      <ul class="nav nav-tabs nav-justified mb-4">
+        <li class="nav-item"><a class="nav-link fs-lg fw-medium py-4 active" href="javascript:void(0);"
+            data-bs-toggle="tab" role="tab" aria-selected="true">1. Your order</a>
+        </li>
+        <li class="nav-item"><a class="nav-link fs-lg fw-medium py-4" href="/checkout" data-bs-toggle="tab" role="tab"
+            aria-selected="true">2. Checkout</a>
+        </li>
+      </ul>
+
+      <div class="px-3 px-sm-4 px-xl-5 pt-1 pb-4 pb-sm-5">
+        <div class="row">
+          <!-- Items in cart-->
+          <div class="col-lg-8 col-md-7 pt-sm-2">
+            <!-- Item-->
+            <div *ngFor="let cart of cartItems;let i = index;"
+              class="d-sm-flex justify-content-between align-items-center mt-3 mb-6 pb-3 border-bottom">
+              <div class="d-block d-sm-flex align-items-center text-center text-sm-start"><a
+                  class="d-inline-block flex-shrink-0 mx-auto me-sm-4" href="javascript:void(0);"><img
+                    src="{{cart.img_url}}" width="120" alt="{{cart.title}}"></a>
+                <div class="pt-2">
+                  <div class="fs-lg text-accent pt-2">{{cart.title}} - {{cart.price|number:'1.2-2'}} AED</div>
+
+                  <h3 class="product-title fs-base mb-2">{{cart.description}}</h3>
+                  <div *ngFor="let group_modifier of cart.group_modifiers_list;let j = index">
+                    <div *ngFor="let modifier of group_modifier.modifiers_list;let k = index">
+                      <h4 *ngIf="modifier.selected" class="product-title fs-base mb-1">
+                        {{modifier.title}} - {{
+                        modifier.price|number:'1.2-2'}} AED</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="pt-2 pt-sm-0 ps-sm-3 mx-auto mx-sm-0 text-center align-items-center align-justify-center">
+                <div class="fs-lg text-accent pt-2"> {{cart.total_price|number:'1.2-2'}} AED</div>
+                <div class="d-flex mb-3">
+                  <button class="btn btn-outline-secondary" style="margin-left: 5px;margin-right: 5px;"
+                    (click)="decreaseQuantity(cart)">
+                    <span *ngIf="cart.qty>=2">-</span>
+                    <span class="ci-trash" *ngIf="cart.qty==1"></span>
+                  </button>
+                  <div class="d-flex justify-content-center align-items-center"
+                    style="border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+                    <input type="text" class="form-control text-center" min="1"
+                      style="text-decoration-color: black;padding:auto; width: 60px; border: none; background: transparent; outline: none;margin-left: 5px;margin-right: 5px;"
+                      value="{{cart.qty}}" [(ngModel)]="cart.qty" (change)="onQuantityChange(cart)"
+                      aria-label="Quantity">
+                  </div>
+                  <button class="btn btn-outline-secondary" style="margin-left: 5px;margin-right: 5px;"
+                    (click)="increaseQuantity(cart)">+</button>
+                </div>
+
+              </div>
+
+            </div>
+            <button type="button" class="btn btn-outline-primary d-block w-100 mt-4"><i
+                class="ci-loading fs-base me-2"></i>Update cart</button>
+          </div>
+          <!-- Sidebar-->
+          <div class="col-lg-4 col-md-5 pt-3 pt-sm-4">
+            <div class="rounded-3 bg-secondary px-3 px-sm-4 py-4">
+              <div class="text-center mb-4 pb-3 border-bottom ">
+                <h3 class="h5 mb-3 pb-1">Sub Total</h3>
+                <h4 class="fw-normal"> {{calculatePrice()| number:'1.2-2'}} AED</h4>
+              </div>
+              <form (ngSubmit)="applycode()" [formGroup]="formData" class="needs-validation" method="post" novalidate>
+                <div class="mb-4">
+                  <label class="form-label mb-3" for="order-comments"><span
+                      class="badge bg-info fs-xs me-2">Note</span>Additional comments</label>
+                  <textarea class="form-control" rows="4" id="order-comments" formControlName="comments"></textarea>
+                </div>
+                <h3 class="h6 mb-4">Apply promo code</h3>
+
+                <div class="mb-3">
+                  <div class="invalid-feedback">Please enter your name!</div>
+                  <input class="form-control" type="text" placeholder="Promo code" formControlName="promocode"
+                    [ngClass]="{ 'is-invalid': submitted && form['promocode'].errors }">
+                  <div class="invalid-feedback">Please provide promo code.</div>
+                  <div class="text-center text-danger" *ngIf="invalid_coupon">invalid Promo code</div>
+                  <div class="text-center text-success" *ngIf="valid_coupon">Promo code Applied
+                    <i class="ci-money-bag fs-lg me-2"></i>
+                    <button class="btn btn-link px-0 text-danger" type="button" (click)="removecode()"><i
+                        class="ci-close-circle me-2"></i><span class="fs-sm"></span></button>
+                  </div>
+                </div>
+                <button class="btn btn-outline-primary d-block w-100 mb-4" type="submit">Apply promo code</button>
+              </form>
+              <div class="text-center mt-1 mb-4 pb-3 border-bottom d-flex justify-content-between">
+                <h3 class="h5 mb-3 pb-1">Total</h3>
+                <h4 *ngIf="!valid_coupon" class="h5">AED {{calculatePrice()}}</h4>
+              </div>
+
+              <div *ngIf="valid_coupon" class="d-fle flex-column h-100 rounded-3 bg-secondary">
+
+                <div class="d-flex justify-content-between fs-md border-bottom pb-3 mb-3">
+                  <span>Subtotal:</span><span class="text-heading">AED
+                    {{calculatePrice()}}.<small>00</small></span>
+                </div>
+                <div class="d-flex justify-content-between fs-md border-bottom pb-3 mb-3">
+                  <span>Promo Code ({{this.coupon_response.data.code}} - {{coupon_response.data.percentage}}
+                    %):</span><span class="text-heading">AED
+                    {{discountprice}}.<small>00</small></span>
+                </div>
+                <div class="d-flex justify-content-between fs-md mb-2"><span>Total:</span><span
+                    class="text-heading fw-medium">AED {{setprice(finalprice)}}.<small>00</small></span>
+                </div>
+              </div>
+
+              <a class="btn btn-primary btn-shadow d-block w-100 mt-4 mb-3" href="javascript:void(0);"
+                (click)="checkoutClick()" routerLink="/checkout"><i class="ci-card fs-lg me-2"></i>Proceed to
+                Checkout</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

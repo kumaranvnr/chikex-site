@@ -1,0 +1,181 @@
+<!-- <app-header></app-header> -->
+
+<div class="container py-1 mt-md-2 mb-2 scroll" style="background-image: url(assets/img/bg.jpg) ;">
+    <div class="row">
+        <div class="col-sm-12">
+            <section class="container text-center pt-2 mt-2">
+                <img src="assets/logo.png">
+            </section>
+
+            <section class="container text-center pt-3 mt-1">
+                <h2 class="h2 pb-1" style="background: -webkit-linear-gradient(#800008, #fb202e);
+                      -webkit-background-clip: text;
+                      -webkit-text-fill-color: transparent;">Chikex<br>
+                    <span class="h5 pb-1" style="background: -webkit-linear-gradient(#ff0303, #c7f71b);
+                      -webkit-background-clip: text;
+                      -webkit-text-fill-color: transparent;">
+                        EXCEPTIONALLY TASTY
+                    </span>
+
+                </h2>
+                <i class="ci-basket h3 text-primary d-block mb-4"></i>
+
+                <a class="btn btn-light border border-3 rounded-pill " style="width: 70%;" target="_blank"
+                    href="https://chikex.me/">Order Now</a>
+
+            </section>
+            <section class="container text-center  mt-md-4 mb-2" *ngIf="locationData!=null">
+                <div class="row pt-4">
+                    <div class="col-md-12 text-center col-sm-12 mb-grid-gutter">
+                        <div class="card shadowcolor">
+                            <div class="card-body">
+                                <h2 class="text-center" style="background: -webkit-linear-gradient(#0a2da1, #902be2);
+                                      -webkit-background-clip: text;
+                                      -webkit-text-fill-color: transparent;">{{locationData.loc_name}} -
+                                    {{getEmirateName(locationData.emirate)}} </h2>
+                                <ul class="list-unstyled mb-0">
+                                    <li class="d-flex pt-2 pb-3 border-bottom"><i
+                                            class="ci-phone fs-lg mt-2 mb-0 text-primary"></i>
+                                        <div class="ps-2"><span class="fs-ms text-muted">Call us</span><a
+                                                class="d-block text-heading fs-sm "
+                                                href="tel:{{locationData.loc_whatsapp}}">{{locationData.loc_whatsapp}}</a>
+                                        </div>
+                                        &nbsp;&nbsp;
+                                        <i class="ci-location fs-lg mt-2 mb-0 text-primary"></i>
+                                        <div class="ps-2"><span class="fs-ms text-muted">Find us</span><a
+                                                class="d-block text-heading fs-sm" [href]="locationData.loc_map">Get
+                                                Direction</a></div>
+                                    </li>
+                                    <li class="d-flex pt-2 pb-3 border-bottom"><i
+                                            class="ci-bell fs-lg mt-2 mb-0 text-primary"></i>
+                                        <div class="ps-3"><span class="fs-ms text-muted">Review</span><a
+                                                class="d-block text-heading fw-bold fs-md " style="background: -webkit-linear-gradient(#610e03, #ff8282);
+                                      -webkit-background-clip: text;
+                                      -webkit-text-fill-color: transparent;"
+                                                [href]="locationData.google_review_link">Give
+                                                the Review and get offers</a>
+                                        </div>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+            <section class="container text-center   mt-1">
+
+                <div class="col-sm-12 col-sm-3 pb-2 mb-2 mt-1 ">
+                    <ul class="list-unstyled fs-lg text-muted mb-0 d-flex d-inline-flex">
+                        <li class="widget-list-item d-inline-flex">
+                            <a class="text-muted" href="tel:{{locationData.loc_whatsapp}}"><i
+                                    class="ci-phone fs-lg mt-1 p-3 mb-0 text-primary"></i></a>
+                        </li>
+                        <li class="widget-list-item d-inline-flex"> <a class="text-muted"
+                                href="mailto:info.chikex@gmail.com"><i
+                                    class="ci-mail fs-lg mt-1 p-3 mb-0 text-primary"></i></a>
+                        </li>
+
+                        <li class="widget-list-item d-inline-flex">
+                            <a class="text-muted"
+                                href="https://api.whatsapp.com/send/?phone={{locationData.loc_whatsapp}}&text=Hi Chikex, I would like to place an order with you!&type=phone_number&app_absent=0">
+                                <i class="ci-whatsapp fs-lg mt-1 p-3 mb-0 text-primary"></i></a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-sm-12 pb-2 mb-2 mt-1 d-flex d-inline-flex">
+                    <div class="col-sm-6 p-1">
+                        <a class="text-muted border border-2 rounded-pill p-2 fw-bold" download
+                            href="assets/Chikex Fried Chicken.vcf"><i
+                                class="ci-download fs-sm mt-1 mb-0 p-1 text-primary "></i>Add to Contacts</a>
+                    </div>
+                    <div class="col-sm-6 p-1 dropdown">
+                        <a class="text-muted border border-2 rounded-pill p-2 fw-bold" href="javascript:void(0); "
+                            (click)="AndroidNativeShare(undefined, undefined, undefined)"><i
+                                class="ci-share fs-sm mt-1 mb-0 p-1 text-primary"></i>Share</a>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-12 pb-2 mb-2 mt-1 ">
+                    <ul class="list-unstyled fs-sm text-muted mb-0 d-flex d-inline-flex">
+                        <li class="widget-list-item d-inline-flex">
+                            <a class="text-muted" href="https://www.instagram.com/chikexuae/"><i
+                                    class="ci-instagram p-3 h3 text-primary d-block "></i></a>
+                        </li>
+                        <li class="widget-list-item d-inline-flex">
+                            <a class="text-muted" href="https://m.facebook.com/profile.php?id=100082858976080"><i
+                                    class="ci-facebook p-3 h3 text-primary d-block "></i></a>
+                        </li>
+                        <li class="widget-list-item d-inline-flex">
+                            <a class="text-muted" href="https://www.youtube.com/channel/UCF4z0roEEZHSHdkXiuETllg"><i
+                                    class="ci-youtube p-3 h3 text-primary d-block "></i></a>
+                        </li>
+                        <li class="widget-list-item d-inline-flex">
+                            <a class="text-muted" href="https://www.tiktok.com/@chikexuae?lang=en"><i
+                                    class="ci-tiktok p-3 h3 text-primary d-block "></i></a>
+                        </li>
+                        <li class="widget-list-item d-inline-flex">
+                            <a class="text-muted" href="https://ae.linkedin.com/in/chikex-fried-chicken-6b7107243"><i
+                                    class="ci-linkedin p-3 h3 text-primary d-block "></i></a>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <a class="btn btn-light border border-3 rounded-pill " style="width: 70%;" download target="_blank"
+                    href="https://chikex.me/menu.pdf">Chikex Menu</a>
+
+            </section>
+
+            <section class="container pt-4 mt-md-4 mb-2">
+                <div class="row pt-4">
+                    <div class="col-md-4 col-sm-12 mb-grid-gutter" *ngFor="let loc of location_list;let i = index">
+                        <div class="card   shadowcolor">
+                            <div class="card-body" (click)="viewOutletData(loc.loc_name)">
+                                <h2 class="text-center" style="background: -webkit-linear-gradient(#0a2da1, #902be2);
+                      -webkit-background-clip: text;
+                      -webkit-text-fill-color: transparent;">{{loc.loc_name}} - {{getEmirateName(loc.emirate)}} </h2>
+                                <ul class="list-unstyled mb-0">
+                                    <li class="d-flex pt-2 pb-3 border-bottom"><i
+                                            class="ci-phone fs-lg mt-2 mb-0 text-primary"></i>
+                                        <div class="ps-2"><span class="fs-ms text-muted">Call us</span><a
+                                                class="d-block text-heading fs-sm "
+                                                href="javascript:void(0);">{{loc.loc_whatsapp}}</a>
+                                        </div>
+                                        &nbsp;&nbsp;
+                                        <i class="ci-location fs-lg mt-2 mb-0 text-primary"></i>
+                                        <div class="ps-2"><span class="fs-ms text-muted">Find us</span><a
+                                                class="d-block text-heading fs-sm" href="javascript:void(0);">Get
+                                                Direction</a></div>
+                                    </li>
+                                    <li class="d-flex pt-2 pb-3 border-bottom"><i
+                                            class="ci-bell fs-lg mt-2 mb-0 text-primary"></i>
+                                        <div class="ps-3"><span class="fs-ms text-muted">Review</span><a
+                                                class="d-block text-heading fw-bold fs-md " style="background: -webkit-linear-gradient(#610e03, #ff8282);
+                      -webkit-background-clip: text;
+                      -webkit-text-fill-color: transparent;" href="javascript:void(0);">Give
+                                                the Review and get offers</a>
+                                        </div>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+
+            <section class="container text-center pt-3 mt-2 pb-2">
+                <p class="fs-sm pt-4">Your review helpful to improve our food quality and service.</p>
+            </section>
+        </div>
+    </div>
+</div>
+
+<!-- Footer-->
+<!-- <app-footer></app-footer> -->

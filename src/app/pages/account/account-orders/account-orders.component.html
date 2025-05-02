@@ -1,0 +1,133 @@
+<app-header></app-header>
+
+<!-- Page Title-->
+<div class="page-title-overlap bg-dark pt-4">
+  <div class="container d-lg-flex justify-content-between py-2 py-lg-3">
+    <div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
+          <li class="breadcrumb-item"><a class="text-nowrap" routerLink="/fashion-store-v1"><i
+                class="ci-home"></i>Home</a></li>
+          <li class="breadcrumb-item text-nowrap"><a href="javascript:void(0);">Account</a>
+          </li>
+          <li class="breadcrumb-item text-nowrap active" aria-current="page">Orders history</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="order-lg-1 pe-lg-4 text-center text-lg-start">
+      <h1 class="h3 text-light mb-0">My orders</h1>
+    </div>
+  </div>
+</div>
+<div class="container pb-5 mb-2 mb-md-4 d-flex flex-column">
+  <div class="row">
+    <!-- Sidebar-->
+    <aside class="col-lg-4 pt-4 pt-lg-0 pe-xl-5">
+      <app-account-sidebar></app-account-sidebar>
+    </aside>
+
+    <!-- Content  -->
+    <section class="col-lg-8">
+      <!-- Toolbar-->
+      <div class="d-flex justify-content-between align-items-center pt-lg-2 pb-4 pb-lg-5 mb-lg-3">
+        <div class="d-flex align-items-center">
+          <label class="d-none d-lg-block fs-sm text-light text-nowrap opacity-75 me-2" for="order-sort">Sort
+            orders:</label>
+          <label class="d-lg-none fs-sm text-nowrap opacity-75 me-2" for="order-sort">Sort orders:</label>
+          <select class="form-select" id="order-sort" [(ngModel)]="service.status">
+            <option value="">All</option>
+            <option value="Delivered">Delivered</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Delayed">Delayed</option>
+            <option value="Canceled">Canceled</option>
+          </select>
+        </div>
+        <!-- <a class="btn btn-primary btn-sm d-none d-lg-inline-block" routerLink="/account/signin"><i
+            class="ci-sign-out me-2"></i>Sign out</a> -->
+      </div>
+      <!-- Orders list-->
+      <div class="table-responsive fs-md mb-4">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Order #</th>
+              <th>Date Purchased</th>
+              <th>Status</th>
+              <th>Total</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of order_list;let i=index">
+              <td class="py-3"> {{order.order_no}} </td>
+              <td class="py-3">{{this.datePipe.transform(order.updatedAt, 'd/M/yyyy')}}</td>
+              <td class="py-3"><span>{{order.status.split("_").join(" ")|titlecase}}</span></td>
+              <!-- <td class="py-3"><span class="badge bg-{{data.status_color}} m-0">{{data.status}}</span></td> -->
+              <td class="py-3">AED {{order.total_price}}</td>
+              <td class="py-3"><a class="nav-link-style fw-medium fs-sm text-center" href=" javascript:void(0);"
+                  ngbTooltip="Show the Order Items" data-bs-toggle="modal"
+                  (click)="orderModal(ordertDetailModal,order)"><i class="ci-view-list opacity-60 me-2"></i></a>
+                <a class="nav-link-style fw-medium fs-sm" href="javascript:void(0);" data-bs-toggle="modal"
+                  ngbTooltip="Repeat this order" (click)="repeatOrder(order)"><i
+                    class="ci-reload opacity-60 me-2"></i></a>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Pagination-->
+      <!--  <nav class="d-flex justify-content-between pt-2" aria-label="Page navigation">
+        <ul class="pagination"></ul>
+        <ul class="pagination">
+          <ngb-pagination [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
+          </ngb-pagination>
+        </ul>
+        <ul class="pagination"></ul>
+      </nav> -->
+    </section>
+  </div>
+</div>
+
+<!-- Footer-->
+<app-footer></app-footer>
+
+<!-- Order Details Modal-->
+<ng-template #ordertDetailModal let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Order No - {{single_order.order_no}}</h5>
+      <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
+        (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body pb-0">
+      <!-- Item-->
+      <div class="d-sm-flex justify-content-between mb-4 pb-3 pb-sm-2 border-bottom"
+        *ngFor="let order_item of single_order.cart_items;let i= index">
+        <div class="d-sm-flex text-center text-sm-start"><a class="d-inline-block flex-shrink-0 mx-auto"
+            href="javascript:void(0);" style="width: 10rem;"><img src="{{order_item.img_link}}" alt="Product"></a>
+          <div class="ps-sm-4 pt-2">
+            <h3 class="product-title fs-base mb-2"><a href="javascript:void(0);">{{order_item.title}}</a></h3>
+            <div class="fs-lg text-accent pt-2">AED {{order_item.price}}.<small>00</small></div>
+          </div>
+        </div>
+        <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
+          <div class="text-muted mb-2">Quantity:</div>{{order_item.qty}}
+        </div>
+        <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
+          <div class="text-muted mb-2">Subtotal</div>AED {{order_item.price}}.<small>00</small>
+        </div>
+      </div>
+    </div>
+    <!-- Footer-->
+    <div class="modal-footer flex-wrap justify-content-between bg-secondary fs-md">
+      <div class="px-2 py-1"><span class="text-muted">Subtotal:&nbsp;</span><span>AED
+          {{single_order.price}}.<small>00</small></span></div>
+      <div class="px-2 py-1"><span class="text-muted">Delivery:&nbsp;</span><span>AED 0.<small>00</small></span></div>
+      <div class="px-2 py-1"><span class="text-muted">Discount:&nbsp;</span><span>AED
+          {{single_order.discount}}.<small>00</small></span></div>
+      <div class="px-2 py-1"><span class="text-muted">Total:&nbsp;</span><span class="fs-lg">AED
+          {{single_order.total_price}}.<small>00</small></span></div>
+    </div>
+  </div>
+</ng-template>

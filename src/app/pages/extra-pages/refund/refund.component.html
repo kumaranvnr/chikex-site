@@ -1,0 +1,163 @@
+<!-- <app-header></app-header> -->
+
+<!-- Page Title (Light)-->
+<app-breadcrumbs title="Privacy Policy" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="container py-5 mt-md-2 mb-2">
+    <div class="row">
+
+
+        <div class="col-lg-12">
+            <p>It's important for customers to review the refund policy of the chikex food ordering app. Customers need
+                to
+                understand their rights and responsibilities in the event that they need to request a refund.</p>
+            <ngb-accordion #acc="ngbAccordion" activeIds="static-1" [closeOthers]="false" class="accordion-flush">
+                <!-- Shoes-->
+                <ngb-panel id="static-1">
+                    <ng-template ngbPanelTitle class="accordion-header">
+                        Order Cancellation
+                    </ng-template>
+                    <ng-template ngbPanelContent>
+                        <div class="card-body fs-md">
+                            <p>There may be a specific time frame within which a customer can cancel an order and be
+                                eligible for a refund. This Cancellation option
+                                typically ends before the restaurant begins preparing the order.</p>
+                            <p>
+                                Chikex will have all the rights to cancel the order in case of
+                                any unforeseen events or Fraudulent Activity. After the Investigation Process, the
+                                amount may be
+                                refunded in case of non fraudulent Activity.
+                            </p>
+                        </div>
+                    </ng-template>
+                </ngb-panel>
+                <ngb-panel id="static-2">
+                    <ng-template ngbPanelTitle class="accordion-header">
+                        Refund Eligibility
+                    </ng-template>
+                    <ng-template ngbPanelContent>
+                        <div class="card-body fs-md">
+                            <p>Refunds might only be available under certain circumstances, such as if the customer is
+                                receiving the wrong items or if
+                                there's an issue with the quality of the food etc. Customers may need to provide valid
+                                proof or documentation to support
+                                their refund request.</p>
+                            <p>Any refund to a customer, whether against a cancelled order or otherwise, shall be made
+                                by
+                                reversing the mode of payment</p>
+                        </div>
+                    </ng-template>
+                </ngb-panel>
+                <ngb-panel id="static-3">
+                    <ng-template ngbPanelTitle class="accordion-header">
+                        Partial Refunds
+                    </ng-template>
+                    <ng-template ngbPanelContent>
+                        <div class="card-body fs-md">
+                            <p>In some cases, a partial refund may be offered if only a portion of the order is
+                                incorrect or if only some items are
+                                unsatisfactory.</p>
+                        </div>
+                    </ng-template>
+                </ngb-panel>
+
+                <ngb-panel id="static-4">
+                    <ng-template ngbPanelTitle class="accordion-header">
+                        Exceptions
+                    </ng-template>
+                    <ng-template ngbPanelContent>
+                        <div class="card-body fs-md">
+                            <p>There may be certain circumstances where refunds are not offered, such as if the customer
+                                provided incorrect delivery
+                                information or if the issue is deemed to be the customer's fault.</p>
+
+                        </div>
+                    </ng-template>
+                </ngb-panel>
+                <ngb-panel id="static-5">
+                    <ng-template ngbPanelTitle class="accordion-header">
+                        Refund Processing Time
+                    </ng-template>
+                    <ng-template ngbPanelContent>
+                        <div class="card-body fs-md">
+                            <p> The policy outline the process for requesting a refund, which may involve contacting
+                                customer support and providing
+                                details about the order and the reason for the refund request.</p>
+
+                            <p>The policy may outline the expected timeframe for processing refunds. This could range
+                                for online transactions maximum
+                                upto 10 days, for COD orders maximum upto 7 days, depending on the payment gateway
+                                applications procedures and payment
+                                processing systems.</p>
+                        </div>
+                    </ng-template>
+                </ngb-panel>
+            </ngb-accordion>
+
+            <!-- Submit request-->
+            <section class="container text-center pt-5 mt-2">
+
+                <h2 class="h4 pb-3">Do You Have Any Query? Submit a request. We can help.</h2><i
+                    class="ci-help h3 text-primary d-block mb-4"></i><a class="btn btn-primary"
+                    routerLink="/pages/submit-request">Submit a request</a>
+                <p class="fs-sm pt-4">Contact us and we’ll get back to you as soon as possible.</p>
+            </section>
+
+            <section class="container-fluid pt-grid-gutter">
+                <div class="row">
+                    <div class="col-xl-3 col-sm-6 mb-grid-gutter">
+                        <div class="card h-100">
+                            <div class="card-body text-center"><i class="ci-phone h3 mt-2 mb-4 text-primary"></i>
+                                <h3 class="h6 mb-3">24/7 Customer care contact number</h3>
+                                <ul class="list-unstyled fs-sm mb-0">
+                                    <li><span class="text-muted me-1"></span><a class="nav-link-style"
+                                            href="tel:+97167418133">+971
+                                            67 418
+                                            133</a></li>
+                                    <li><span class="text-muted me-1"></span><a class="nav-link-style"
+                                            href="tel:+97167418133">+971
+                                            67 418
+                                            133</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 mb-grid-gutter">
+                        <div class="card h-100">
+                            <div class="card-body text-center"><i class="ci-mail h3 mt-2 mb-4 text-primary"></i>
+                                <h3 class="h6 mb-3">Email addresses</h3>
+                                <ul class="list-unstyled fs-sm mb-0">
+                                    <li><span class="text-muted me-1"></span><a class="nav-link-style"
+                                            href="mailto:info.chikex@gmail.com">info.chikex@gmail.com</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-sm-6 mb-grid-gutter"><a class="card h-100" href="javascript:void(0);">
+                            <div class="card-body text-center"><i class="ci-location h3 mt-2 mb-4 text-primary"></i>
+                                <h3 class="h6 mb-2">Corporate Office address</h3>
+                                <p class="fs-sm text-muted">
+                                    Office # 1, Geepas Building 6,<br> Ajman, UAE</p>
+                            </div>
+                        </a></div>
+                    <div class="col-xl-3 col-sm-6 mb-grid-gutter">
+                        <div class="card h-100">
+                            <div class="card-body text-center"><i class="ci-time h3 mt-2 mb-4 text-primary"></i>
+                                <h3 class="h6 mb-3">Working hours</h3>
+                                <ul class="list-unstyled fs-sm text-muted mb-0">
+                                    <li>Mon - Sun: 09:00 AM - 06:00 PM</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </div>
+</div>
+
+<!-- Footer-->
+<!-- <app-footer></app-footer> -->

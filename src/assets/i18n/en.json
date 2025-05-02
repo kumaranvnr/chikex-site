@@ -1,0 +1,21 @@
+{
+  "MENUITEMS": {
+    "CUISINE": {
+      "TEXT": "Cuisine",
+      "LIST": {
+        "Fried&Chicken": "Fried Chicken",
+        "Kids&Corner": "kids Corner",
+        "Moxitos": "Moxitos",
+        "Sides": "Sides",
+        "Burger&Combo": "Burger & Combo",
+        "Wraps": "Wraps"
+      }
+    },
+    "Menu": "Menu",
+    "Deals": "Deals",
+    "About": "About Us",
+    "StoreLocator": "Store Locator",
+    "OurStory": "Our Story",
+    "ContactUs": "Contact Us"
+  }
+}
