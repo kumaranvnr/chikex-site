@@ -76,7 +76,8 @@
     <section class="container pt-4 mt-md-4 mb-2">
       <h2 class="h3 text-center mb-3">Outlet Locations</h2>
       <div class="row pt-4">
-        <div class="col-md-4 col-sm-6 mb-grid-gutter" *ngFor="let location of location_list;let i = index">
+        <div class="col-md-4 col-sm-6 mb-grid-gutter"
+          *ngFor="let location of location_list;let i = index;trackBy:fromDataResolver.identify;">
           <div class="card border-0 shadow"><img class="card-img-top" src="assets/img/contacts/orlando.jpg"
               alt="{{location.loc_name}}">
             <div class="card-body">

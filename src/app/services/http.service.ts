@@ -123,7 +123,7 @@ export class HttpService {
   }
 
   async applyCouponCode(data: any): Promise<any> {
-    return await this.httpClient.post(this.base_url + "/checkout-srv", data, {
+    return await this.httpClient.post(this.base_url + "/carts-srv/applycoupon", data, {
       headers: this.prepareAuthHeader()
     }).toPromise();
   }
@@ -161,11 +161,7 @@ export class HttpService {
     }).toPromise();
   }
 
-  async convertCartToOrder(data: any): Promise<any> {
-    return await this.httpClient.post(this.base_url + "/orders-srv/order", data, {
-      headers: this.prepareAuthHeader()
-    }).toPromise();
-  }
+
 
   async getCheckOutIdRequest(cart_id: string): Promise<any> {
     return await this.httpClient.get(this.base_url + "/orders-srv/" + cart_id, {
@@ -185,6 +181,21 @@ export class HttpService {
     await CookieStore.saveDataAsync("order_info", new_items)
     return Promise.resolve(new_items);
   }
+
+
+  async getOrderTrackingById(): Promise<any> {
+    const order_data = await CookieStore.getDataAsync("order_info");
+
+    const order_info = await this.httpClient.get(this.base_url + `/orders-srv/${order_data.orderNo}`, {
+      headers: this.prepareAuthHeader()
+    }).toPromise();
+
+    return Promise.resolve(order_info);
+
+
+  }
+
+
 
   async getCartId(): Promise<any> {
     return await CookieStore.getDataAsync("cart_id");
@@ -289,5 +300,57 @@ export class HttpService {
         headers: this.prepareAuthHeader()
       }).toPromise();
   }
+
+  async getUserAddressList(): Promise<any> {
+    return this.httpClient.get(this.base_url + "/usersaddress-srv/list",
+      {
+        headers: this.prepareAuthHeader()
+      }).toPromise();
+  }
+
+  async saveAddress(data: any): Promise<any> {
+    return await this.httpClient.post(this.base_url + "/usersaddress-srv", data, {
+      headers: this.prepareAuthHeader()
+    }).toPromise();
+  }
+
+
+  async getNearbyLocationList(data: any): Promise<any> {
+    return await this.httpClient.post(this.base_url + "/locations-srv/nearby/web", data, {
+      headers: this.prepareAuthHeader()
+    }).toPromise();
+  }
+
+
+  async deleteUserAddress(address_id: string): Promise<any> {
+    return await this.httpClient.delete(this.base_url + `/usersaddress-srv/${address_id}`, {
+      headers: this.prepareAuthHeader()
+    }).toPromise();
+  }
+
+  async updateCartRequirement(data: any): Promise<any> {
+    return await this.httpClient.post(this.base_url + "/carts-srv/requirement", data, {
+      headers: this.prepareAuthHeader()
+    }).toPromise();
+  }
+
+  async convertCartToOrder(data: any): Promise<any> {
+    return await this.httpClient.post(this.base_url + "/carts-srv/cart-to-order", data, {
+      headers: this.prepareAuthHeader()
+    }).toPromise();
+  }
+  async updatePaymentInfo(data: any): Promise<any> {
+    return await this.httpClient.post(this.base_url + "/orders-srv/update-payment", data, {
+      headers: this.prepareAuthHeader()
+    }).toPromise();
+  }
+
+  async updateCartUserAddress(data: any): Promise<any> {
+    return await this.httpClient.post(this.base_url + "/carts-srv/useraddress", data, {
+      headers: this.prepareAuthHeader()
+    }).toPromise();
+  }
+
+
 
 }

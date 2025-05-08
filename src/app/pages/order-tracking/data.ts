@@ -34,10 +34,10 @@ const CartData = [
 ];
 
 const orderStatus = [
-    { id: "order_placed", text: "Order placed", icon_text: "ci-bag", flag: "", },
-    { id: "processing_order", text: "Processing order", icon_text: "ci-settings", flag: "", },
-    { id: "order_dispatched", text: "Order Dispatched", icon_text: "ci-star", flag: "", },
-    { id: "order_delivered", text: "Order Delivered", icon_text: "ci-package", flag: "", },
+    { id: "order_initiated", text: "Order Initiated", icon_text: "ci-bag", flag: "", time: "" },
+    { id: "order_placed", text: "Order Placed", icon_text: "ci-settings", flag: "", time: "" },
+    { id: "order_dispatched", text: "Order Dispatched", icon_text: "ci-star", flag: "", time: "" },
+    { id: "order_delivered", text: "Order Delivered", icon_text: "ci-package", flag: "", time: "" },
 
 ]
 

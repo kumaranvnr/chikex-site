@@ -14,6 +14,7 @@ import { CookieStore } from 'src/app/services/helpers/CookieStore';
 import { Router } from '@angular/router';
 import { cartdata } from '../../cart/data';
 import { HttpService } from 'src/app/services/http.service';
+import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
 
 @Component({
   selector: 'app-account-payment',
@@ -25,7 +26,7 @@ import { HttpService } from 'src/app/services/http.service';
  * Account Payment Component
  */
 export class AccountPaymentComponent implements OnInit {
-
+  fromDataResolver = FromDataResolver;
   // Form Submit
   userForm!: UntypedFormGroup;
   submitted = false;

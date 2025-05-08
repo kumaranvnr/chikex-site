@@ -57,22 +57,9 @@ export class AccountSigninComponent implements OnInit {
     });
   }
 
-  //------------------ Sign In Form ---------------------//
-  // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
 
-
-
-  //------------------ Sign Up Form ---------------------//
-
-  // convenience getter for easy access to form fields
   get fa() { return this.SignupForm.controls; }
-
-  /**
-   * Form submit
-   */
-
-
 
   async onSubmit() {
 
@@ -80,7 +67,7 @@ export class AccountSigninComponent implements OnInit {
       if (this.loginForm.valid) {
         const login_data = this.loginForm.value;
         if (!login_data.email) {
-          alert('Please enter user name'); return;
+          alert('Please enter email address'); return;
         }
         if (!login_data.password) {
           alert('Please enter password'); return;
@@ -92,7 +79,7 @@ export class AccountSigninComponent implements OnInit {
           this.router.navigate(['/portal/handle/token'], {
             queryParams:
             {
-              access_token: save_respose.data.session.access_token
+              access_token: save_respose.data[0].session[0].access_token
             }
           });
         }
@@ -110,15 +97,15 @@ export class AccountSigninComponent implements OnInit {
       if (this.SignupForm.valid) {
         const login_data = this.SignupForm.value;
         login_data.user_name = login_data.given_name + " " + login_data.family_name;
-        console.log(login_data.email);
+
         if (!login_data.email) {
-          alert('Please enter user name'); return;
+          alert('Please enter email address'); return;
         }
         if (!login_data.password) {
           alert('Please enter password'); return;
         }
-        if (!login_data.user_name) {
-          alert('Please enter name'); return;
+        if (!login_data.mobile) {
+          alert('Please enter mobile'); return;
         }
         console.log(login_data);
         let save_respose = await this.restService.userRegister(login_data);

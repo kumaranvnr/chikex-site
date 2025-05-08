@@ -8,13 +8,13 @@
       <div class="navbar-toolbar d-flex align-items-center order-lg-3">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
           <span class="navbar-toggler-icon" (click)="collapse.toggle()"></span></button>
-        <a class="navbar-tool d-none d-lg-flex" href="javascript:void(0)" data-bs-toggle="collapse"
+        <!-- <a class="navbar-tool d-none d-lg-flex" href="javascript:void(0)" data-bs-toggle="collapse"
           data-bs-target="#searchBox" role="button" aria-expanded="false" aria-controls="searchBox">
           <span class="navbar-tool-tooltip">Search</span>
           <div class="navbar-tool-icon-box" (click)="collapse.toggle()">
             <i class="navbar-tool-icon ci-search"></i>
           </div>
-        </a>
+        </a> -->
         <!--  <a class="navbar-tool ms-2" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#showModal"
           (click)="checkSignInStatus()"><span class="navbar-tool-tooltip">Account</span>
           <div class="navbar-tool-icon-box"><i class="navbar-tool-icon ci-user"></i></div>
@@ -59,7 +59,8 @@
             <div class="dropdown-menu dropdown-menu-end">
               <div class="widget widget-cart px-3 pt-2 pb-3" style="width: 20rem;">
                 <div style="height: 15rem;" data-simplebar data-simplebar-auto-hide="false" *ngIf="carts.length!=0">
-                  <div *ngFor="let cart of carts;let i = index" class="widget-cart-item pb-2 border-bottom">
+                  <div *ngFor="let cart of carts;let i = index;trackBy:fromDataResolver.identify;"
+                    class="widget-cart-item pb-2 border-bottom">
                     <button class="btn-close text-danger" type="button" aria-label="Remove"
                       (click)="removecart(cart)"><span aria-hidden="true">&times;</span></button>
                     <div class="d-flex align-items-center"><a class="d-block" href="javascript:void(0);"><img
@@ -79,35 +80,33 @@
                     class="btn btn-outline-secondary btn-sm" href="javascript:void(0);" routerLink="/cart">Expand cart<i
                       class="ci-arrow-right ms-1 me-n1"></i></a>
                 </div><a class="btn btn-primary btn-sm d-block w-100" href="javascript:void(0);"
-                  (click)="openMapModal()" routerLink="/checkout"><i
-                    class="ci-card me-2 fs-base align-middle"></i>Checkout</a>
+                  routerLink="/checkout"><i class="ci-card me-2 fs-base align-middle"></i>Checkout</a>
               </div>
             </div>
           </div>
         </ng-container>
 
-
       </div>
       <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed" class="collapse navbar-collapse me-auto order-lg-2"
         id="navbarCollapse">
         <!-- Search (mobile)-->
-        <div class="d-lg-none py-3">
+        <!-- <div class="d-lg-none py-3">
           <div class="input-group"><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
             <input class="form-control rounded-start" type="text" [(ngModel)]="term" placeholder="What do you need?">
           </div>
-        </div>
+        </div> -->
         <!-- Location dropdown-->
-        <ul class="navbar-nav navbar-mega-nav ms-lg-4 pe-lg-2 me-lg-2">
+        <!-- <ul class="navbar-nav navbar-mega-nav ms-lg-4 pe-lg-2 me-lg-2">
           <li ngbDropdown class="nav-item dropdown">
             <a class="nav-link dropdown-toggle ps-lg-0" href="javascript:void(0);" data-bs-toggle="dropdown"
               ngbDropdownToggle><i class="ci-location me-2"></i>{{selectedLocation}}</a>
             <ul ngbDropdownMenu class="dropdown-menu">
-              <li (click)="ChangeLocation(location)" *ngFor="let location of location_List;let i = index">
+              <li (click)="ChangeLocation(location)" *ngFor="let location of location_List;let i = index;trackBy:fromDataResolver.identify;">
                 <a class="dropdown-item" href="javascript:void(0);">{{location.loc_name}}</a>
               </li>
             </ul>
           </li>
-        </ul>
+        </ul> -->
         <!-- Primary menu-->
         <ul class="navbar-nav">
           <!-- <li ngbDropdown class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="javascript:void(0);"
@@ -162,24 +161,25 @@
               </div>
             </div>
           </li> -->
-          <li class="nav-item"><a class="nav-link" routerLink="/menu">{{
-              "MENUITEMS.Menu" | translate }}</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="/">{{
+              "MENUITEMS.Home" | translate }}</a></li>
           <li class="nav-item"><a class="nav-link" routerLink="/pages/about">{{
               "MENUITEMS.About" | translate }}</a></li>
-
+          <li class="nav-item"><a class="nav-link" routerLink="/menu">{{
+              "MENUITEMS.Menu" | translate }}</a></li>
           <li class="nav-item"><a class="nav-link" routerLink="/pages/contacts">{{
               "MENUITEMS.ContactUs" | translate }}</a></li>
         </ul>
       </div>
     </div>
     <!-- Search collapse-->
-    <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed" class="search-box collapse" id="searchBox">
+    <!-- <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed" class="search-box collapse" id="searchBox">
       <div class="container py-2">
         <div class="input-group"><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
           <input class="form-control rounded-start" type="text" placeholder="What do you need?">
         </div>
       </div>
-    </div>
+    </div> -->
   </header>
 </div>
 
@@ -205,16 +205,16 @@
       <span class="handheld-toolbar-icon"><i class="ci-user"></i></span>
       <span class="handheld-toolbar-label">Account</span>
     </a>
-    <a class="d-table-cell handheld-toolbar-item" href="javascript:void(0)" data-bs-toggle="collapse"
+    <a class="d-table-cell handheld-toolbar-item" routerLink="/menu" data-bs-toggle="collapse"
       data-bs-target="#navbarCollapse" (click)="collapse.toggle()" onclick="window.scrollTo(0, 0)">
       <span class="handheld-toolbar-icon"><i class="ci-menu"></i></span>
       <span class="handheld-toolbar-label">Menu</span>
     </a>
-    <a class="d-table-cell handheld-toolbar-item" href="javascript:void(0)" href="/cart">
+    <a class="d-table-cell handheld-toolbar-item" href="javascript:void(0)" routerLink="/cart">
       <span class="handheld-toolbar-icon"><i class="ci-cart"></i>
         <span class="badge bg-primary rounded-pill ms-1">{{carts.length}}</span>
       </span>
-      <span class="handheld-toolbar-label">${{calculatetotal(total)}}</span>
+      <span class="handheld-toolbar-label">{{calculatetotal(total)|number:'1.2-2'}} AED</span>
     </a>
   </div>
 </div>

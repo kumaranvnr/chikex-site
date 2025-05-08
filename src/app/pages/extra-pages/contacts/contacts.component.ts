@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { location_list } from '../../index/data';
 import { HttpService } from 'src/app/services/http.service';
+import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
 
 @Component({
   selector: 'app-contacts',
@@ -10,7 +11,7 @@ import { HttpService } from 'src/app/services/http.service';
 })
 
 export class ContactsComponent implements OnInit {
-
+  fromDataResolver = FromDataResolver;
   breadCrumbItems!: Array<{}>;
   contactForm!: UntypedFormGroup;
   submitted = false;

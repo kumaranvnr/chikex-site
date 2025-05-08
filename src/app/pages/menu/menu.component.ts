@@ -1,43 +1,159 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { cart_details, cartdata } from '../cart/data';
 import { ActivatedRoute } from '@angular/router';
-
 import { HttpService } from 'src/app/services/http.service';
 import Swal from 'sweetalert2';
 import { CookieStore } from 'src/app/services/helpers/CookieStore';
-import { SignmodalComponent } from 'src/app/shared/signmodal/signmodal.component';
+import { SignmodalComponent } from 'src/app/shared/modals/signmodal/signmodal.component';
+import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
+
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent {
-
+  fromDataResolver = FromDataResolver;
   products: any;
   productdetail: any;
   category_name_header: any;
   category_list: any;
   complete_product_list: any;
   complete_category_list: any;
+  location_List: any;
+  address: any;
+  outlet_id: any;
+  outlet_code: any;
 
-  constructor(private modalService: NgbModal,
+  constructor(private modalService: NgbModal, private cd: ChangeDetectorRef,
     private restService: HttpService, private route: ActivatedRoute) {
     this.getProductList();
-    this.getCategory()
-    this.getCartRequest();
+    this.getCategory();
+    this.getLocationList();
+    // this.getCartRequest();
+  }
+
+  async getLocationList(): Promise<any> {
+    let response = await this.restService.getLocationList();
+    if (response.data) {
+      this.location_List = response.data.location_list;
+    } else {
+      console.log(response?.error);
+    }
+  }
+
+  // check_product_status(product: any) {
+  //   var status = true;
+  //   CookieStore.getDataAsync('outlet_id').then(data => {
+  //     if (data) {
+  //       const location_id = product.locations.find((location: any) => location == data);
+  //       if (!location_id || location_id == undefined) {
+  //         status = false;
+  //       }
+  //     }
+  //   });
+  //   return status
+  // }
+
+  check_product_status(product: any) {
+    if (this.outlet_id == undefined) {
+      return true;
+    }
+    var location_id = product.locations.find((location: any) => location === this.outlet_id);
+    if (location_id) {
+      return true;
+    }
+    return false;
+  }
+
+  async check_address_list(): Promise<any> {
+    var getlocation: boolean = false;
+    const user_info = await CookieStore.getUserInfo()?.sub;
+    if (user_info) {
+      let user_address_response = await this.restService.getUserAddressList();
+      if (user_address_response?.data.length > 0) {
+        this.address = user_address_response?.data.find((data: any) => data.primary == true);
+        CookieStore.saveDataAsync("current_address", this.address);
+        this.outlet_code = this.address.nearbyStore;
+      } else {
+        getlocation = true;
+      }
+    }
+    else {
+      getlocation = true;
+    }
+    if (getlocation) {
+      await this.getCurrentLocation();
+    }
+    if (this.location_List && this.outlet_code) {
+      this.outlet_id = this.location_List.find((data: any) => data.code == this.outlet_code)?._id;
+      CookieStore.saveDataAsync("outlet_id", this.outlet_id);
+      this.cd.detectChanges();
+    }
   }
 
   ngOnInit(): void {
-    this.category_list = this.complete_category_list;
-    this.route.params.subscribe(data => {
-      if (data['category'] != null) {
-        this.category_name_header = this.getCategoryDescription(data['category']);
+    setTimeout(() => {
+      let category_id = this.route.snapshot.paramMap.get('category');
+      if (category_id) {
+        this.category_name_header = category_id;
+        this.filterProducts(category_id);
+      }
+      if (category_id == null) {
+        this.products = this.complete_product_list;
+      }
+      this.check_address_list();
+    }, 1000);
+
+  }
+
+  lat: any; long: any;
+  getCurrentLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const coordinate: any = {};
+          coordinate.lat = position.coords.latitude;
+          coordinate.long = position.coords.longitude;
+          let location_response = await this.restService.getNearbyLocationList(coordinate);
+          if (location_response) {
+            if (location_response.data.length > 0) {
+              this.outlet_id = location_response?.data[0]?._id;
+              CookieStore.saveDataAsync("outlet_id", this.outlet_id);
+              this.outlet_code = location_response?.data[0]?.code;
+            }
+          }
+        },
+        (error) => {
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              alert("User denied the request for Geolocation.");
+              break;
+            case error.POSITION_UNAVAILABLE:
+              alert("Location information is unavailable.");
+              break;
+            case error.TIMEOUT:
+              alert("The request to get user location timed out.");
+              break;
+          }
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  }
+
+
+
+  filterProducts(category_id: any) {
+    setTimeout(() => {
+      if (this.complete_product_list) {
         this.products = this.complete_product_list.filter((item: any) => {
-          return item.category_code === data['category'];
+          return item.category_code === category_id;
         });
       }
-    });
+    }, 300);
   }
 
   async getCartRequest(): Promise<any> {
@@ -56,10 +172,9 @@ export class MenuComponent {
   }
 
   async getProductList(): Promise<any> {
-    let category_response = await this.restService.getProductList();
-    if (category_response.data) {
-      this.products = category_response.data;
-      this.complete_product_list = category_response.data;
+    let product_response = await this.restService.getProductList();
+    if (product_response.data) {
+      this.complete_product_list = product_response.data;
     }
   }
 
@@ -71,41 +186,73 @@ export class MenuComponent {
     }
   }
 
-  getCategoryDescription(category_id: string) {
+  getCategoryDescription(category_id: any) {
     return this.complete_category_list.find((c: any) => c._id == category_id)?.title
   }
 
   // open modal
   openModal(content: any, i: any) {
+
     this.productdetail = this.products[i];
+    var location_id = this.productdetail.locations.find((location: any) => location === this.outlet_id);
+    if (!location_id) {
+      Swal.fire({ title: 'Message', text: `Stock not available`, confirmButtonColor: '#364574' });
+      return;
+    }
+    // this.check_location_status(this.products[i]);
     this.modalService.open(content, { size: 'xl', centered: true });
   }
 
+  async removecart(product: any) {
+    // this.cartdata.splice(product, 1);
+    const index = cartdata.findIndex((cart: any) => cart.product_id == product.product_id);
+    if (index !== -1) {
+      cartdata.splice(index, 1);
+    }
+    if (product.sub == undefined) {
+      product.sub = CookieStore.getUserInfo()?.sub
+    }
+    let remove_obj: any = {
+      sub: product.sub,
+      product_id: product.product_id
+    };
+    await this.restService.removeCartItems(remove_obj);
+  }
+
   async decreaseQuantity(product: any): Promise<void> {
+
     if (product.qty == 1) {
+      this.removecart(product);
       return;
     }
+
     product.qty--;
     this.calculateAddontotal(product);
+    this.updateTempCart(product);
   }
+
 
   async onQuantityChange(product: any): Promise<void> {
     if (product.qty < 0) {
       product.qty = 1;
     }
     this.calculateAddontotal(product);
+    this.updateTempCart(product);
   }
 
   async increaseQuantity(product: any): Promise<void> {
     product.qty++;
     this.calculateAddontotal(product);
+    this.updateTempCart(product);
   }
+
   adjustWidth(event: any): void {
     const input = event.target;
     input.style.width = `${input.value.length + 1}ch`; // Adjust width based on input length
   }
+
   calculateAddontotal(product: any) {
-    var addons_total_price = 0;
+    let addons_total_price = 0;
     if (product.group_modifiers_list.length != 0) {
       product.group_modifiers_list.forEach((group_modifier: any) => {
         group_modifier.modifiers_list.forEach((modifier: any) => {
@@ -124,9 +271,11 @@ export class MenuComponent {
       group_modifier.modifiers_list.forEach((element: any) => {
         element.selected = false;
       });
+      group_modifier.selected = true;
     }
     modifier.selected = !modifier.selected;
     this.calculateAddontotal(product);
+
   }
 
   getItemStatus(productId: string) {
@@ -136,10 +285,35 @@ export class MenuComponent {
     }
     return false;
   }
-  async addnewitem(product: any): Promise<void> {
+  async updateTempCart(product: any) {
     var sub = CookieStore.getUserInfo()?.sub;
-    if (sub == "") {
-      Swal.fire({ title: 'Login!', text: `Please Login to Continue`, confirmButtonColor: '#364574', icon: 'info', position: 'top', width: '500px', });
+
+    product.sub = sub;
+    let cart_data = cartdata.find(data => data.product_id == product.product_id);
+    if (cart_data) {
+      cart_data.price = product.price;
+      cart_data.qty = product.qty;
+      cart_data.addon_total = product.addon_total;
+      cart_data.total_price = product.total_price;
+      cart_data.group_modifiers_list = product.group_modifiers_list;
+    } else {
+      cartdata.push(product);
+    }
+
+    const cart_info: any = {};
+    cart_info.sub = sub;
+    cart_info.cart_items = [];
+    cart_info.cart_items.push(product);
+
+    await this.restService.addCartItems(cart_info);
+
+  }
+
+  async addnewitem(product: any): Promise<void> {
+
+    var sub = CookieStore.getUserInfo()?.sub;
+    if (sub == "" || sub == undefined) {
+
       this.modalService.open(SignmodalComponent, { size: 'md', centered: true });
       return;
     }
@@ -147,11 +321,26 @@ export class MenuComponent {
       return;
     }
 
+    if (product.group_modifiers_list.length != 0) {
+      var required = false;
+      product.group_modifiers_list.forEach((group_modifier: any) => {
+        if (group_modifier.mtype == 0 && group_modifier.selected == false) {
+          required = true;
+        }
+      });
+      if (required) {
+
+        Swal.fire({ title: 'Message', text: `Please choose options`, confirmButtonColor: '#364574' });
+        return;
+      }
+    }
+
     product.sub = sub;
     let cart_data = cartdata.find(data => data.product_id == product.product_id);
     if (cart_data) {
+      cart_data.price = product.price;
       cart_data.qty = product.qty;
-      cart_data.addon_total = product.addons_total_price;
+      cart_data.addon_total = product.addon_total;
       cart_data.total_price = product.total_price;
       cart_data.group_modifiers_list = product.group_modifiers_list;
     } else {
@@ -168,11 +357,7 @@ export class MenuComponent {
       this.modalService.dismissAll();
       Swal.fire({ title: 'Added!', text: `${product.title} has been Added to cart.`, confirmButtonColor: '#364574', icon: 'success', position: 'bottom-end', width: '500px', });
     }
-  }
 
-  qty_info: any
-  async onChange(event: any) {
-    this.qty_info = parseFloat(event.target.value);
   }
 
   // filter product

@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 import { HttpService } from 'src/app/services/http.service';
 import { addressData } from './data';
 import { cartdata } from '../../cart/data';
+import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
 
 @Component({
   selector: 'app-account-address',
@@ -28,7 +29,7 @@ import { cartdata } from '../../cart/data';
  * Account Address Component
  */
 export class AccountAddressComponent implements OnInit {
-
+  fromDataResolver = FromDataResolver;
   tables$: Observable<Table[]>;
   total$: Observable<number>;
   public isCollapsed = true;

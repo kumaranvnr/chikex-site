@@ -1,14 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+/// <reference types="google.maps" />
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
-import { SignmodalComponent } from '../signmodal/signmodal.component';
+import { SignmodalComponent } from '../modals/signmodal/signmodal.component';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { cart_details, cartdata } from 'src/app/pages/cart/data';
 import { SharedService } from 'src/app/services/shared.service';
 import { CookieStore } from 'src/app/services/helpers/CookieStore';
 import { HttpService } from 'src/app/services/http.service';
-
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { AddressmodalComponent } from '../modals/addressmodal/addressmodal.component';
+import { AddresslistmodalComponent } from '../modals/addresslistmodal/addresslistmodal.component';
+import Swal from 'sweetalert2';
+import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
 
 @Component({
   selector: 'app-header',
@@ -17,6 +23,7 @@ import { HttpService } from 'src/app/services/http.service';
 })
 
 export class HeaderComponent implements OnInit {
+  fromDataResolver = FromDataResolver;
   public isCollapsed = true;
   formData!: UntypedFormGroup;
   signupformData!: UntypedFormGroup;
@@ -38,30 +45,31 @@ export class HeaderComponent implements OnInit {
     private restService: HttpService,
     private sharedService: SharedService) {
     translate.setDefaultLang('en');
-    this.getLocationList();
+    //  this.getLocationList();
     this.getCartDetails();
   }
 
   async getCartDetails(): Promise<any> {
 
     var sub = CookieStore.getUserInfo()?.sub;
-    let cart_reponse = await this.restService.getCartDetails(sub);
-    if (cart_reponse.data) {
-      cart_details._id = cart_reponse.data._id;
-      cart_details.sub = cart_reponse.data.sub;
-      cart_details.total_price = cart_reponse.data.total_price;
-      cartdata.splice(0);
-      cart_reponse.data.cart_items.forEach((element: any) => {
-        cartdata.push(element);
-      });
+    if (sub != undefined) {
+      let cart_reponse = await this.restService.getCartDetails(sub);
+      if (cart_reponse.data) {
+        cart_details._id = cart_reponse.data._id;
+        cart_details.sub = cart_reponse.data.sub;
+        cart_details.total_price = cart_reponse.data.total_price;
+        cartdata.splice(0);
+        cart_reponse.data.cart_items.forEach((element: any) => {
+          cartdata.push(element);
+        });
+      }
+      this.carts = cartdata;
     }
-    this.carts = cartdata;
 
   }
 
   ngOnInit(): void {
     this.selectedLocation = 'UAE',
-
       this.sharedService.loginStatus.subscribe(flag => {
         const user = CookieStore.getUserInfo();
         if (user) {
@@ -72,11 +80,6 @@ export class HeaderComponent implements OnInit {
         }
       });
   }
-
-  openMapModal() {
-    // this.modalService.open(AddressModalComponentComponent, { size: 'xl', centered: true });
-  }
-
 
   async getLocationList(): Promise<any> {
     let response = await this.restService.getLocationList();

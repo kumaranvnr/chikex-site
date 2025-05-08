@@ -10,11 +10,15 @@ import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 // component
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { SignmodalComponent } from './signmodal/signmodal.component';
+import { SignmodalComponent } from './modals/signmodal/signmodal.component';
 import { LanguageService } from '../services/language.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { NavbarLevel1LightComponent } from './navbar-level1-light/navbar-level1-light.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
+import { AddressmodalComponent } from './modals/addressmodal/addressmodal.component';
+import { AddresslistmodalComponent } from './modals/addresslistmodal/addresslistmodal.component';
+import { NewaddressmodalComponent } from './modals/newaddressmodal/newaddressmodal.component';
+
 
 @NgModule({
   declarations: [
@@ -23,7 +27,9 @@ import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
     SignmodalComponent,
     NavbarLevel1LightComponent,
     BreadcrumbsComponent,
-
+    AddressmodalComponent,
+    AddresslistmodalComponent,
+    NewaddressmodalComponent
   ],
   imports: [
     CommonModule,

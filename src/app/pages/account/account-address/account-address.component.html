@@ -46,7 +46,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of tables$ | async;let i=index">
+            <tr *ngFor="let data of tables$ | async;let i=index;trackBy:fromDataResolver.identify;">
               <td class="py-3 align-middle">{{data.given_name}} {{data.street1}}, {{data.street2}}, {{data.city}}
                 {{data.emirate}}, {{data.mobile}}</td>
               <td class="py-3 align-middle">

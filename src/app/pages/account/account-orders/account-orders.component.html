@@ -58,18 +58,18 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let order of order_list;let i=index">
+            <tr *ngFor="let order of order_list;let i=index;trackBy:fromDataResolver.identify;">
               <td class="py-3"> {{order.order_no}} </td>
-              <td class="py-3">{{this.datePipe.transform(order.updatedAt, 'd/M/yyyy')}}</td>
+              <td class="py-3">{{this.datePipe.transform(order.updatedAt, 'dd/MM/yyyy hh:mm aa')}}</td>
               <td class="py-3"><span>{{order.status.split("_").join(" ")|titlecase}}</span></td>
               <!-- <td class="py-3"><span class="badge bg-{{data.status_color}} m-0">{{data.status}}</span></td> -->
-              <td class="py-3">AED {{order.total_price}}</td>
+              <td class="py-3">AED {{order.total_price|number:'1.2-2'}}</td>
               <td class="py-3"><a class="nav-link-style fw-medium fs-sm text-center" href=" javascript:void(0);"
                   ngbTooltip="Show the Order Items" data-bs-toggle="modal"
                   (click)="orderModal(ordertDetailModal,order)"><i class="ci-view-list opacity-60 me-2"></i></a>
-                <a class="nav-link-style fw-medium fs-sm" href="javascript:void(0);" data-bs-toggle="modal"
+                <!-- <a class="nav-link-style fw-medium fs-sm" href="javascript:void(0);" data-bs-toggle="modal"
                   ngbTooltip="Repeat this order" (click)="repeatOrder(order)"><i
-                    class="ci-reload opacity-60 me-2"></i></a>
+                    class="ci-reload opacity-60 me-2"></i></a> -->
               </td>
 
             </tr>
@@ -103,31 +103,35 @@
     <div class="modal-body pb-0">
       <!-- Item-->
       <div class="d-sm-flex justify-content-between mb-4 pb-3 pb-sm-2 border-bottom"
-        *ngFor="let order_item of single_order.cart_items;let i= index">
+        *ngFor="let order_item of single_order.cart_items;let i= index;trackBy:fromDataResolver.identify;">
         <div class="d-sm-flex text-center text-sm-start"><a class="d-inline-block flex-shrink-0 mx-auto"
-            href="javascript:void(0);" style="width: 10rem;"><img src="{{order_item.img_link}}" alt="Product"></a>
+            href="javascript:void(0);" style="width: 10rem;"><img src="{{order_item.img_url}}" alt="Product"></a>
           <div class="ps-sm-4 pt-2">
             <h3 class="product-title fs-base mb-2"><a href="javascript:void(0);">{{order_item.title}}</a></h3>
-            <div class="fs-lg text-accent pt-2">AED {{order_item.price}}.<small>00</small></div>
+            <div class="fs-lg text-accent pt-2"> {{order_item.price|number:'1.2-2'}} AED</div>
           </div>
         </div>
         <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
           <div class="text-muted mb-2">Quantity:</div>{{order_item.qty}}
         </div>
         <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
-          <div class="text-muted mb-2">Subtotal</div>AED {{order_item.price}}.<small>00</small>
+          <div class="text-muted mb-2">Add On Total:</div>{{order_item.addon_total|number:'1.2-2'}} AED
+        </div>
+        <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
+          <div class="text-muted mb-2">Subtotal</div> {{order_item.total_price| number: '1.2-2'}} AED
         </div>
       </div>
     </div>
     <!-- Footer-->
     <div class="modal-footer flex-wrap justify-content-between bg-secondary fs-md">
-      <div class="px-2 py-1"><span class="text-muted">Subtotal:&nbsp;</span><span>AED
-          {{single_order.price}}.<small>00</small></span></div>
-      <div class="px-2 py-1"><span class="text-muted">Delivery:&nbsp;</span><span>AED 0.<small>00</small></span></div>
-      <div class="px-2 py-1"><span class="text-muted">Discount:&nbsp;</span><span>AED
-          {{single_order.discount}}.<small>00</small></span></div>
-      <div class="px-2 py-1"><span class="text-muted">Total:&nbsp;</span><span class="fs-lg">AED
-          {{single_order.total_price}}.<small>00</small></span></div>
+      <div class="px-2 py-1"><span class="text-muted">Subtotal:&nbsp;</span><span>
+          {{single_order.sub_total|number:'1.2-2'}} AED</span></div>
+      <div class="px-2 py-1"><span class="text-muted">Delivery Charges :&nbsp;</span><span>
+          {{single_order.delivery_charges |number:'1.2-2'}} AED</span></div>
+      <div class="px-2 py-1"><span class="text-muted">Discount:&nbsp;</span><span>
+          {{single_order.discount |number:'1.2-2'}} AED</span></div>
+      <div class="px-2 py-1"><span class="text-muted">Total:&nbsp;</span><span class="fs-lg">
+          {{single_order.total_price |number:'1.2-2'}} AED</span></div>
     </div>
   </div>
 </ng-template>

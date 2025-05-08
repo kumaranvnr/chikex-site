@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { CookieStore } from 'src/app/services/helpers/CookieStore';
 import { cartdata } from '../../cart/data';
 import { HttpService } from 'src/app/services/http.service';
+import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
 
 @Component({
   selector: 'app-account-orders',
@@ -23,7 +24,7 @@ import { HttpService } from 'src/app/services/http.service';
  * Account Orders Component
  */
 export class AccountOrdersComponent implements OnInit {
-
+  fromDataResolver = FromDataResolver;
   tables$: Observable<Table[]>;
   total$: Observable<number>;
   public isCollapsed = true;
@@ -74,8 +75,8 @@ export class AccountOrdersComponent implements OnInit {
     this.modalService.open(ordertDetailModal, { size: 'lg', centered: true });
   }
 
-  repeatOrder(order_info: any) {
+  // repeatOrder(order_info: any) {
 
-  }
+  // }
 
 }

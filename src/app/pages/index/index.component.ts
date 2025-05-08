@@ -7,6 +7,7 @@ import { SwiperOptions } from 'swiper';
 import { Router } from '@angular/router';
 import { cart_details, cartdata } from '../cart/data';
 import { HttpService } from 'src/app/services/http.service';
+import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
 
 @Component({
   selector: 'app-index',
@@ -14,6 +15,7 @@ import { HttpService } from 'src/app/services/http.service';
   styleUrls: ['./index.component.scss']
 })
 export class IndexComponent implements OnInit {
+  fromDataResolver = FromDataResolver;
   category: any;
   restaurants: any;
   review: any;
@@ -23,8 +25,7 @@ export class IndexComponent implements OnInit {
   @ViewChild(SwiperDirective, { static: false }) directiveRef?: SwiperDirective;
 
   constructor(public router: Router, private httpService: HttpService) {
-    this.getCartRequest();
-
+    // this.getCartRequest();
   }
 
   ngOnInit(): void {

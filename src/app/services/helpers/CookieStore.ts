@@ -160,14 +160,13 @@ export class CookieStore {
     }
 
     static getCacheKey(key: any) {
-        const cache_key = (<any>window).cache_key;
+        const cache_key = (<any>window).cache_key || 'default';
         key = "v-" + cache_key + "-" + key
         return key;
     }
 
     static async saveDataAsync(key: string, data: any): Promise<any> {
         try {
-
             key = this.getCacheKey(key);
             if (localStorage) {
                 localStorage.setItem(key, JSON.stringify(data));
@@ -196,6 +195,16 @@ export class CookieStore {
             return Promise.resolve(null);
         } catch (error) {
             return Promise.resolve(null);
+        }
+
+    }
+
+    static clearDataAsync(key: string) {
+        key = this.getCacheKey(key);
+        if (localStorage && localStorage.getItem(key)) {
+            localStorage.removeItem(key);
+        } else {
+            cookies.set(key, '');
         }
 
     }

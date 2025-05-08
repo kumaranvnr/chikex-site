@@ -1,9 +1,14 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
 import { cart_details, cartdata } from './data';
 import { HttpService } from 'src/app/services/http.service';
 import { Router } from '@angular/router';
 import { CookieStore } from 'src/app/services/helpers/CookieStore';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AddresslistmodalComponent } from 'src/app/shared/modals/addresslistmodal/addresslistmodal.component';
+import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
+//import * as google from 'google.maps';
 
 @Component({
   selector: 'app-cart',
@@ -11,7 +16,7 @@ import { CookieStore } from 'src/app/services/helpers/CookieStore';
   styleUrls: ['./cart.component.scss']
 })
 export class CartComponent implements OnInit, AfterViewInit {
-
+  fromDataResolver = FromDataResolver;
   formData!: UntypedFormGroup;
   qty: any = 1;
   cartItems: any[] = [];
@@ -25,8 +30,8 @@ export class CartComponent implements OnInit, AfterViewInit {
     private resetService: HttpService,
     private cd: ChangeDetectorRef,
     private router: Router,
+    private modalService: NgbModal,
     private restService: HttpService) {
-    this.getCartDetails();
 
   }
 
@@ -36,35 +41,35 @@ export class CartComponent implements OnInit, AfterViewInit {
       comments: [''],
       promocode: ['', [Validators.required]],
     });
-
+    this.getCartDetails();
   }
-
 
   ngAfterViewInit() {
     this.total_price = cart_details.total_price;
+
     this.cd.detectChanges();
   }
 
   async getCartDetails(): Promise<any> {
-    if (cart_details._id == '') {
-      var sub = CookieStore.getUserInfo()?.sub;
-      let cart_reponse = await this.restService.getCartDetails(sub);
-      if (cart_reponse.data) {
-        cart_details._id = cart_reponse.data._id;
-        cart_details.sub = cart_reponse.data.sub;
-        cart_details.total_price = cart_reponse.data.total_price;
-        cartdata.splice(0);
-        cart_reponse.data.cart_items.forEach((element: any) => {
-          cartdata.push(element);
-        });
-      }
-      this.cartItems = cartdata;
-      this.formData.controls['comments'].setValue(cart_reponse.data.comments);
-      if (cart_reponse.data.coupon_applied) {
-        this.formData.controls['promocode'].setValue(cart_reponse.data.coupon[0].code);
-        this.applycode();
-      }
+
+    var sub = CookieStore.getUserInfo()?.sub;
+    let cart_reponse = await this.restService.getCartDetails(sub);
+    if (cart_reponse.data) {
+      cart_details._id = cart_reponse.data._id;
+      cart_details.sub = cart_reponse.data.sub;
+      cart_details.total_price = cart_reponse.data.total_price;
+      cartdata.splice(0);
+      cart_reponse.data.cart_items.forEach((element: any) => {
+        cartdata.push(element);
+      });
     }
+    this.cartItems = cartdata;
+    this.formData.controls['comments'].setValue(cart_reponse.data.comments);
+    if (cart_reponse.data.coupon_applied) {
+      this.formData.controls['promocode'].setValue(cart_reponse.data.coupon_code);
+      this.applycode();
+    }
+
   }
 
   /**
@@ -84,33 +89,6 @@ export class CartComponent implements OnInit, AfterViewInit {
       total_price += parseFloat(element.total_price);
     });
     return total_price;
-  }
-
-  calculatetotal(i: any, ev: any) {
-    this.qty = ev.target.value;
-    this.cartItems[i].total_price = this.cartItems[i].price * this.qty;
-
-    if (this.cartItems[i].qty > this.qty) {
-      this.total_price -= this.cartItems[i].total_price;
-    } else {
-      this.total_price += this.cartItems[i].total_price;
-    }
-    this.cartItems[i].qty = this.qty;
-
-    let cart = {} as ICartItems;
-    cart._id = cart_details._id;
-    cart.sub = cart_details.sub;
-    cart.product_id = this.cartItems[i].product_id;
-    cart.title = this.cartItems[i].title;
-    cart.description = this.cartItems[i].description;
-    cart.price = this.cartItems[i].price;
-    cart.img_url = this.cartItems[i].img_link;
-
-    cart.qty = this.qty;
-    cart.price = this.cartItems[i].price;
-    cart.discount = 0;
-    cart.total_price = (cart.qty * cart.price) - cart.discount;
-
   }
 
   calculateAddontotal(product: any) {
@@ -150,22 +128,14 @@ export class CartComponent implements OnInit, AfterViewInit {
     this.calculateAddontotal(product);
   }
 
-  async updateCartItems(product: any): Promise<void> {
-    let cart_data = cartdata.find(data => data.product_code == product.product_code);
-    if (cart_data) {
-      cart_data.qty = product.qty;
-      cart_data.price = product.price;
-      cart_data.discount = product.discount;
-      cart_data.total_price = product.total_price;
-    }
-    await this.resetService.addtoCartItems(product);
-  }
-
   async removecart(product: any) {
-    this.cartItems.splice(product, 1);
+    // this.cartItems.splice(product, 1);
     const index = this.cartItems.findIndex((cart: any) => cart.product_id == product.product_id);
     if (index !== -1) {
       this.cartItems.splice(index, 1);
+    }
+    if (product.sub == undefined) {
+      product.sub = CookieStore.getUserInfo()?.sub
     }
     let remove_obj: any = {
       sub: product.sub,
@@ -190,18 +160,7 @@ export class CartComponent implements OnInit, AfterViewInit {
           this.valid_coupon = true;
           this.discountprice = ((price * parseFloat(this.coupon_response.data.percentage)) / 100);
           this.finalprice = price - ((price * parseFloat(this.coupon_response.data.percentage)) / 100);
-          let formdata = this.formData.value;
-          let obj = {
-            _id: cart_details._id,
-            sub: cart_details.sub,
-            coupon_applied: true,
-            coupon: this.coupon_response.data,
-            comments: formdata.comments,
-            price: price,
-            discount: this.discountprice,
-            total_price: this.finalprice
-          }
-          await this.restService.applyCouponCode(obj);
+
         } else {
           this.invalid_coupon = true; this.valid_coupon = false;
         }
@@ -211,60 +170,30 @@ export class CartComponent implements OnInit, AfterViewInit {
       }
     }
 
-
   }
 
   async removecode(): Promise<void> {
     this.valid_coupon = false;
     this.coupon_response = null;
-    let price = this.calculatePrice();
-    let formdata = this.formData.value;
-    let obj = {
-      _id: cart_details._id,
-      sub: cart_details.sub,
-      coupon_applied: false,
-      coupon: [],
-      price: price,
-      comments: formdata.comments,
-      discount: 0,
-      total_price: price
-    }
-    await this.restService.applyCouponCode(obj);
+    this.calculatePrice();
+
   }
 
   async checkoutClick(): Promise<void> {
-    let price = this.calculatePrice();
+
     let formdata = this.formData.value;
-    let obj;
+    let obj: any = {};
+    obj.sub = CookieStore.getUserInfo()?.sub;
+    obj.comments = formdata.comments;
+    obj.coupon_applied = false;
     if (this.valid_coupon) {
-      this.discountprice = ((price * parseFloat(this.coupon_response.data.percentage)) / 100);
-      this.finalprice = price - ((price * parseFloat(this.coupon_response.data.percentage)) / 100);
-      obj = {
-        _id: cart_details._id,
-        sub: cart_details.sub,
-        coupon_applied: true,
-        coupon: this.coupon_response.data,
-        price: price,
-        comments: formdata.comments,
-        discount: this.discountprice,
-        total_price: this.finalprice
-      }
-    } else {
-      obj = {
-        _id: cart_details._id,
-        sub: cart_details.sub,
-        coupon_applied: false,
-        coupon: [],
-        price: price,
-        comments: formdata.comments,
-        discount: 0,
-        total_price: price
-      }
+      obj.coupon_applied = true;
+      obj.coupon_code = formdata.promocode;
     }
     await this.restService.applyCouponCode(obj);
-    window.location.href = "/checkout";
   }
 }
+
 
 export interface ICartItems {
   _id: string;

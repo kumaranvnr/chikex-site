@@ -36,10 +36,10 @@
       <!-- Wishlist-->
       <!-- Item-->
       <div class="d-sm-flex justify-content-between mt-lg-4 mb-4 pb-3 pb-sm-2 border-bottom"
-        *ngFor="let data of wishlistDatas; let i = index">
+        *ngFor="let data of wishlistDatas; let i = index;trackBy:fromDataResolver.identify;">
         <div class="d-block d-sm-flex align-items-start text-center text-sm-start">
           <a class="d-block flex-shrink-0 mx-auto me-sm-4" routerLink="/shop/single-v1" style="width: 10rem;"><img
-              src="{{data.img_link}}" alt="{{data.img_name}}"></a>
+              src="{{data.img_url}}" alt="{{data.title}}"></a>
           <div class="pt-2">
             <h3 class="product-title fs-base mb-2"><a routerLink="/shop/single-v1">{{data.content}}</a></h3>
             <div class="fs-lg text-accent pt-2">${{data.display_price}}</div>

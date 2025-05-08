@@ -26,8 +26,9 @@ export class CheckoutCompleteComponent implements OnInit {
   order_no: string = '';
   async getOrderRequest(): Promise<void> {
     let order_data = await this.resetService.getOrderDetailsById();
+    console.log(order_data);
     if (order_data) {
-      this.order_no = order_data.order_no;
+      this.order_no = order_data.orderNo;
     }
   }
 }

@@ -132,7 +132,8 @@
 
             <section class="container pt-4 mt-md-4 mb-2">
                 <div class="row pt-4">
-                    <div class="col-md-4 col-sm-12 mb-grid-gutter" *ngFor="let loc of location_list;let i = index">
+                    <div class="col-md-4 col-sm-12 mb-grid-gutter"
+                        *ngFor="let loc of location_list;let i = index;trackBy:fromDataResolver.identify;">
                         <div class="card   shadowcolor">
                             <div class="card-body" (click)="viewOutletData(loc.loc_name)">
                                 <h2 class="text-center" style="background: -webkit-linear-gradient(#0a2da1, #902be2);

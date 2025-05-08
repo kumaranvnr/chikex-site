@@ -224,7 +224,7 @@
     <div class="container py-md-4 pt-3 pb-0 py-sm-3">
         <h2 class="text-center mb-4 mb-md-5">Customer reviews</h2>
         <swiper [config]="config">
-            <div *ngFor="let data of review;let i = index">
+            <div *ngFor="let data of review;let i = index;trackBy:fromDataResolver.identify;">
                 <div class="card card-body fs-md text-muted border-0 shadow-sm">
                     <div class="mb-2">
                         <ng-template #t let-fill="fill">

@@ -1,0 +1,43 @@
+<div class="modal-content">
+    <div class="modal-header bg-secondary">
+        <h4 class="modal-title">Change delivery address</h4>
+        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
+            (click)="closemodal()"></button>
+    </div>
+    <div class="modal-body ">
+        <div *ngFor="let address of address_list" [ngClass]="{'selected-address': selectedAddress === address}"
+            class="address-item" (click)="selectAddress(address)">
+            <div class="address-details">
+
+                <h5> {{ address.name }} <small style="background-color: beige;">{{ address.locationType }}</small></h5>
+
+                <p>{{ address.flat }},{{address.building}},{{address.city
+                    }},{{address.countryName}},
+                </p>
+                <p *ngIf="address.landmark"> LandMark : {{address.landmark}}</p>
+                <p>{{ address.mobile }}</p>
+                <!-- <span class="verification-status">{{ address.verified ? 'Verified' : 'Not Verified' }}</span> -->
+            </div>
+            <div class="address-actions">
+                <button (click)="editAddress(address); $event.stopPropagation()">
+                    <i class="ci-edit"></i>
+                </button>
+                <button (click)="deleteAddress(address); $event.stopPropagation()">
+                    <i class="ci-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer ">
+        <div class="row col-lg-12 d-flex ">
+            <div class="d-flex mb-1 flex-row align-items-center justify-content-between"><button type="button"
+                    class="btn btn-primary" (click)="opennewaddressmodal()">
+                    Add new Address</button> &nbsp;&nbsp;&nbsp;
+                <button type="button" class="btn btn-primary" (click)="address_confirmed()">
+                    Confirm</button>
+            </div>
+
+        </div>
+
+    </div>
+</div>

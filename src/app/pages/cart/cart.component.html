@@ -12,8 +12,8 @@
         <li class="nav-item"><a class="nav-link fs-lg fw-medium py-4 active" href="javascript:void(0);"
             data-bs-toggle="tab" role="tab" aria-selected="true">1. Your order</a>
         </li>
-        <li class="nav-item"><a class="nav-link fs-lg fw-medium py-4" href="/checkout" data-bs-toggle="tab" role="tab"
-            aria-selected="true">2. Checkout</a>
+        <li class="nav-item"><a class="nav-link fs-lg fw-medium py-4" href="/checkout" aria-selected="true">2.
+            Checkout</a>
         </li>
       </ul>
 
@@ -22,7 +22,7 @@
           <!-- Items in cart-->
           <div class="col-lg-8 col-md-7 pt-sm-2">
             <!-- Item-->
-            <div *ngFor="let cart of cartItems;let i = index;"
+            <div *ngFor="let cart of cartItems;let i = index;trackBy:fromDataResolver.identify;"
               class="d-sm-flex justify-content-between align-items-center mt-3 mb-6 pb-3 border-bottom">
               <div class="d-block d-sm-flex align-items-center text-center text-sm-start"><a
                   class="d-inline-block flex-shrink-0 mx-auto me-sm-4" href="javascript:void(0);"><img
@@ -31,8 +31,10 @@
                   <div class="fs-lg text-accent pt-2">{{cart.title}} - {{cart.price|number:'1.2-2'}} AED</div>
 
                   <h3 class="product-title fs-base mb-2">{{cart.description}}</h3>
-                  <div *ngFor="let group_modifier of cart.group_modifiers_list;let j = index">
-                    <div *ngFor="let modifier of group_modifier.modifiers_list;let k = index">
+                  <div
+                    *ngFor="let group_modifier of cart.group_modifiers_list;let j = index;trackBy:fromDataResolver.identify;">
+                    <div
+                      *ngFor="let modifier of group_modifier.modifiers_list;let k = index;trackBy:fromDataResolver.identify;">
                       <h4 *ngIf="modifier.selected" class="product-title fs-base mb-1">
                         {{modifier.title}} - {{
                         modifier.price|number:'1.2-2'}} AED</h4>
@@ -43,27 +45,27 @@
               <div class="pt-2 pt-sm-0 ps-sm-3 mx-auto mx-sm-0 text-center align-items-center align-justify-center">
                 <div class="fs-lg text-accent pt-2"> {{cart.total_price|number:'1.2-2'}} AED</div>
                 <div class="d-flex mb-3">
-                  <button class="btn btn-outline-secondary" style="margin-left: 5px;margin-right: 5px;"
+                  <button class="btn btn-outline-secondary" style="margin-left: 5px;margin-right: 5px;padding:10px;"
                     (click)="decreaseQuantity(cart)">
                     <span *ngIf="cart.qty>=2">-</span>
                     <span class="ci-trash" *ngIf="cart.qty==1"></span>
                   </button>
                   <div class="d-flex justify-content-center align-items-center"
                     style="border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
-                    <input type="text" class="form-control text-center" min="1"
+                    <input disabled type="text" class="form-control text-center" min="1"
                       style="text-decoration-color: black;padding:auto; width: 60px; border: none; background: transparent; outline: none;margin-left: 5px;margin-right: 5px;"
                       value="{{cart.qty}}" [(ngModel)]="cart.qty" (change)="onQuantityChange(cart)"
                       aria-label="Quantity">
                   </div>
-                  <button class="btn btn-outline-secondary" style="margin-left: 5px;margin-right: 5px;"
+                  <button class="btn btn-outline-secondary" style="margin-left: 5px;margin-right: 5px;padding:10px;"
                     (click)="increaseQuantity(cart)">+</button>
                 </div>
 
               </div>
 
             </div>
-            <button type="button" class="btn btn-outline-primary d-block w-100 mt-4"><i
-                class="ci-loading fs-base me-2"></i>Update cart</button>
+            <!-- <button type="button" class="btn btn-outline-primary d-block w-100 mt-4"><i
+                class="ci-loading fs-base me-2"></i>Update cart</button> -->
           </div>
           <!-- Sidebar-->
           <div class="col-lg-4 col-md-5 pt-3 pt-sm-4">
@@ -96,22 +98,21 @@
               </form>
               <div class="text-center mt-1 mb-4 pb-3 border-bottom d-flex justify-content-between">
                 <h3 class="h5 mb-3 pb-1">Total</h3>
-                <h4 *ngIf="!valid_coupon" class="h5">AED {{calculatePrice()}}</h4>
+                <h4 *ngIf="!valid_coupon" class="h5"> {{calculatePrice()| number:'1.2-2'}} AED</h4>
               </div>
 
               <div *ngIf="valid_coupon" class="d-fle flex-column h-100 rounded-3 bg-secondary">
 
                 <div class="d-flex justify-content-between fs-md border-bottom pb-3 mb-3">
-                  <span>Subtotal:</span><span class="text-heading">AED
-                    {{calculatePrice()}}.<small>00</small></span>
+                  <span>Subtotal:</span><span class="text-heading">
+                    {{calculatePrice()| number:'1.2-2'}} AED</span>
                 </div>
                 <div class="d-flex justify-content-between fs-md border-bottom pb-3 mb-3">
-                  <span>Promo Code ({{this.coupon_response.data.code}} - {{coupon_response.data.percentage}}
-                    %):</span><span class="text-heading">AED
-                    {{discountprice}}.<small>00</small></span>
+                  <span>Promo Code ({{this.coupon_response.data.code}})</span><span class="text-heading">
+                    {{discountprice| number:'1.2-2'}} AED</span>
                 </div>
                 <div class="d-flex justify-content-between fs-md mb-2"><span>Total:</span><span
-                    class="text-heading fw-medium">AED {{setprice(finalprice)}}.<small>00</small></span>
+                    class="text-heading fw-medium"> {{setprice(finalprice)| number:'1.2-2'}} AED</span>
                 </div>
               </div>
 

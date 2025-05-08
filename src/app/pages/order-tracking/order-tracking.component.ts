@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 // Data Get
 import { CartData, orderStatus } from './data';
 import { HttpService } from 'src/app/services/http.service';
+import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
 
 @Component({
   selector: 'app-order-tracking',
@@ -15,7 +16,7 @@ import { HttpService } from 'src/app/services/http.service';
  * Order Tracking Component
  */
 export class OrderTrackingComponent implements OnInit {
-
+  fromDataResolver = FromDataResolver;
   orderDatas: any;
   order_status: any;
 
@@ -29,18 +30,19 @@ export class OrderTrackingComponent implements OnInit {
   }
 
   async getOrderDetails(): Promise<any> {
-    let orderDetails = await this.restService.getOrderDetailsById();
+    let orderDetails = await this.restService.getOrderTrackingById();
     if (orderDetails) {
-      this.orderDatas = orderDetails;
+      this.orderDatas = orderDetails.data[0];
       this.order_status = orderStatus;
-      console.log(orderStatus);
       for (let i: number = 0; i < orderStatus.length; i++) {
-        console.log(orderStatus[i].id + "-" + this.orderDatas.status);
-        if (orderStatus[i].id == this.orderDatas.status) {
-          orderStatus[i].flag = "active";
-          return;
-        } else {
+        const order_timing = this.orderDatas.orderStatus.find((data: any) => data.status == orderStatus[i].id.toUpperCase());
+        if (order_timing) {
+          orderStatus[i].time = order_timing.createdAt;
+        }
+        if (orderStatus[i].id.toUpperCase() == this.orderDatas.status) {
           orderStatus[i].flag = "completed";
+        } else {
+          orderStatus[i].flag = "active";
         }
       }
     }

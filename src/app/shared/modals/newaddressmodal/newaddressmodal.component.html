@@ -1,0 +1,104 @@
+<div class="modal-content">
+    <div class="modal-header bg-secondary">
+        <h4 class="modal-title">Add new address</h4>
+        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
+            (click)="closemodal()"></button>
+    </div>
+    <div class="modal-body rounded-3 shadow-lg ">
+        <ng-container>
+            <form (ngSubmit)="saveAddress()" [formGroup]="formData" class="needs-validation ">
+                <div class="row pb-4 pt-3">
+                    <div class="col-sm-6 mb-4">
+                        <label class="form-label" for="fd-name">Your name<sup class="text-danger ms-1">*</sup></label>
+                        <input class="form-control" type="text" required id="fd-name" formControlName="name"
+                            [ngClass]="{ 'is-invalid': submitted && form['name'].errors }">
+                        <div class="invalid-feedback">Please enter your name!</div>
+                    </div>
+                    <div class="col-sm-6 mb-4">
+                        <label class="form-label" for="fd-phone">Phone number<sup
+                                class="text-danger ms-1">*</sup></label>
+                        <input class="form-control" type="text" required id="fd-phone" formControlName="mobile"
+                            [ngClass]="{ 'is-invalid': submitted && form['mobile'].errors }">
+                        <div class="invalid-feedback">Please enter your phone number!</div>
+                    </div>
+
+                </div>
+                <h2 class="h5 pb-3">Delivery address</h2>
+                <div class="row">
+
+                    <div class="col-lg-2 " style="position: relative;overflow: hidden;">
+                        <iframe class="iframe-full-height" width="100" height="150px"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3603.9513987992136!2d55.4368288!3d25.406437399999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f57848b7424c9%3A0x13f67229d0d31faf!2sGeepas%20Building%206!5e0!3m2!1sen!2sae!4v1677565554355!5m2!1sen!2sae"></iframe>
+                        <br>
+
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="form-label"
+                            for="fd-fulladdress">{{this.address_information?.formatted_address}}</label>
+                        <button type="button" class="btn btn-secondary" (click)="edit_map_address()">
+                            Edit</button>
+                    </div>
+
+
+                    <div class="col-sm-6 mb-4">
+                        <label class="form-label" for="fd-locationType">Location Type</label>
+                        &nbsp;&nbsp;
+                        <div class="form-check form-check-inline mt-3">
+                            <input class="form-check-input" type="radio" name="locationType"
+                                formControlName="locationType" value="Home" checked id="home">
+                            <label class="form-check-label" for="home">Home</label>
+                        </div>
+                        <div class="form-check form-check-inline mt-3">
+                            <input class="form-check-input" type="radio" name="locationType"
+                                formControlName="locationType" value="Work" id="work">
+                            <label class="form-check-label" for="work">Work</label>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mb-4">
+                        <label class="form-label" for="fd-flat">Street/Flat<sup class="text-danger ms-1">*</sup></label>
+                        <input class="form-control" type="text" placeholder="Street, Apartment number or suite" required
+                            id="fd-flat" formControlName="flat"
+                            [ngClass]="{ 'is-invalid': submitted && form['flat'].errors }">
+                        <div class="invalid-feedback">Please enter your flat!</div>
+                    </div>
+
+                    <div class="col-sm-6 mb-4">
+                        <label class="form-label" for="fd-building">Building<sup
+                                class="text-danger ms-1">*</sup></label>
+                        <input class="form-control" type="text" placeholder="building" required id="fd-building"
+                            formControlName="building"
+                            [ngClass]="{ 'is-invalid': submitted && form['building'].errors }">
+                        <div class="invalid-feedback">please enter your building!</div>
+                    </div>
+                    <div class="col-sm-6 mb-4">
+                        <label class="form-label" for="fd-city">City<sup class="text-danger ms-1">*</sup></label>
+                        <input class="form-control" type="text" placeholder="city" required id="fd-city"
+                            formControlName="city" [ngClass]="{ 'is-invalid': submitted && form['city'].errors }">
+                        <div class="invalid-feedback">Please enter your city!</div>
+                    </div>
+                    <div class="col-sm-6 mb-4">
+                        <label class="form-label" for="fd-landmark">Landmark</label>
+                        <input class="form-control" type="text" placeholder="Landmark" id="fd-landmark"
+                            formControlName="landmark">
+                    </div>
+
+                    <div class="col-sm-6 mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" checked id="primary">
+                            <label class="form-check-label" for="primary">Set as default</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </ng-container>
+
+    </div>
+    <div class="modal-footer" style="padding: 10px;">
+        <div class="row col-lg-12 d-flex flex-row align-items-center">
+            <div class="d-flex mb-1 justify-content-end"><button type="button" class="btn btn-primary"
+                    (click)="saveAddress()">
+                    Save Address</button></div>
+        </div>
+    </div>
+</div>

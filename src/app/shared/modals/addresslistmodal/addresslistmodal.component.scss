@@ -1,0 +1,50 @@
+.modal-content {
+
+    margin: auto;
+}
+
+.address-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &.selected-address {
+        border-color: #bc202e; // Highlight color
+        background-color: rgba(188, 32, 46, 0.1); // Light highlight
+    }
+
+    .address-details {
+        flex: 1;
+
+        h5 {
+            margin: 0;
+            font-weight: bold;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        .verification-status {
+            color: green; // Verified color
+        }
+    }
+
+    .address-actions {
+        display: flex;
+        align-items: center;
+
+        button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+            color: #bc202e; // Icon color
+        }
+    }
+}

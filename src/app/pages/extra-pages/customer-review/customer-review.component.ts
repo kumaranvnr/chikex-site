@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Location } from '@angular/common';
 import { HttpService } from 'src/app/services/http.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
 
 @Component({
   selector: 'app-customer-review',
@@ -9,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./customer-review.component.scss']
 })
 export class CustomerReviewComponent {
-
+  fromDataResolver = FromDataResolver;
   location_list: Ilocations[] = [];
   locationData: any;
   emirates_list: any;

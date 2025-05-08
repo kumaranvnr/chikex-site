@@ -163,7 +163,7 @@
     <h2 class="h3 my-2">Our core team</h2>
     <p class="fs-sm text-muted">People behind your great shopping experience</p>
     <div class="row pt-3">
-      <div class="col-lg-4 col-sm-6 mb-grid-gutter" *ngFor="let data of teamDatas; let i = index">
+      <div class="col-lg-4 col-sm-6 mb-grid-gutter" *ngFor="let data of teamDatas; let i = index;trackBy:fromDataResolver.identify;">
         <div class="d-flex align-items-center"><img class="rounded-circle" src="{{data.image}}" width="96"
             alt="Jonathan Doe">
           <div class="ps-3">
