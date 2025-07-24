@@ -99,7 +99,14 @@ export class HeaderComponent implements OnInit {
     return this.total.toFixed(2)
   }
 
+  async addNewAddress(): Promise<void> {
+    const address = await CookieStore.getDataAsync("address");
+    const location_data = await CookieStore.getDataAsync("location_data");
 
+    console.log(location_data);
+
+    this.modalService.open(AddressmodalComponent, { size: 'lg', centered: true });
+  }
 
   // set location
   ChangeLocation(location: any) {

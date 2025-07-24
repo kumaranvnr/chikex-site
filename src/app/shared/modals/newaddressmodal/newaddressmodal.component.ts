@@ -10,6 +10,7 @@ import { HttpService } from 'src/app/services/http.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { AddressmodalComponent } from '../addressmodal/addressmodal.component';
 import { AddresslistmodalComponent } from '../addresslistmodal/addresslistmodal.component';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-newaddressmodal',
@@ -27,6 +28,7 @@ export class NewaddressmodalComponent implements OnInit {
   constructor(private cd: ChangeDetectorRef, public formBuilder: UntypedFormBuilder,
     private restService: HttpService,
     private sharedService: SharedService,
+    private ngxService: NgxUiLoaderService,
     private http: HttpClient, private modalService: NgbModal) {
 
     this.formData = this.formBuilder.group({
@@ -60,48 +62,7 @@ export class NewaddressmodalComponent implements OnInit {
 
   ngOnInit(): void {
     try {
-      CookieStore.getDataAsync('address').then(data => {
-        this.address_information = data;
-        var city = data?.address_components.find((component: any) => component.types.includes('locality'))?.long_name;
-        var countryName = data?.address_components.find((component: any) => component.types.includes('country'))?.long_name;
-        this.formData.controls['primary'].setValue(true);
-        this.formData.controls['streetAddress'].setValue(data?.formatted_address);
-
-        this.formData.controls['countryName'].setValue(countryName);
-        this.formData.controls['region'].setValue(city);
-        this.formData.controls['city'].setValue(city);
-
-        this.formData.controls['lat'].setValue(this.address_information?.geometry.location.lat);
-        this.formData.controls['lng'].setValue(this.address_information?.geometry.location.lng);
-        this.lat = this.address_information?.geometry.location.lat;
-        this.lng = this.address_information?.geometry.location.lng
-      });
-      CookieStore.getDataAsync('location_data').then(data => {
-        this.formData.controls['nearbyStore'].setValue(data?.code);
-        this.formData.controls['distance'].setValue(data?.distance);
-      });
-
-      CookieStore.getDataAsync('edit_address').then(data => {
-        if (data) {
-          this.formData.controls['_id'].setValue(data?._id);
-          this.formData.controls['name'].setValue(data?.name);
-          this.formData.controls['mobile'].setValue(data?.mobile);
-          this.formData.controls['streetAddress'].setValue(data?.streetAddress);
-          this.formData.controls['flat'].setValue(data?.flat);
-          this.formData.controls['building'].setValue(data?.building);
-          this.formData.controls['city'].setValue(data?.city);
-          this.formData.controls['landmark'].setValue(data?.landmark);
-          this.formData.controls['countryName'].setValue(data?.countryName);
-          this.formData.controls['region'].setValue(data?.region);
-          this.formData.controls['distance'].setValue(data?.distance);
-          this.formData.controls['nearbyStore'].setValue(data?.nearbyStore);
-          this.formData.controls['lat'].setValue(data?.lat);
-          this.formData.controls['lng'].setValue(data?.lng);
-          this.formData.controls['locationType'].setValue(data?.locationType);
-          this.formData.controls['primary'].setValue(data?.primary);
-        }
-
-      });
+      this.getDataFromCookies();
 
     }
     catch (error) {
@@ -109,12 +70,65 @@ export class NewaddressmodalComponent implements OnInit {
     }
   }
 
+  async getDataFromCookies(): Promise<void> {
+    const edit_address = await CookieStore.getDataAsync('edit_address')
+    if (edit_address) {
+      this.formData.controls['_id'].setValue(edit_address?._id);
+      this.formData.controls['name'].setValue(edit_address?.name);
+      this.formData.controls['mobile'].setValue(edit_address?.mobile);
+      this.formData.controls['streetAddress'].setValue(edit_address?.streetAddress);
+      this.formData.controls['flat'].setValue(edit_address?.flat);
+      this.formData.controls['building'].setValue(edit_address?.building);
+      this.formData.controls['city'].setValue(edit_address?.city);
+      this.formData.controls['landmark'].setValue(edit_address?.landmark);
+      this.formData.controls['countryName'].setValue(edit_address?.countryName);
+      this.formData.controls['region'].setValue(edit_address?.region);
+      this.formData.controls['distance'].setValue(edit_address?.distance);
+      this.formData.controls['nearbyStore'].setValue(edit_address?.nearbyStore);
+      this.formData.controls['lat'].setValue(edit_address?.lat);
+      this.formData.controls['lng'].setValue(edit_address?.lng);
+      this.formData.controls['locationType'].setValue(edit_address?.locationType);
+      this.formData.controls['primary'].setValue(edit_address?.primary);
+    }
+
+    const address = await CookieStore.getDataAsync('address');
+    if (address) {
+      this.address_information = address;
+      var city = address?.address_components.find((component: any) => component.types.includes('locality'))?.long_name;
+      var countryName = address?.address_components.find((component: any) => component.types.includes('country'))?.long_name;
+      this.formData.controls['primary'].setValue(true);
+      this.formData.controls['streetAddress'].setValue(address?.formatted_address);
+
+      this.formData.controls['countryName'].setValue(countryName);
+      this.formData.controls['region'].setValue(city);
+      this.formData.controls['city'].setValue(city);
+
+      this.formData.controls['lat'].setValue(this.address_information?.geometry.location.lat);
+      this.formData.controls['lng'].setValue(this.address_information?.geometry.location.lng);
+      this.lat = this.address_information?.geometry.location.lat;
+      this.lng = this.address_information?.geometry.location.lng
+
+    }
+
+    const location_data = await CookieStore.getDataAsync('location_data')
+    if (location_data) {
+      this.formData.controls['nearbyStore'].setValue(location_data?.code);
+      this.formData.controls['distance'].setValue(location_data?.distance);
+    }
+
+  }
+
   edit_map_address() {
+    // CookieStore.clearDataAsync('edit_address');
+    // CookieStore.clearDataAsync('location_data');
+    // CookieStore.clearDataAsync('address');
+
     this.modalService.dismissAll();
     this.modalService.open(AddressmodalComponent, { size: 'lg', backdrop: 'static' });
   }
 
   async saveAddress(): Promise<void> {
+    this.ngxService.start();
     this.submitted = true;
     let addressData = this.formData.value;
 
@@ -129,7 +143,6 @@ export class NewaddressmodalComponent implements OnInit {
       building: addressData.building,
       city: addressData.city,
       landmark: addressData.landmark,
-
       countryName: addressData.countryName,
       region: addressData.countryName,
       distance: addressData.distance,
@@ -141,6 +154,7 @@ export class NewaddressmodalComponent implements OnInit {
     }
 
     const useraddress_response = await this.restService.saveAddress(obj);
+    this.ngxService.stop();
     if (useraddress_response?.success) {
       this.closemodal();
       this.modalService.open(AddresslistmodalComponent, { size: 'lg', centered: true });

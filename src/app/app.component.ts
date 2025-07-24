@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent {
   title = 'Chikex | Fried Chicken and Restaurant LLC, UAE';
+  constructor() {
+
+  }
+
+  ngOnInit() {
+
+  }
+
   onActivate(event: any) {
     let scrollToTop = window.setInterval(() => {
       let pos = window.pageYOffset;
@@ -17,6 +26,4 @@ export class AppComponent {
       }
     }, 1);
   }
-
-
 }

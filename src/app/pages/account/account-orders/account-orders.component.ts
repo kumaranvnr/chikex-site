@@ -12,6 +12,7 @@ import { CookieStore } from 'src/app/services/helpers/CookieStore';
 import { cartdata } from '../../cart/data';
 import { HttpService } from 'src/app/services/http.service';
 import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-account-orders',
@@ -33,12 +34,16 @@ export class AccountOrdersComponent implements OnInit {
   email: string = '';
 
   order_list: any[] = [];
+  complete_order_list: any[] = [];
   single_order: any;
+  orders_status: string = '';
   constructor(public service: AccountListService,
     private modalService: NgbModal,
     private restService: HttpService,
+    private ngxService: NgxUiLoaderService,
     public datePipe: DatePipe,
     private router: Router) {
+    this.ngxService.start();
     this.tables$ = service.tables$;
     this.total$ = service.total$;
 
@@ -47,7 +52,9 @@ export class AccountOrdersComponent implements OnInit {
     this.name = user_info.name;
     this.email = user_info.email;
 
+
     this.getAllOrders();
+    this.ngxService.stop();
   }
 
   ngOnInit(): void {
@@ -60,6 +67,7 @@ export class AccountOrdersComponent implements OnInit {
     let response = await this.restService.getAllOrders(account_id);
     if (response) {
       this.order_list = response.data;
+      this.complete_order_list = response.data;
     }
   }
   SignOut() {
@@ -75,6 +83,18 @@ export class AccountOrdersComponent implements OnInit {
     this.modalService.open(ordertDetailModal, { size: 'lg', centered: true });
   }
 
+  orderFilter(event: any) {
+    console.log(event.target.value);
+    if (this.orders_status != '') {
+      this.order_list = this.complete_order_list.filter((order: any) => {
+        return order.status === this.orders_status;
+      });
+    }
+    else {
+      this.order_list = this.complete_order_list;
+    }
+
+  }
   // repeatOrder(order_info: any) {
 
   // }

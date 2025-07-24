@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CartData, orderStatus } from './data';
 import { HttpService } from 'src/app/services/http.service';
 import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-order-tracking',
@@ -20,7 +21,7 @@ export class OrderTrackingComponent implements OnInit {
   orderDatas: any;
   order_status: any;
 
-  constructor(private modalService: NgbModal,
+  constructor(private modalService: NgbModal, private ngxService: NgxUiLoaderService,
     private restService: HttpService) {
     this.getOrderDetails();
   }
@@ -30,6 +31,7 @@ export class OrderTrackingComponent implements OnInit {
   }
 
   async getOrderDetails(): Promise<any> {
+    this.ngxService.start();
     let orderDetails = await this.restService.getOrderTrackingById();
     if (orderDetails) {
       this.orderDatas = orderDetails.data[0];
@@ -46,6 +48,7 @@ export class OrderTrackingComponent implements OnInit {
         }
       }
     }
+    this.ngxService.stop();
   }
   /**
   * Open center modal and product data get

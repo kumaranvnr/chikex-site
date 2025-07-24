@@ -3,6 +3,7 @@ import { UntypedFormBuilder } from '@angular/forms';
 import { HttpService } from 'src/app/services/http.service';
 import { cart_details } from '../cart/data';
 import { CookieStore } from 'src/app/services/helpers/CookieStore';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-checkout-complete',
@@ -16,8 +17,11 @@ import { CookieStore } from 'src/app/services/helpers/CookieStore';
 export class CheckoutCompleteComponent implements OnInit {
 
   constructor(public formBuilder: UntypedFormBuilder,
+    private ngxService: NgxUiLoaderService,
     private resetService: HttpService) {
+    this.ngxService.start();
     this.getOrderRequest();
+    this.ngxService.stop();
   }
 
   ngOnInit(): void {

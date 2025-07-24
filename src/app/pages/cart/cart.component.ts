@@ -8,6 +8,8 @@ import { CookieStore } from 'src/app/services/helpers/CookieStore';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddresslistmodalComponent } from 'src/app/shared/modals/addresslistmodal/addresslistmodal.component';
 import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import Swal from 'sweetalert2';
 //import * as google from 'google.maps';
 
 @Component({
@@ -29,6 +31,7 @@ export class CartComponent implements OnInit, AfterViewInit {
     public formBuilder: UntypedFormBuilder,
     private resetService: HttpService,
     private cd: ChangeDetectorRef,
+    private ngxService: NgxUiLoaderService,
     private router: Router,
     private modalService: NgbModal,
     private restService: HttpService) {
@@ -36,12 +39,14 @@ export class CartComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    // Validation
+    this.ngxService.start();
+
     this.formData = this.formBuilder.group({
       comments: [''],
       promocode: ['', [Validators.required]],
     });
     this.getCartDetails();
+    this.ngxService.stop();
   }
 
   ngAfterViewInit() {
@@ -72,9 +77,6 @@ export class CartComponent implements OnInit, AfterViewInit {
 
   }
 
-  /**
-* Returns form
-*/
   get form() {
     return this.formData.controls;
   }
@@ -130,6 +132,7 @@ export class CartComponent implements OnInit, AfterViewInit {
 
   async removecart(product: any) {
     // this.cartItems.splice(product, 1);
+    this.ngxService.start();
     const index = this.cartItems.findIndex((cart: any) => cart.product_id == product.product_id);
     if (index !== -1) {
       this.cartItems.splice(index, 1);
@@ -142,6 +145,7 @@ export class CartComponent implements OnInit, AfterViewInit {
       product_id: product.product_id
     };
     await this.restService.removeCartItems(remove_obj);
+    this.ngxService.stop();
   }
 
   setprice(price: any) {
@@ -149,6 +153,7 @@ export class CartComponent implements OnInit, AfterViewInit {
   }
   coupon_response: any;
   async applycode(): Promise<void> {
+    this.ngxService.start();
     this.submitted = true;
     let data = this.formData.value;
     if (data.promocode) {
@@ -169,7 +174,7 @@ export class CartComponent implements OnInit, AfterViewInit {
         this.invalid_coupon = true; this.valid_coupon = false;
       }
     }
-
+    this.ngxService.stop();
   }
 
   async removecode(): Promise<void> {
@@ -180,7 +185,13 @@ export class CartComponent implements OnInit, AfterViewInit {
   }
 
   async checkoutClick(): Promise<void> {
-
+    this.ngxService.start();
+    this.cartItems = cartdata;
+    if (this.cartItems.length == 0) {
+      this.ngxService.stop(); this.submitted = false;
+      Swal.fire({ title: 'Message', text: `Cart is empty!.`, confirmButtonColor: '#364574' });
+      return;
+    }
     let formdata = this.formData.value;
     let obj: any = {};
     obj.sub = CookieStore.getUserInfo()?.sub;
@@ -191,6 +202,8 @@ export class CartComponent implements OnInit, AfterViewInit {
       obj.coupon_code = formdata.promocode;
     }
     await this.restService.applyCouponCode(obj);
+    this.ngxService.stop();
+    this.router.navigate(["/checkout"]);
   }
 }
 

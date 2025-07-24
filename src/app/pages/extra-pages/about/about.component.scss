@@ -18,3 +18,77 @@
     max-width: 400px;
     margin-bottom: 40px;
 }
+
+.reasons-why {
+    background-color: #fff;
+    color: #292929;
+
+    h2 {
+        margin-bottom: 1rem;
+    }
+
+    h1 {
+        color: #bf1e2e; // Dark red
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+
+        .text-orange {
+            color: #FFA500; // Orange
+        }
+    }
+
+    .counters {
+        .counter {
+            flex: 1;
+            text-align: center;
+
+            h3 {
+                font-size: 2.5rem;
+                margin: 0;
+            }
+
+            p {
+                margin-top: 0.5rem;
+                font-size: 1rem;
+                color: #7d879c; // Muted text color
+            }
+        }
+    }
+}
+
+.reasons-why {
+    background-color: #fff;
+    color: #292929;
+
+    h2 {
+        margin-bottom: 1rem;
+    }
+
+    h1 {
+        color: #bf1e2e; // Dark red
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+
+        .text-orange {
+            color: #FFA500; // Orange
+        }
+    }
+
+    .counters {
+        .counter {
+            flex: 1;
+            text-align: center;
+
+            h3 {
+                font-size: 2.5rem;
+                margin: 0;
+            }
+
+            p {
+                margin-top: 0.5rem;
+                font-size: 1rem;
+                color: #7d879c; // Muted text color
+            }
+        }
+    }
+}

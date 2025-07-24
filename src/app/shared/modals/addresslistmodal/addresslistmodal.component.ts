@@ -8,6 +8,7 @@ import { NewaddressmodalComponent } from '../newaddressmodal/newaddressmodal.com
 import { CookieStore } from 'src/app/services/helpers/CookieStore';
 import { Subscription } from 'rxjs';
 import { SharedService } from 'src/app/services/shared.service';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-addresslistmodal',
@@ -22,9 +23,11 @@ export class AddresslistmodalComponent implements OnInit, OnDestroy {
   message: string | any;
   subscription: Subscription | any;
 
-  constructor(private modalService: NgbModal, private sharedService: SharedService,
+  constructor(private modalService: NgbModal, private sharedService: SharedService, private ngxService: NgxUiLoaderService,
     private restService: HttpService, private route: ActivatedRoute) {
+    this.ngxService.start();
     this.getUserAddressList();
+    this.ngxService.stop();
   }
 
   closemodal() {
@@ -68,11 +71,12 @@ export class AddresslistmodalComponent implements OnInit, OnDestroy {
   }
 
   async deleteAddress(address: any) {
+    this.ngxService.start();
     const delete_address_response = await this.restService.deleteUserAddress(address._id);
     if (delete_address_response?.success) {
       this.getUserAddressList();
-
     }
+    this.ngxService.stop();
   }
 
   addNewAddress() {
@@ -94,16 +98,18 @@ export class AddresslistmodalComponent implements OnInit, OnDestroy {
   }
 
   async address_confirmed() {
+
     if (this.selectedAddress) {
       CookieStore.saveDataAsync('selected_address', this.selectedAddress);
       const obj: any = {};
       obj.sub = CookieStore.getUserInfo()?.sub;
       obj.address_id = this.selectedAddress?._id;
-
+      this.ngxService.start();
       await this.restService.updateCartUserAddress(obj);
-
+      this.ngxService.stop();
       this.closemodal();
     }
+
   }
 
 }

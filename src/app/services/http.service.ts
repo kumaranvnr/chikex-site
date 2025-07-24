@@ -13,11 +13,12 @@ var md5 = require('md5');
 export class HttpService {
 
   get base_url(): string {
-    if (location.href.includes("localhost")) {
-      return "http://localhost:5002";
-    } else {
-      return "https://orders-api.chikex.me";
-    }
+    // if (location.href.includes("localhost")) {
+    //   return "http://localhost:5002";
+    // } else {
+    //   return "https://orders-api.chikex.me";
+    // }
+    return "https://orders-api.chikex.me";
   }
 
   constructor(public httpClient: HttpClient,
@@ -61,12 +62,8 @@ export class HttpService {
     CookieStore.clearAllStorage();
     cartdata.splice(0);
     cart_details._id = '';
-    this.router.navigate(['/account/signin']);
+    this.router.navigate(['/menu']);
   }
-
-
-
-
 
   async userRegister(data: any): Promise<any> {
     const reponse = this.httpClient.post(this.base_url + "/users-srv/register/user", data, {

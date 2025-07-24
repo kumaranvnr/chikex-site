@@ -1,0 +1,32 @@
+.select-location-button {
+    background-color: #f0f8ff;
+    /* Light blue background */
+    border: 1px solid #b0e0e6;
+    /* Light blue border */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #e6f7ff;
+        /* Slightly darker on hover */
+    }
+
+    .circle-icon {
+        background-color: #ff4d4f;
+        /* Red background */
+        border-radius: 50%;
+        /* Circular shape */
+        width: 30px;
+        /* Width of the circle */
+        height: 30px;
+        /* Height of the circle */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        i {
+            color: white;
+            /* White icon color */
+        }
+    }
+}

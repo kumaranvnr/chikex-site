@@ -3,7 +3,7 @@
   <div class="container pt-4 pb-3 py-sm-4">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb flex-lg-nowrap justify-content-center justify-content-lg-start">
-        <li class="breadcrumb-item"><a class="text-nowrap" routerLink=""><i class="ci-home"></i>Home</a></li>
+        <li class="breadcrumb-item"><a class="text-nowrap" routerLink="/"><i class="ci-home"></i>Home</a></li>
         <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap"> Cart</a></li>
       </ol>
     </nav>
@@ -44,7 +44,7 @@
               </div>
               <div class="pt-2 pt-sm-0 ps-sm-3 mx-auto mx-sm-0 text-center align-items-center align-justify-center">
                 <div class="fs-lg text-accent pt-2"> {{cart.total_price|number:'1.2-2'}} AED</div>
-                <div class="d-flex mb-3">
+                <div class=" mb-3" style="display: inline-flex;">
                   <button class="btn btn-outline-secondary" style="margin-left: 5px;margin-right: 5px;padding:10px;"
                     (click)="decreaseQuantity(cart)">
                     <span *ngIf="cart.qty>=2">-</span>
@@ -117,7 +117,7 @@
               </div>
 
               <a class="btn btn-primary btn-shadow d-block w-100 mt-4 mb-3" href="javascript:void(0);"
-                (click)="checkoutClick()" routerLink="/checkout"><i class="ci-card fs-lg me-2"></i>Proceed to
+                (click)="checkoutClick()"><i class="ci-card fs-lg me-2"></i>Proceed to
                 Checkout</a>
             </div>
           </div>

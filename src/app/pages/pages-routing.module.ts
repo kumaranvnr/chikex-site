@@ -49,6 +49,7 @@ const routes: Routes = [
     canActivate: [AuthguardGuard],
     data: { allowed_roles: ['user'] },
   },
+
   {
     path: 'account',
     loadChildren: () => import('./account/account.module').then(m => m.AccountModule)
@@ -57,6 +58,7 @@ const routes: Routes = [
     path: 'pages',
     loadChildren: () => import('./extra-pages/extra-pages.module').then(m => m.ExtraPagesModule)
   },
+
   {
     path: '', component: IndexComponent
   },

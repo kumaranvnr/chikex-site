@@ -1,13 +1,14 @@
 <div (window:scroll)="windowScroll()" id="home">
   <header class="navbar d-block navbar-sticky navbar-expand-lg navbar-light bg-light activation-area">
     <div class="container">
-      <a class="navbar-brand d-none d-sm-block me-4 order-lg-1" routerLink="/">
-        <img src="assets/img/side-logo.png" width="142" alt="Chikex"></a>
-      <a class="navbar-brand d-sm-none me-2 order-lg-1" routerLink="/">
-        <img src="assets/img/side-logo.png" width="74" alt="Chikex"></a>
+      <a class="navbar-brand d-none d-sm-block me-4 order-lg-1" href="javascript:void(0);">
+        <img src="assets/img/ft-logo.png" width="50" alt="Chikex"></a>
+      <a class="navbar-brand d-sm-none me-2 order-lg-1" href="javascript:void(0);">
+        <img src="assets/img/ft-logo.png" width="50" alt="Chikex"></a>
       <div class="navbar-toolbar d-flex align-items-center order-lg-3">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-          <span class="navbar-toggler-icon" (click)="collapse.toggle()"></span></button>
+        <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+          <span class="navbar-toggler-icon" (click)="collapse.toggle()"></span></button> -->
+
         <!-- <a class="navbar-tool d-none d-lg-flex" href="javascript:void(0)" data-bs-toggle="collapse"
           data-bs-target="#searchBox" role="button" aria-expanded="false" aria-controls="searchBox">
           <span class="navbar-tool-tooltip">Search</span>
@@ -15,10 +16,22 @@
             <i class="navbar-tool-icon ci-search"></i>
           </div>
         </a> -->
+
         <!--  <a class="navbar-tool ms-2" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#showModal"
           (click)="checkSignInStatus()"><span class="navbar-tool-tooltip">Account</span>
           <div class="navbar-tool-icon-box"><i class="navbar-tool-icon ci-user"></i></div>
         </a> -->
+        <div class="select-location-button d-flex align-items-center justify-content-between p-1 border rounded"
+          (click)="addNewAddress()">
+          <div class="d-flex align-items-center">
+            <i class="ci-location me-2"></i>
+            <div>
+              <span class="text-dark fw-bold text-uppercase">Deliver To</span>
+              <!-- <div class="text-muted fs-sm">Get accurate pricing and menu listing.</div> -->
+            </div>
+          </div>
+
+        </div>
         <div class="navbar-tool dropdown ms-3" *ngIf="!loginstatus">
           <a class="navbar-tool-icon-box bg-secondary dropdown-toggle" data-bs-toggle="modal"
             data-bs-target="#showModal" (click)="checkSignInStatus()">
@@ -90,25 +103,26 @@
       <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed" class="collapse navbar-collapse me-auto order-lg-2"
         id="navbarCollapse">
         <!-- Search (mobile)-->
-        <!-- <div class="d-lg-none py-3">
+        <div class="d-lg-none py-3">
           <div class="input-group"><i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
             <input class="form-control rounded-start" type="text" [(ngModel)]="term" placeholder="What do you need?">
           </div>
-        </div> -->
+        </div>
         <!-- Location dropdown-->
         <!-- <ul class="navbar-nav navbar-mega-nav ms-lg-4 pe-lg-2 me-lg-2">
           <li ngbDropdown class="nav-item dropdown">
             <a class="nav-link dropdown-toggle ps-lg-0" href="javascript:void(0);" data-bs-toggle="dropdown"
               ngbDropdownToggle><i class="ci-location me-2"></i>{{selectedLocation}}</a>
             <ul ngbDropdownMenu class="dropdown-menu">
-              <li (click)="ChangeLocation(location)" *ngFor="let location of location_List;let i = index;trackBy:fromDataResolver.identify;">
+              <li (click)="ChangeLocation(location)"
+                *ngFor="let location of location_List;let i = index;trackBy:fromDataResolver.identify;">
                 <a class="dropdown-item" href="javascript:void(0);">{{location.loc_name}}</a>
               </li>
             </ul>
           </li>
         </ul> -->
         <!-- Primary menu-->
-        <ul class="navbar-nav">
+        <ul class="navbar-nav justify-content-between">
           <!-- <li ngbDropdown class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="javascript:void(0);"
               data-bs-toggle="dropdown" ngbDropdownToggle>{{ "MENUITEMS.CUISINE.TEXT" | translate }}</a>
             <div class="dropdown-menu px-2 ps-0 pb-4" ngbDropdownMenu>
@@ -157,18 +171,15 @@
                       <h6 class="fs-base text-center">{{ "MENUITEMS.CUISINE.LIST.Wraps" | translate }}</h6>
                     </a></div>
                 </div>
-                
               </div>
             </div>
           </li> -->
-          <li class="nav-item"><a class="nav-link" routerLink="/">{{
-              "MENUITEMS.Home" | translate }}</a></li>
-          <li class="nav-item"><a class="nav-link" routerLink="/pages/about">{{
-              "MENUITEMS.About" | translate }}</a></li>
-          <li class="nav-item"><a class="nav-link" routerLink="/menu">{{
-              "MENUITEMS.Menu" | translate }}</a></li>
-          <li class="nav-item"><a class="nav-link" routerLink="/pages/contacts">{{
-              "MENUITEMS.ContactUs" | translate }}</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="/home">HOME</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="/pages/about">
+              ABOUT US</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="/menu">CATALOGUE</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="/pages/contacts">
+              CONTACT US</a></li>
         </ul>
       </div>
     </div>
@@ -205,12 +216,28 @@
       <span class="handheld-toolbar-icon"><i class="ci-user"></i></span>
       <span class="handheld-toolbar-label">Account</span>
     </a>
+
+    <!-- <a class="d-table-cell handheld-toolbar-item" routerLink="/menu" data-bs-toggle="collapse"
+      data-bs-target="#navbarCollapse" (click)="collapse.toggle()" onclick="window.scrollTo(0, 0)">
+      <span class="handheld-toolbar-icon"><i class="ci-menu"></i></span>
+      <span class="handheld-toolbar-label">Menu</span>
+    </a> -->
+
     <a class="d-table-cell handheld-toolbar-item" routerLink="/menu" data-bs-toggle="collapse"
       data-bs-target="#navbarCollapse" (click)="collapse.toggle()" onclick="window.scrollTo(0, 0)">
       <span class="handheld-toolbar-icon"><i class="ci-menu"></i></span>
       <span class="handheld-toolbar-label">Menu</span>
     </a>
-    <a class="d-table-cell handheld-toolbar-item" href="javascript:void(0)" routerLink="/cart">
+
+    <a *ngIf="loginstatus" class="d-table-cell handheld-toolbar-item" href="javascript:void(0)" routerLink="/cart">
+      <span class="handheld-toolbar-icon"><i class="ci-cart"></i>
+        <span class="badge bg-primary rounded-pill ms-1">{{carts.length}}</span>
+      </span>
+      <span class="handheld-toolbar-label">{{calculatetotal(total)|number:'1.2-2'}} AED</span>
+    </a>
+
+    <a *ngIf="!loginstatus" class="d-table-cell handheld-toolbar-item" href="javascript:void(0)" data-bs-toggle="modal"
+      (click)="checkSignInStatus()">
       <span class="handheld-toolbar-icon"><i class="ci-cart"></i>
         <span class="badge bg-primary rounded-pill ms-1">{{carts.length}}</span>
       </span>

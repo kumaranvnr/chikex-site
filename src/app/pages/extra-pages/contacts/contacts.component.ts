@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { location_list } from '../../index/data';
+
 import { HttpService } from 'src/app/services/http.service';
 import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-contacts',
@@ -17,14 +18,17 @@ export class ContactsComponent implements OnInit {
   submitted = false;
   location_list: any = {};
   emirates_list: any = {};
-  constructor(private formBuilder: UntypedFormBuilder, private httpService: HttpService) {
+  constructor(private formBuilder: UntypedFormBuilder,
+    private ngxservice: NgxUiLoaderService,
+    private httpService: HttpService) {
+
     this.getLocationList()
   }
 
   ngOnInit(): void {
 
     this.breadCrumbItems = [
-      { label: 'Home', link: '/fashion-store-v1' },
+      { label: 'Home', link: '/' },
       { label: 'Contacts', active: true, link: '/pages/contatcs' }
     ];
 
@@ -36,6 +40,7 @@ export class ContactsComponent implements OnInit {
     });
   }
   async getLocationList(): Promise<any> {
+    this.ngxservice.start();
     let response = await this.httpService.getLocationList();
     if (response.data) {
       this.location_list = response.data.location_list;
@@ -43,6 +48,7 @@ export class ContactsComponent implements OnInit {
     } else {
       console.log(response?.error);
     }
+    this.ngxservice.stop();
   }
 
   getEmirateName(emirate: string) {

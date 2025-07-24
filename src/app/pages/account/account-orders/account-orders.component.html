@@ -6,7 +6,7 @@
     <div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
-          <li class="breadcrumb-item"><a class="text-nowrap" routerLink="/fashion-store-v1"><i
+          <li class="breadcrumb-item"><a class="text-nowrap" routerLink="javascript:void(0);"><i
                 class="ci-home"></i>Home</a></li>
           <li class="breadcrumb-item text-nowrap"><a href="javascript:void(0);">Account</a>
           </li>
@@ -34,7 +34,7 @@
           <label class="d-none d-lg-block fs-sm text-light text-nowrap opacity-75 me-2" for="order-sort">Sort
             orders:</label>
           <label class="d-lg-none fs-sm text-nowrap opacity-75 me-2" for="order-sort">Sort orders:</label>
-          <select class="form-select" id="order-sort" [(ngModel)]="service.status">
+          <select class="form-select" id="order-sort" (change)="orderFilter($event)">
             <option value="">All</option>
             <option value="Delivered">Delivered</option>
             <option value="In Progress">In Progress</option>

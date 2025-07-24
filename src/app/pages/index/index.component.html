@@ -1,26 +1,16 @@
 <app-header></app-header>
 <!-- Hero section-->
-<section class="bg-darker bg-size-cover bg-position-center py-5 py-lg-10"
+<section class="bg-darker bg-size-cover bg-position-center py-3 py-lg-10"
     style="background-image: url(assets/img/food-delivery/hero-bg.jpg);">
     <div class="container pb-5">
-        <div class="row justify-content-center pb-5">
-            <div class="col-xl-6 col-lg-7 col-md-8 col-sm-10 text-center">
+        <div class="row   pb-5">
+            <div class="col-xl-6 col-lg-7 col-md-8 col-sm-10 ">
                 <h5 class="text-light fw-light">#1 Fried Chicken Restaurant since 2022</h5>
-                <div class="h1 text-light mb-3 pb-4">We deliver your favorite food fresh &amp; fast in
-                    <div class="dropdown d-inline-block ms-1">
-                        <a href="javascript:void(0);">UAE</a>
-                        <!--  <a class="dropdown-toggle" href="javascript:void(0);" data-bs-toggle="dropdown">New York</a>
-                         <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item fs-base" href="javascript:void(0);">Los Angeles</a>
-                            <a class="dropdown-item fs-base" href="javascript:void(0);">Chicago</a>
-                            <a class="dropdown-item fs-base" href="javascript:void(0);">Houston</a>
-                            <a class="dropdown-item fs-base" href="javascript:void(0);">Philadelphia</a>
-                            <a class="dropdown-item fs-base" href="javascript:void(0);">San Diego</a>
-                            <a class="dropdown-item fs-base" href="javascript:void(0);">Miami</a>
-                        </div> -->
-                    </div>
-                </div><a class="btn btn-primary" href="javascript:void(0)" [ngxScrollTo]="'#cuisine'" data-scroll>What
-                    do you want to eat?</a>
+                <div class="h1 text-light mb-3 pb-4">We deliver your favorite food fresh &amp; fast in UAE
+
+                </div><a class="btn btn-primary" style="background-color: #991a25;" href="javascript:void(0)"
+                    [ngxScrollTo]="'#cuisine'" data-scroll>Order
+                    Now</a>
             </div>
         </div>
     </div>
@@ -31,12 +21,12 @@
         <h2 class="text-center pt-4 pt-sm-3">Trending food in your city</h2>
         <p class="text-muted text-center mb-5">Choose what you want and we dilever it to you</p>
         <div class="row">
-            <div *ngFor="let cat of category" class="col-md-4 col-sm-6 mb-grid-gutter">
-                <a class="card border-0 shadow" routerLink="menu/{{cat._id}}"><img class="card-img-top img-responsive"
-                        src="{{cat.img_url}}" alt="Burgers &amp; Fries">
-                    <div class="card-body py-4 text-center">
+            <div *ngFor="let cat of category" class="col-md-2 col-sm-6 mb-grid-gutter">
+                <a class="card border-0 shadow" routerLink="/menu/{{cat._id}}" style="height: 100%;"><img
+                        class="card-img-top img-responsive" src="{{cat.img_url}}" alt="Burgers &amp; Fries">
+                    <!-- <div class="card-body py-4 text-center">
                         <h3 class="h5 mt-1">{{cat.title}}</h3>
-                    </div>
+                    </div> -->
                 </a>
             </div>
         </div>
@@ -45,72 +35,33 @@
 
 
 <!-- Hero slider-->
-<section class="tns-carousel mb-3 mb-md-5">
+<section class="tns-carousel mb-3 mb-md-5 bg-size-cover bg-position-center"
+    style="background-image: url(assets/img/slider.png);">
     <swiper class="swiper-container" [config]="config" [(index)]=" index">
 
         <div class="swiper-wrapper">
             <div class="swiper-slide">
                 <!-- Slide 1-->
                 <div>
-                    <div class="rounded-3 px-md-5 text-center text-xl-start" style="background-color: #59c879;">
+                    <div class="rounded-3 px-md-5 text-center text-xl-start">
                         <div class="d-xl-flex justify-content-between align-items-center px-4 px-sm-5 mx-auto"
                             style="max-width: 1226px;">
-                            <div class="py-5 me-xl-4 mx-auto mx-xl-0" style="max-width: 490px;">
-                                <h2 class="h1 text-light">Fresh Foods a Click Away</h2>
-                                <p class="text-light pb-4">Order any food from our store online and we
+                            <div class="py-5 me-xl-4   mx-xl-0" style="max-width: 490px;">
+                                <h2 class="h1 text-light">Taste the Difference</h2>
+                                <p class="text-light pb-4">Order any food from our online store and we
                                     deliver them
                                     to your door at
                                     a time convenient for you.</p>
-                                <!-- <h5 class="text-light pb-3">On the go? Try our mobile app</h5>
-                                    <div class="d-flex flex-wrap justify-content-center justify-content-xl-start">
-                                        <a class="btn-market btn-apple me-2 mb-2" href="javascript:void(0);"
-                                            role="button"><span class="btn-market-subtitle">Download on the</span><span
-                                                class="btn-market-title">App
-                                                Store</span></a><a class="btn-market btn-google mb-2"
-                                            href="javascript:void(0);" role="button"><span
-                                                class="btn-market-subtitle">Download on
-                                                the</span><span class="btn-market-title">Google
-                                                Play</span></a>
-                                    </div> -->
+
                                 <a class="btn btn-primary btn-shadow" routerLink="/menu">View products</a>
                             </div>
-                            <div><img class="img-responsive" src="assets/img/grocery/slider/slide01.jpg" alt="Image">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <!-- Slide 2-->
-                <div>
-                    <div class="rounded-3 px-md-5 text-center text-xl-start" style="background-color: #1a6fb0;">
-                        <div class="d-xl-flex justify-content-between align-items-center px-4 px-sm-5 mx-auto"
-                            style="max-width: 1226px;">
-                            <div class="py-5 me-xl-4 mx-auto mx-xl-0" style="max-width: 490px;">
-                                <h2 class="h1 text-light">24/7 Delivery Service</h2>
-                                <p class="text-light pb-4">Order any goods from our store online and we
-                                    deliver them
-                                    to your door at
-                                    a time convenient for you.</p>
-                                <!--  <h5 class="text-light pb-3">On the go? Try our mobile app</h5>
-                                    <div class="d-flex flex-wrap justify-content-center justify-content-xl-start">
-                                        <a class="btn-market btn-apple me-2 mb-2" href="javascript:void(0);"
-                                            role="button"><span class="btn-market-subtitle">Download on the</span><span
-                                                class="btn-market-title">App
-                                                Store</span></a><a class="btn-market btn-google mb-2"
-                                            href="javascript:void(0);" role="button"><span
-                                                class="btn-market-subtitle">Download on
-                                                the</span><span class="btn-market-title">Google
-                                                Play</span></a>
-                                    </div> -->
-                            </div>
-                            <div><img class="img-responsive" src="assets/img/grocery/slider/slide02.jpg" alt="Image">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
+                            <!-- <div><img class="img-responsive" src="assets/img/grocery/slider/slide01.jpg" alt="Image">
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
         <!-- Add Arrows -->
@@ -128,7 +79,7 @@
                     <div class="display-3 fw-normal opacity-15 me-4">01</div>
                     <div class="ps-2"><img class="d-block my-2" src="assets/img/grocery/steps/01.png" width="72"
                             alt="Order online">
-                        <p class="mb-3 pt-1">You order your favorite products online</p>
+                        <p class="mb-3 pt-1">Select your favorite food from our online menu.</p>
                     </div>
                 </div>
                 <hr class="d-md-none d-lg-block d-xl-none">
@@ -139,8 +90,8 @@
                 <div class="d-flex align-items-center mx-auto py-3 px-3" style="max-width: 362px;">
                     <div class="display-3 fw-normal opacity-15 me-4">02</div>
                     <div class="ps-2"><img class="d-block my-2" src="assets/img/grocery/steps/02.png" width="72"
-                            alt="Grocery collected">
-                        <p class="mb-3 pt-1">A personal assistant collects the products from your list</p>
+                            alt="prepare food">
+                        <p class="mb-3 pt-1">Our team personally prepares your order fresh and crispy.</p>
                     </div>
                 </div>
                 <hr class="d-md-none d-lg-block d-xl-none">
@@ -152,7 +103,7 @@
                     <div class="display-3 fw-normal opacity-15 me-4">03</div>
                     <div class="ps-2"><img class="d-block my-2" src="assets/img/grocery/steps/03.png" width="72"
                             alt="Delivery">
-                        <p class="mb-3 pt-1">We deliver to the door at a time convenient for you</p>
+                        <p class="mb-3 pt-1">We deliver straight to your door — hot, fresh, and right on time.</p>
                     </div>
                 </div>
             </div>
@@ -161,18 +112,18 @@
 </section>
 
 <!-- Mobile app CTA-->
-<!-- <section class="bg-primary bg-size-cover bg-position-center pt-5"
-    style="background-image: url(img/food-delivery/mobile-app-bg.jpg);">
+<section class="bg-primary bg-size-cover bg-position-center pt-5">
     <div class="container pt-2 pt-sm-0">
         <div class="row align-items-center">
             <div class="col-xl-4 col-lg-5 col-sm-6 offset-xl-2 offset-lg-1 mt-md-n5 text-center text-sm-start">
                 <h2 class="text-light mb-3">Order food on the go with Chikex App</h2>
-                <p class="text-light opacity-70 mb-0 d-block d-sm-none d-md-block">Pay with in app wallet, collect
-                    loyalty points, track your orders in real time and much more.</p>
-                <div class="mt-4 pt-2"><a class="btn-market btn-apple me-3 mb-2" href="javascript:void(0);"
-                        role="button"><span class="btn-market-subtitle">Download on the</span><span
-                            class="btn-market-title">App
-                            Store</span></a><a class="btn-market btn-google mb-2" href="javascript:void(0);"
+                <!-- <p class="text-light opacity-70 mb-0 d-block d-sm-none d-md-block">Pay with in app wallet, collect
+                    loyalty points, track your orders in real time and much more.</p> -->
+                <div class="mt-4 pt-2"><a class="btn-market btn-apple me-3 mb-2"
+                        href="https://apps.apple.com/ae/app/chikex/id6744054503" role="button"><span
+                            class="btn-market-subtitle">Download on the</span><span class="btn-market-title">App
+                            Store</span></a><a class="btn-market btn-google mb-2"
+                        href="https://play.google.com/store/apps/details?id=com.chikex.ecom&pcampaignid=web_share"
                         role="button"><span class="btn-market-subtitle">Download on the</span><span
                             class="btn-market-title">Google
                             Play</span></a></div>
@@ -181,7 +132,7 @@
                     src="assets/img/food-delivery/phone.png" width="331" alt="Mobile App Screen"></div>
         </div>
     </div>
-</section> -->
+</section>
 <!-- Become Courier / Partner CTA-->
 <!-- <section class="container pb-4 pt-lg-5 pb-sm-5">
     <div class="row pt-4 mt-2 mt-lg-3 mb-md-2">
@@ -219,7 +170,7 @@
         </div>
     </div>
 </section> -->
-<!-- Reviews-->
+
 <section class="bg-secondary py-5">
     <div class="container py-md-4 pt-3 pb-0 py-sm-3">
         <h2 class="text-center mb-4 mb-md-5">Customer reviews</h2>

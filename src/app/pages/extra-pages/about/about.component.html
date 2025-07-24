@@ -18,7 +18,7 @@
 <div class="activation-area">
 
 
-  <section class="tns-carousel">
+  <!-- <section class="tns-carousel">
     <swiper class="swiper-container" [config]="config">
       <div class="swiper-wrapper">
         <div class="swiper-slide">
@@ -41,7 +41,7 @@
         </div>
       </div>
     </swiper>
-  </section>
+  </section> -->
 
   <!-- Row: Shop online-->
 
@@ -82,23 +82,46 @@
     </div>
   </section>
 
-  <section class="row g-0">
+
+
+  <section class="reasons-why text-center py-4 bg-white">
+    <h2 class="text-uppercase fs-5">REASONS WHY PEOPLE LOVE</h2>
+    <h1 class="font-weight-bold text-dark-red">
+      CHIKEX <span class="font-weight-bold text-orange">SO MUCH</span>
+    </h1>
+    <div class="row counters d-flex justify-content-between mt-4 m-2">
+      <div class="counter col-xl-4 col-lg-12 col-md-4">
+        <h3 class="count" data-target="164684">0</h3>
+        <p>BELOVED CUSTOMERS</p>
+      </div>
+      <div class="counter col-xl-4 col-lg-12 col-md-4">
+        <h3 class="count" data-target="58845">0</h3>
+        <p>DELIVERED ORDERS</p>
+      </div>
+      <div class="counter col-xl-4 col-lg-12 col-md-4 ">
+        <h3 class="count" data-target="12573">0</h3>
+        <p>POSITIVE REVIEWS</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- <section class="row g-0">
     <div class="col-md-6 bg-position-center bg-size-cover bg-secondary"
       style="min-height: 15rem; background-image: url(assets/img/about/01.jpg);"></div>
     <div class="col-md-6 px-3 px-md-5 py-5">
       <div class="mx-auto py-lg-5" style="max-width: 35rem;">
         <h2 class="h3 pb-3">Search, Select, Buy online</h2>
         <p class="fs-sm pb-3 text-muted">Welcome to our restaurant's online ordering platform! Simply search our menu,
-          select your favorite items, and buy them online for pickup or delivery. Enjoy our classic fried chicken, spicy
-          wings, crispy tenders, and much more from the comfort of your own home. We accept all cards and provide a
+          select your favorite items, and buy them online for delivery. Enjoy our classic fried chicken, crispy tenders,
+          and much more from the comfort of your own home. We accept all cards and provide a
           convenient ordering process.</p><a class="btn btn-primary btn-shadow" routerLink="/menu">View products</a>
       </div>
     </div>
-  </section>
+  </section> -->
 
   <!-- Row: Delivery-->
 
-  <section class="row g-0">
+  <!-- <section class="row g-0">
     <div class="col-md-6 bg-position-center bg-size-cover bg-secondary order-md-2"
       style="min-height: 15rem; background-image: url(assets/img/about/02.jpg);"></div>
     <div class="col-md-6 px-3 px-md-5 py-5 order-md-1">
@@ -111,12 +134,11 @@
           minutes of the order processing time.
           We understand that our customers have busy schedules, which is why we offer a variety of delivery options to
           fit
-          your needs. Whether you prefer to have your food delivered to your doorstep or to pick it up from our
-          restaurant, we've got you covered.</p><!-- <a class="btn btn-accent btn-shadow"
-        href="javascript:void(0);">Shipping details</a> -->
+          your needs. Whether you prefer to have your food delivered to your doorstep.</p>
+         
       </div>
     </div>
-  </section>
+  </section> -->
 
   <!-- Row: Mobile app-->
   <!-- <section class="row g-0">
@@ -139,23 +161,23 @@
 </section> -->
   <!-- Section: Shopping outlets-->
 
-  <section class="row g-0">
+  <!-- <section class="row g-0">
     <div class="col-md-6 bg-position-center bg-size-cover bg-secondary "
       style="min-height: 15rem; background-image: url(assets/img/about/04.jpg);"></div>
     <div class="col-md-6 px-3 px-md-5 py-5 order-md-1">
       <div class="mx-auto py-lg-5" style="max-width: 35rem;">
-        <h2 class="h3 pb-3">Shop offline. Cozy outlet stores</h2>
-        <p class="fs-sm pb-3 text-muted">Come visit our cozy outlet stores to enjoy our delicious menu items in a warm
+        <h2 class="h3 pb-3">Visit outlets</h2>
+        <p class="fs-sm pb-3 text-muted">Come visit our outlets to enjoy our delicious menu items in a warm
           and
           inviting atmosphere. Our soft lighting and comfortable seating make for a comfortable dining experience. Our
           friendly staff are always on hand to assist you and provide recommendations. Join us for some classic fried
-          chicken, spicy wings, crispy tenders, and more - we promise to leave you wanting more!.</p><a
-          class="btn btn-warning btn-shadow" routerLink="/pages/contacts">See outlet stores</a>
+          chicken, crispy tenders, burgers and more - we promise to leave you wanting more!.</p><a
+          class="btn btn-warning btn-shadow" routerLink="/pages/contacts">See outlets</a>
       </div>
     </div>
-  </section>
+  </section> -->
 
-  <hr>
+
 
   <!-- Section: Team-->
 
@@ -163,7 +185,8 @@
     <h2 class="h3 my-2">Our core team</h2>
     <p class="fs-sm text-muted">People behind your great shopping experience</p>
     <div class="row pt-3">
-      <div class="col-lg-4 col-sm-6 mb-grid-gutter" *ngFor="let data of teamDatas; let i = index;trackBy:fromDataResolver.identify;">
+      <div class="col-lg-4 col-sm-6 mb-grid-gutter"
+        *ngFor="let data of teamDatas; let j = index;trackBy:fromDataResolver.identify;">
         <div class="d-flex align-items-center"><img class="rounded-circle" src="{{data.image}}" width="96"
             alt="Jonathan Doe">
           <div class="ps-3">

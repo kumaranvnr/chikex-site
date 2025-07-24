@@ -8,6 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { SharedService } from 'src/app/services/shared.service';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-checkout',
@@ -35,10 +36,13 @@ export class CheckoutComponent implements OnInit, AfterViewInit, OnDestroy {
     private restService: HttpService,
     private modalService: NgbModal,
     private sharedService: SharedService,
+    private ngxService: NgxUiLoaderService,
     private cd: ChangeDetectorRef,) {
+
     this.getCartDetails();
     this.check_delivery_address();
     //   this.getCurrentLocation();
+
   }
 
   lat: any; long: any;
@@ -90,7 +94,7 @@ export class CheckoutComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async getCartDetails(): Promise<any> {
-
+    this.ngxService.start();
     var sub = CookieStore.getUserInfo()?.sub;
     let cart_reponse = await this.restService.getCartDetails(sub);
     if (cart_reponse.data) {
@@ -106,7 +110,7 @@ export class CheckoutComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }
     this.cartproduct = cartdata;
-
+    this.ngxService.stop();
   }
 
   ngAfterViewInit(): void {
@@ -147,9 +151,23 @@ export class CheckoutComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async completeorder(): Promise<void> {
+    this.ngxService.start();
     this.submitted = true;
+    this.cartproduct = cartdata;
+    if (this.cartproduct.length == 0) {
+      this.ngxService.stop(); this.submitted = false;
+      Swal.fire({ title: 'Message', text: `Cart is empty!.`, confirmButtonColor: '#364574' });
+      return;
+    }
     let checkoutData = this.formData.value;
+    if (checkoutData.payment_type == null || checkoutData.payment_type == '' || checkoutData.payment_type == undefined) {
+      this.ngxService.stop(); this.submitted = false;
+      Swal.fire({ title: 'Message', text: `Choose the payment options`, confirmButtonColor: '#364574' });
+      return;
+    }
+
     if (checkoutData.payment_type == 'Online') {
+      this.ngxService.stop(); this.submitted = false;
       Swal.fire({ title: 'Message', text: `Technical issue with online payment.Please proceed with COD`, confirmButtonColor: '#364574' });
       return;
     }
@@ -176,6 +194,7 @@ export class CheckoutComponent implements OnInit, AfterViewInit, OnDestroy {
       outlet_code: this.current_address.nearbyStore,
       table_type: 'Delivery',
       currency: 'AED',
+      source: 'Site',
       lat: this.lat,
       long: this.long
     }
@@ -185,10 +204,15 @@ export class CheckoutComponent implements OnInit, AfterViewInit, OnDestroy {
     let cart_obj = { cart_id: cart_details._id, sub: sub, useraddress: this.current_address };
     let order_response = await this.restService.convertCartToOrder(cart_obj);
 
-    let order_obj = { order_no: order_response.data.orderNo, sub: sub };
+    let order_obj = {
+      sub: sub,
+      order_no: order_response.data.orderNo,
+      payment_type: checkoutData.payment_type
+    };
     let payment_response = await this.restService.updatePaymentInfo(order_obj);
-    console.log(order_response.data);
+
     CookieStore.saveDataAsync("order_info", order_response.data);
+    this.ngxService.stop();
     window.location.href = '/order-confirmation';
   }
 

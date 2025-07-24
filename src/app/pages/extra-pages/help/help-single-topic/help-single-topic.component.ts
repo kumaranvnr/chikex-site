@@ -18,10 +18,10 @@ export class HelpSingleTopicComponent implements OnInit {
     /**
     * BreadCrumb
     */
-     this.breadCrumbItems = [
-      { label: 'Home', link:'/fashion-store-v1' },
-      { label: 'Help center', link:'/pages/single-topic' },
-      { label: 'Single topic', active: true, link:'/pages/single-topic' }
+    this.breadCrumbItems = [
+      { label: 'Home', link: '/' },
+      { label: 'Help center', link: '/pages/single-topic' },
+      { label: 'Single topic', active: true, link: '/pages/single-topic' }
     ];
   }
 

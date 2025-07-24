@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { categoryData, resturants, Reviews } from './data';
+import { Reviews } from './data';
 
 // Swiper Slider
 import { SwiperComponent, SwiperDirective } from 'ngx-swiper-wrapper';
@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { cart_details, cartdata } from '../cart/data';
 import { HttpService } from 'src/app/services/http.service';
 import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-index',
@@ -17,20 +18,19 @@ import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
 export class IndexComponent implements OnInit {
   fromDataResolver = FromDataResolver;
   category: any;
-  restaurants: any;
+
   review: any;
   index: number = 1;
   location_list: any = {};
   @ViewChild(SwiperComponent, { static: false }) componentRef?: SwiperComponent;
   @ViewChild(SwiperDirective, { static: false }) directiveRef?: SwiperDirective;
 
-  constructor(public router: Router, private httpService: HttpService) {
+  constructor(public router: Router, private httpService: HttpService, private ngxService: NgxUiLoaderService,) {
     // this.getCartRequest();
   }
 
   ngOnInit(): void {
-    this.category = categoryData;
-    this.restaurants = resturants;
+
     this.review = Reviews;
     document.querySelector('.cart')?.classList.add('d-none');
     this.getCategory();
@@ -52,12 +52,14 @@ export class IndexComponent implements OnInit {
   }
 
   async getCategory(): Promise<any> {
+    this.ngxService.start();
     let category_response = await this.httpService.getCategoryList();
     if (category_response.data) {
       this.category = category_response.data.filter((item: any) => {
         return item.homepage == true;
       })
     }
+    this.ngxService.stop();
   }
 
   /**

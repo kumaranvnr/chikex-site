@@ -9,6 +9,8 @@ import { NewaddressmodalComponent } from '../newaddressmodal/newaddressmodal.com
 import { CookieStore } from 'src/app/services/helpers/CookieStore';
 import { HttpService } from 'src/app/services/http.service';
 import Swal from 'sweetalert2';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { SignmodalComponent } from '../signmodal/signmodal.component';
 
 @Component({
   selector: 'app-addressmodal',
@@ -22,7 +24,7 @@ export class AddressmodalComponent implements OnInit {
 
   searchTerm: string = '';
   searchResults: any[] = [];
-
+  delivery_status: boolean = true;
   lat = 25.3608332804672;
   lng = 55.3965451784847;
   coordinates = new google.maps.LatLng(this.lat, this.lng);
@@ -38,6 +40,7 @@ export class AddressmodalComponent implements OnInit {
     private http: HttpClient,
     private sharedService: SharedService,
     private restService: HttpService,
+    private ngxService: NgxUiLoaderService,
     private modalService: NgbModal) {
     this.centerOnCurrentLocation();
   }
@@ -56,8 +59,19 @@ export class AddressmodalComponent implements OnInit {
     this.modalService.dismissAll();
   }
   confirmAdreess() {
-    this.closemodal();
-    this.modalService.open(NewaddressmodalComponent, { size: 'lg', centered: true });
+    var sub = CookieStore.getUserInfo()?.sub;
+    if (sub == "" || sub == undefined) {
+      this.modalService.open(SignmodalComponent, { size: 'md', centered: true });
+      return;
+    }
+
+    if (this.delivery_status) {
+      this.closemodal();
+      this.modalService.open(NewaddressmodalComponent, { size: 'lg', centered: true });
+    }
+    else {
+      Swal.fire("Delivery not available in your location");
+    }
   }
 
   initializeMap(interactive: boolean) {
@@ -147,6 +161,7 @@ export class AddressmodalComponent implements OnInit {
 
 
   async checkingDelivery(coordinate: any) {
+    this.ngxService.start();
     const location_response = await this.restService.getNearbyLocationList(coordinate);
     if (location_response) {
       if (location_response.data.length > 0) {
@@ -156,13 +171,18 @@ export class AddressmodalComponent implements OnInit {
         //   this.sharedService.setValue(address);
         CookieStore.saveDataAsync('address', address);
         CookieStore.saveDataAsync('location_data', location_response.data[0]);
-        this.cd.detectChanges();
+        this.cd.detectChanges(); this.delivery_status = true;
       } else {
+        this.ngxService.stop();
         Swal.fire("Delivery not available in your location");
+        this.delivery_status = false;
       }
     } else {
+      this.ngxService.stop();
       Swal.fire("Location not found");
+      this.delivery_status = false;
     }
+    this.ngxService.stop();
   }
 
 }

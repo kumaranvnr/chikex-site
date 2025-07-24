@@ -5,9 +5,23 @@
     font-size: 18px;
     color: #FEA569;
 }
+
 .half {
     position: absolute;
     display: inline-block;
     overflow: hidden;
     color: #FEA569;
+}
+
+.h1 {
+    font-size: calc(1rem + 1.5vw);
+}
+
+@media (max-width: 768px) {
+
+    .bg-darker {
+        background-size: contain; // Ensure the image is fully visible
+        background-position: center; // Center the image
+        background-repeat: no-repeat;
+    }
 }

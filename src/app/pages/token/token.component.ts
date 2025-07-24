@@ -29,7 +29,7 @@ export class TokenComponent implements OnInit {
         if (userinfo_response.success) {
           CookieStore.saveUserInfo(userinfo_response.data);
           if (CookieStore.isRoleExists(["user"])) {
-            this.router.navigate(["/"])
+            this.router.navigate(["/menu"])
           }
         } else {
           const login_url = this.restService.getLoginUrl();
