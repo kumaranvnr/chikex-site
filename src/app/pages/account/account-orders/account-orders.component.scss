@@ -1,0 +1,93 @@
+// Enhanced modal styling
+.modal-content {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    border-radius: 12px 12px 0 0;
+    border-bottom: none;
+    padding: 1.5rem;
+}
+
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.order-items-list {
+    .border-bottom:last-child {
+        border-bottom: none !important;
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .modal-dialog {
+        margin: 0.5rem;
+        max-width: calc(100% - 1rem);
+    }
+
+    .modal-footer {
+        .d-flex {
+            flex-direction: column;
+            gap: 0.5rem;
+
+            >div {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    }
+
+    .order-items-list {
+        .d-flex {
+            flex-direction: row;
+            align-items: flex-start !important;
+
+            .text-end {
+                text-align: left !important;
+                margin-top: 0.5rem;
+                margin-left: 0 !important;
+            }
+        }
+    }
+}
+
+// Print styles
+@media print {
+
+    .modal-header,
+    .modal-footer {
+        display: none !important;
+    }
+
+    .modal-body {
+        max-height: none !important;
+        overflow: visible !important;
+    }
+}
+
+// Status badge colors
+.badge {
+    &.bg-success {
+        background-color: var(--bs-success) !important;
+    }
+
+    &.bg-primary {
+        background-color: var(--bs-primary) !important;
+    }
+
+    &.bg-warning {
+        background-color: var(--bs-warning) !important;
+    }
+
+    &.bg-danger {
+        background-color: var(--bs-danger) !important;
+    }
+
+    &.bg-secondary {
+        background-color: var(--bs-secondary) !important;
+    }
+}

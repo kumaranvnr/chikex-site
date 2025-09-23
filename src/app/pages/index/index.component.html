@@ -19,11 +19,11 @@
 <div class="activation-area">
     <section class="container py-4 my-lg-3 py-sm-5 " id="cuisine">
         <h2 class="text-center pt-4 pt-sm-3">Trending food in your city</h2>
-        <p class="text-muted text-center mb-5">Choose what you want and we dilever it to you</p>
+        <p class="text-muted text-center mb-5">Choose what you want and we deliver it to you</p>
         <div class="row">
-            <div *ngFor="let cat of category" class="col-md-2 col-sm-6 mb-grid-gutter">
-                <a class="card border-0 shadow" routerLink="/menu/{{cat._id}}" style="height: 100%;"><img
-                        class="card-img-top img-responsive" src="{{cat.img_url}}" alt="Burgers &amp; Fries">
+            <div *ngFor="let cat of category" class="col-6 col-sm-6 col-md-2 mb-grid-gutter">
+                <a class="card border-0 shadow" routerLink="/menu/{{cat._id}}" style="height: 100%;">
+                    <img class="card-img-top img-responsive" src="{{cat.img_url}}" alt="Burgers &amp; Fries">
                     <!-- <div class="card-body py-4 text-center">
                         <h3 class="h5 mt-1">{{cat.title}}</h3>
                     </div> -->

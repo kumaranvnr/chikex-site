@@ -82,19 +82,18 @@ export class AccountProfileComponent implements OnInit {
 
   async updateProfile() {
     try {
+      const login_data = this.AccountProfile.value;
+      if (!login_data.email) {
+        alert('Please enter email'); return;
+      }
+      if (!login_data.password) {
+        alert('Please enter password'); return;
+      }
+      if (!login_data.mobile) {
+        alert('Please enter mobile'); return;
+      }
       if (this.AccountProfile.valid) {
-        const login_data = this.AccountProfile.value;
         login_data.sub = CookieStore.getUserInfo()?.sub;
-        if (!login_data.email) {
-          alert('Please enter email'); return;
-        }
-        if (!login_data.password) {
-          alert('Please enter password'); return;
-        }
-        if (!login_data.mobile) {
-          alert('Please enter mobile'); return;
-        }
-
         let save_respose = await this.restService.UserProfileUpdate(login_data);
         if (save_respose.success) {
           alert('successfully updated')
@@ -103,6 +102,7 @@ export class AccountProfileComponent implements OnInit {
     } catch (error) {
       alert('Error while read data' + error);
     } finally {
+
     }
   }
 

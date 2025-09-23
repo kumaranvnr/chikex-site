@@ -19,12 +19,22 @@
     <div class="container pt-4 pb-3 py-sm-4">
 
         <div class="rounded-3 shadow-lg mt-4 mb-5">
-            <ul class="nav nav-tabs nav-justified mb-sm-4">
-                <li class="nav-item"><a class="nav-link fs-lg fw-medium py-4" href="/cart">1. Your
-                        order</a></li>
-                <li class="nav-item"><a class="nav-link fs-lg fw-medium py-4 active" href="javascript:void(0)">2.
-                        Checkout</a></li>
-            </ul>
+            <div class="card shadow-sm mb-4">
+                <div class="card-body p-0">
+                    <ul class="nav nav-pills nav-justified">
+                        <li class="nav-item">
+                            <a class="nav-link py-3" href="/cart">
+                                <span class="d-none d-sm-inline">1. </span>Your Order
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <span class="nav-link active py-3">
+                                <span class="d-none d-sm-inline">2. </span>Checkout
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <form (ngSubmit)="completeorder()" [formGroup]="formData"
                 class="needs-validation px-3 px-sm-4 px-xl-5 pt-sm-1 pb-4 pb-sm-5">
 
@@ -63,8 +73,10 @@
                         <div class="d-flex align-items-center">
                             <label class="form-label fw-normal text-nowrap me-3 mb-0" for="fd-change">I need change
                                 from</label>
-                            <div class="input-group flex-nowrap" style="width: 10rem;"><span class="input-group-text"><!-- <i
-                                        class="ci-dollar"></i> -->AED</span>
+                            <div class="input-group flex-nowrap" style="width: 10rem;"><span
+                                    class="input-group-text text-accents"><!-- <i
+                                        class="ci-dollar"></i> --><img src="assets/aedsymbol.png"
+                                        alt="aed symbol" /></span>
                                 <input class="form-control bg-none pe-3" type="number" id="fd-change"
                                     formControlName="need_change_from">
                             </div>
@@ -89,20 +101,24 @@
                             <div class="d-fle flex-column h-100 rounded-3 bg-secondary px-3 px-sm-4 py-4">
                                 <h2 class="h5 pb-3">Your total</h2>
                                 <div class="d-flex justify-content-between fs-md border-bottom pb-3 mb-3">
-                                    <span>Subtotal:</span><span class="text-heading">AED
+                                    <span>Subtotal:</span><span class="text-heading text-accents"><img
+                                            src="assets/aedsymbol.png" alt="aed symbol" />
                                         {{checkoutInfo?.sub_total|number:'1.2-2'}}</span>
                                 </div>
                                 <div *ngIf="checkoutInfo?.coupon_applied"
                                     class="d-flex justify-content-between fs-md border-bottom pb-3 mb-3">
-                                    <span>Discount:</span><span class="text-heading">AED
+                                    <span>Discount:</span><span class="text-heading text-accents"><img
+                                            src="assets/aedsymbol.png" alt="aed symbol" />
                                         {{checkoutInfo?.discount|number:'1.2-2'}}<small></small></span>
                                 </div>
                                 <div class="d-flex justify-content-between fs-md border-bottom pb-3 mb-3">
-                                    <span>Delivery Charges:</span><span class="text-heading">AED
+                                    <span>Delivery Charges:</span><span class="text-heading text-accents"><img
+                                            src="assets/aedsymbol.png" alt="aed symbol" />
                                         {{checkoutInfo?.delivery_charges|number:'1.2-2'}}</span>
                                 </div>
                                 <div class="d-flex justify-content-between fs-md mb-2"><span>Total:</span><span
-                                        class="text-heading fw-medium">AED
+                                        class="text-heading fw-medium text-accents"> <img src="assets/aedsymbol.png"
+                                            alt="aed symbol" />
                                         {{checkoutInfo?.total_price|number:'1.2-2'}}</span>
                                 </div>
                             </div>

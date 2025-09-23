@@ -45,8 +45,26 @@ export class CartComponent implements OnInit, AfterViewInit {
       comments: [''],
       promocode: ['', [Validators.required]],
     });
+
     this.getCartDetails();
     this.ngxService.stop();
+
+    // setTimeout(() => {
+    //   this.adjustImageSize();
+    // }, 100);
+
+  }
+
+  adjustImageSize() {
+    const images = document.querySelectorAll('.text-accent img');
+    images.forEach((img: Element) => {
+      if (img instanceof HTMLImageElement) {
+        const fontSize = window.getComputedStyle(img.parentElement!).fontSize; // Get the font size of the parent
+        const sizeInPixels = parseFloat(fontSize) * 1.5; // Calculate the desired size (1.5 times the font size)
+        img.style.width = `${sizeInPixels}px`; // Set the width
+        img.style.height = 'auto'; // Maintain aspect ratio
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -115,6 +133,7 @@ export class CartComponent implements OnInit, AfterViewInit {
     }
     product.qty--;
     this.calculateAddontotal(product);
+    this.updateTempCart(product);
   }
 
   async onQuantityChange(product: any): Promise<void> {
@@ -123,11 +142,38 @@ export class CartComponent implements OnInit, AfterViewInit {
       product.qty = 1;
     }
     this.calculateAddontotal(product);
+    this.updateTempCart(product);
   }
 
   async increaseQuantity(product: any): Promise<void> {
     product.qty++;
     this.calculateAddontotal(product);
+    this.updateTempCart(product);
+  }
+
+  async updateTempCart(product: any) {
+    this.ngxService.start();
+    var sub = CookieStore.getUserInfo()?.sub;
+
+    product.sub = sub;
+    let cart_data = cartdata.find(data => data.product_id == product.product_id);
+    if (cart_data) {
+      cart_data.price = product.price;
+      cart_data.qty = product.qty;
+      cart_data.addon_total = product.addon_total;
+      cart_data.total_price = product.total_price;
+      cart_data.group_modifiers_list = product.group_modifiers_list;
+    } else {
+      cartdata.push(product);
+    }
+
+    const cart_info: any = {};
+    cart_info.sub = sub;
+    cart_info.cart_items = [];
+    cart_info.cart_items.push(product);
+
+    await this.restService.addCartItems(cart_info);
+    this.ngxService.stop();
   }
 
   async removecart(product: any) {
@@ -146,6 +192,9 @@ export class CartComponent implements OnInit, AfterViewInit {
     };
     await this.restService.removeCartItems(remove_obj);
     this.ngxService.stop();
+    if (this.cartItems.length == 0) {
+      this.router.navigate(["/menu"]);
+    }
   }
 
   setprice(price: any) {
@@ -185,13 +234,14 @@ export class CartComponent implements OnInit, AfterViewInit {
   }
 
   async checkoutClick(): Promise<void> {
-    this.ngxService.start();
+
     this.cartItems = cartdata;
     if (this.cartItems.length == 0) {
       this.ngxService.stop(); this.submitted = false;
-      Swal.fire({ title: 'Message', text: `Cart is empty!.`, confirmButtonColor: '#364574' });
+      Swal.fire({ title: 'Message', text: `Cart is empty!.`, confirmButtonColor: '#364574', timer: 1500 });
       return;
     }
+    this.ngxService.start();
     let formdata = this.formData.value;
     let obj: any = {};
     obj.sub = CookieStore.getUserInfo()?.sub;

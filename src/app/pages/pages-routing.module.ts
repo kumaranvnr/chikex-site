@@ -11,6 +11,7 @@ import { CheckoutCompleteComponent } from './checkout-complete/checkout-complete
 import { OrderTrackingComponent } from './order-tracking/order-tracking.component';
 import { AuthguardGuard } from '../guards/authguard.guard';
 import { UnderMaintenanceComponent } from './under-maintenance/under-maintenance.component';
+import { ProductDetailsComponent } from './product-details/product-details.component';
 
 const routes: Routes = [
 
@@ -27,6 +28,9 @@ const routes: Routes = [
   },
   {
     path: 'menu/:category', component: MenuComponent
+  },
+  {
+    path: 'products', component: ProductDetailsComponent
   },
   {
     path: 'menu', component: MenuComponent

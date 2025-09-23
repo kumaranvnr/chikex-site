@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { cart_details, cartdata } from '../cart/data';
 import { ActivatedRoute } from '@angular/router';
@@ -27,6 +27,11 @@ export class MenuComponent {
   outlet_id: any;
   outlet_code: any;
   loading: boolean = true;
+  expandedItems: Set<string> = new Set();
+  selected_category_id: string = '';
+  // coupons: CouponData[] = [];
+  // showArrows: boolean = true;
+
 
   constructor(private modalService: NgbModal, private cd: ChangeDetectorRef, private ngxService: NgxUiLoaderService,
     private restService: HttpService, private route: ActivatedRoute) {
@@ -36,6 +41,36 @@ export class MenuComponent {
     this.getProductList();
     this.ngxService.stop();
     // this.getCartRequest();
+    // this.coupons = [{
+    //   code: '10OFF',
+    //   discount: 10,
+    //   isAutoApplied: true,
+    //   id: '3453w-=sdfsdf',
+    //   subtitle: 'Test Coupon',
+    // },
+    // {
+    //   code: '20OFF',
+    //   discount: 20,
+    //   isAutoApplied: true,
+    //   id: '45dfgd34dfsdf',
+    //   subtitle: 'Test Coupon 2',
+    // }]
+  }
+
+
+  isActive(category_id: any): boolean {
+    return this.selected_category_id === category_id; // Check if the category is active
+  }
+  showMore(item: any): void {
+    if (this.expandedItems.has(item._id)) {
+      this.expandedItems.delete(item._id); // Collapse if already expanded
+    } else {
+      this.expandedItems.add(item._id); // Expand
+    }
+  }
+
+  addToFavorites(item: any) {
+    // Logic to add item to favorites
   }
 
   async getLocationList(): Promise<any> {
@@ -46,6 +81,13 @@ export class MenuComponent {
       console.log(response?.error);
     }
   }
+
+  // onCouponClick(coupon: CouponData): void {
+  //   if (!coupon.isAutoApplied) {
+  //     // Handle coupon code copy or application logic
+  //     console.log('Coupon clicked:', coupon.code);
+  //   }
+  // }
 
   // check_product_status(product: any) {
   //   var status = true;
@@ -112,9 +154,41 @@ export class MenuComponent {
   }
 
   ngOnInit(): void {
+    // setTimeout(() => {
+    //   this.updateMenuGridView();
+    // }, 100);
 
     this.check_address_list();
   }
+
+
+  private updateModifiersView() {
+    const targetElements = document.querySelectorAll('.mobile-modifiers');
+
+    targetElements.forEach((element: Element) => {
+      if (this.checkMobileDevice()) {
+        element.classList.remove('d-flex');
+      } else {
+        element.classList.add('d-flex');
+      }
+    });
+  }
+
+  // private updateMenuGridView() {
+  //   try {
+  //     const targetElements = document.querySelectorAll('.menu-grid');
+  //     targetElements.forEach((element: Element) => {
+  //       if (this.checkMobileDevice()) {
+  //         element.classList.remove('mb-grid-gutter');
+  //       } else {
+  //         element.classList.add('mb-grid-gutter');
+  //       }
+  //     });
+  //   }
+  //   catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   lat: any; long: any;
   getCurrentLocation() {
@@ -166,6 +240,7 @@ export class MenuComponent {
 
   async getCartRequest(): Promise<any> {
     if (cart_details._id == '') {
+      this.ngxService.start();
       let cart_reponse = await this.restService.getCartIdRequest();
       if (cart_reponse.data) {
         cart_details._id = cart_reponse.data._id;
@@ -176,6 +251,7 @@ export class MenuComponent {
           cartdata.push(element)
         });
       }
+      this.ngxService.stop();
     }
   }
 
@@ -193,7 +269,7 @@ export class MenuComponent {
 
       if (category_id) {
         this.category_name_header = category_id;
-        this.filterProducts(category_id);
+        this.selectcategory(category_id, null);
       }
     }
     catch (error) {
@@ -226,14 +302,19 @@ export class MenuComponent {
     var location_id = this.productdetail.locations.find((location: any) => location === this.outlet_id);
 
     // if (!location_id) {
-    //   Swal.fire({ title: 'Message', text: `Stock not available`, confirmButtonColor: '#364574' });
+    //   Swal.fire({ title: 'Message', text: `Stock not available`, confirmButtonColor: '#364574',timer:1500  });
     //   return;
     // }
     // this.check_location_status(this.products[i]);
+    setTimeout(() => {
+      this.updateModifiersView();
+    }, 100);
+
     this.modalService.open(content, { size: 'xl', centered: true });
   }
 
   async removecart(product: any) {
+    this.ngxService.start();
     // this.cartdata.splice(product, 1);
     const index = cartdata.findIndex((cart: any) => cart.product_id == product.product_id);
     if (index !== -1) {
@@ -247,6 +328,7 @@ export class MenuComponent {
       product_id: product.product_id
     };
     await this.restService.removeCartItems(remove_obj);
+    this.ngxService.stop();
   }
 
   async decreaseQuantity(product: any): Promise<void> {
@@ -316,6 +398,7 @@ export class MenuComponent {
     return false;
   }
   async updateTempCart(product: any) {
+    this.ngxService.start();
     var sub = CookieStore.getUserInfo()?.sub;
 
     product.sub = sub;
@@ -336,17 +419,20 @@ export class MenuComponent {
     cart_info.cart_items.push(product);
 
     await this.restService.addCartItems(cart_info);
-
+    this.ngxService.stop();
   }
 
   async addnewitem(product: any): Promise<void> {
-
+    this.ngxService.start();
     var sub = CookieStore.getUserInfo()?.sub;
     if (sub == "" || sub == undefined) {
       this.modalService.open(SignmodalComponent, { size: 'md', centered: true });
+      this.ngxService.stop();
       return;
+
     }
     if (product.quantity == 0) {
+      this.ngxService.stop();
       return;
     }
 
@@ -359,7 +445,8 @@ export class MenuComponent {
       });
       if (required) {
 
-        Swal.fire({ title: 'Message', text: `Please choose required options`, confirmButtonColor: '#364574' });
+        Swal.fire({ title: 'Message', text: `Please choose required options`, confirmButtonColor: '#364574', timer: 1500 });
+        this.ngxService.stop();
         return;
       }
     }
@@ -382,9 +469,10 @@ export class MenuComponent {
     cart_info.cart_items.push(product);
 
     let response = await this.restService.addCartItems(cart_info);
+    this.ngxService.stop();
     if (response.data) {
       this.modalService.dismissAll();
-      Swal.fire({ title: 'Added!', text: `${product.title} has been Added to cart.`, confirmButtonColor: '#364574', icon: 'success', position: 'bottom-end', width: '500px', });
+      Swal.fire({ title: 'Added!', text: `${product.title} has been Added to cart.`, confirmButtonColor: '#364574', icon: 'success', position: 'bottom-end', width: '500px', timer: 1500 });
     }
 
   }
@@ -392,6 +480,7 @@ export class MenuComponent {
   // filter product
   selectcategory(category_id: string, event: any) {
     try {
+      this.selected_category_id = category_id;
       const iconItems = document.querySelectorAll('#filter-list');
       iconItems.forEach((item: any) => {
         var el = item.querySelectorAll('li')
@@ -404,15 +493,49 @@ export class MenuComponent {
           }
         })
       });
+      this.category_name_header = category_id;
+
       this.products = this.complete_product_list.filter((item: any) => {
         return item.category_code === category_id
       });
-      this.category_name_header = category_id;
+      if (this.checkMobileDevice()) {
+        this.scrollToCategory(category_id);
+        // this.scrollToProductsByCategory(category_id)
+      }
     }
     catch (error) {
       console.log(error);
     }
 
+  }
+
+  scrollToProductsByCategory(categoryId: string): void {
+    const productListContainer = document.querySelectorAll('.product-section') as NodeListOf<HTMLElement>;
+    const targetSection = Array.from(productListContainer).find((section: HTMLElement) => {
+      return section.textContent?.trim() === categoryId; // Assuming each section has a data attribute for category ID
+    });
+    if (targetSection) {
+      targetSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  scrollToCategory(categoryId: string): void {
+    const categoryElements = document.querySelectorAll('.category-item') as NodeListOf<HTMLElement>;
+    const targetElement = Array.from(categoryElements).find((el: HTMLElement) => {
+      return el.textContent?.trim() === this.getCategoryName(categoryId); // Ensure proper comparison
+    });
+
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      targetElement.focus();
+    }
+  }
+
+
+  checkMobileDevice(): boolean {
+    const mobileBreakpoints = [576, 768];
+    const isMobile = mobileBreakpoints.some(breakpoint => window.innerWidth < breakpoint);
+    return isMobile;
   }
 
   getCategoryName(category_id: string) {
@@ -437,4 +560,13 @@ export interface ICartItems {
   currency: string;
   currency_locale: string;
   group_modifiers_list: any;
+}
+
+export interface CouponData {
+  id: string;
+  discount: number;
+  subtitle: string;
+  code?: string;
+  isAutoApplied: boolean;
+  isActive?: boolean;
 }

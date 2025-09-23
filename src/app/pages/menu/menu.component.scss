@@ -90,19 +90,20 @@
 }
 
 .mobile-qty-display {
-    margin: 0 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 0.375rem;
-    background-color: #f9f9f9;
-    min-width: 60px;
+    // margin: 0 0.2rem;
+    // border: 1px solid #ddd;
+    // border-radius: 0.375rem;
+    background-color: white;
+    min-width: 50px;
+
 
     .form-control {
         border: none;
         background: transparent;
         outline: none;
-        padding: 0.5rem;
-        font-weight: 600;
-        min-height: 44px;
+        // padding: 0.2rem;
+        font-weight: 500;
+        // min-height: 30px;
     }
 }
 
@@ -129,6 +130,8 @@
 
 // Responsive adjustments
 @media (max-width: 575.98px) {
+
+
     .container {
         padding-left: 1rem;
         padding-right: 1rem;
@@ -147,6 +150,10 @@
 
 // Ensure proper spacing for grid view on larger screens
 @media (min-width: 576px) {
+    .mb-grid-gutter {
+        margin-bottom: 0px;
+    }
+
     .product-card {
         height: 100%;
         display: flex;
@@ -163,3 +170,275 @@
         }
     }
 }
+
+.card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: box-shadow 0.3s;
+
+    &:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+}
+
+
+.vertical-category-list {
+
+    overflow-y: auto; // Allow vertical scrolling
+    display: flex;
+    flex-direction: row; // Arrange items in a column
+    gap: 0.5rem; // Space between items
+
+    .category-container {
+        display: -webkit-box;
+        flex-direction: row; // Ensure items are in a column
+        width: 100%; // Full width
+        align-items: center;
+
+        .category-item {
+            padding: 0.25rem 0.25rem; // Padding for each category item
+            margin: 5px;
+            border-radius: 0.25rem; // Rounded corners
+            color: #333; // Text color
+            text-decoration: none; // Remove underline
+            transition: background-color 0.3s, color 0.3s; // Smooth transition for hover effects
+            white-space: nowrap; // Prevent text wrapping
+            overflow: hidden; // Hide overflow
+            text-overflow: ellipsis; // Show ellipsis for overflow text
+            display: block; // Ensure items are block elements
+
+            &:hover {
+                background-color: #BC202E; // Change background on hover
+                color: #fff; // Change text color on hover
+            }
+
+            &.active {
+                background-color: #BC202E; // Active background color
+                color: #fff; // Active text color
+            }
+        }
+    }
+
+    @media (max-width: 576px) {
+        .category-item {
+            padding: 1rem; // Increase padding for better touch targets on mobile
+        }
+    }
+}
+
+.card-body {
+    padding: 0.75rem 0.75rem;
+}
+
+
+
+// .coupon-cards-container {
+//     width: 100%;
+//     overflow-x: auto;
+//     padding: 1rem 0;
+// }
+
+// .coupon-cards-wrapper {
+//     display: flex;
+//     gap: 0;
+//     min-width: max-content;
+//     padding: 0 1rem;
+// }
+
+// .coupon-card {
+//     position: relative;
+//     width: 100%;
+//     height: 120px;
+//     background: white;
+//     border: 2px dashed #42d697;
+//     border-radius: 8px;
+//     overflow: hidden;
+//     transition: all 0.3s ease;
+//     cursor: default;
+
+//     &--clickable {
+//         cursor: pointer;
+
+//         &:hover {
+//             transform: translateY(-2px);
+//             box-shadow: 0 4px 12px rgba(66, 214, 151, 0.2);
+//             border-color: #2ea86f;
+//         }
+
+//         &:focus {
+//             outline: 2px solid #42d697;
+//             outline-offset: 2px;
+//         }
+//     }
+
+//     &--active {
+//         border-color: #2ea86f;
+//         box-shadow: 0 2px 8px rgba(66, 214, 151, 0.3);
+//     }
+
+//     // Remove gap between cards by overlapping borders
+//     &:not(:first-child) {
+//         margin-left: -2px;
+//     }
+// }
+
+// .coupon-card__top {
+//     background: linear-gradient(135deg, #e8f5e8 0%, #d4f4d4 100%);
+//     padding: 12px 16px 8px;
+//     height: 60px;
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: center;
+//     text-align: center;
+// }
+
+// .coupon-card__discount {
+//     font-size: 18px;
+//     font-weight: 700;
+//     color: #2d5a2d;
+//     line-height: 1.2;
+//     margin-bottom: 2px;
+// }
+
+// .coupon-card__subtitle {
+//     font-size: 12px;
+//     color: #5a7a5a;
+//     line-height: 1.2;
+// }
+
+// .coupon-card__separator {
+//     height: 1px;
+//     background: repeating-linear-gradient(to right,
+//             #42d697 0,
+//             #42d697 4px,
+//             transparent 4px,
+//             transparent 8px);
+//     margin: 0 16px;
+// }
+
+// .coupon-card__bottom {
+//     padding: 12px 16px;
+//     height: 58px;
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
+//     background: white;
+// }
+
+// .coupon-card__code {
+//     font-size: 14px;
+//     font-weight: 600;
+//     color: #2b3445;
+//     letter-spacing: 0.5px;
+// }
+
+// .coupon-card__auto-applied {
+//     font-size: 14px;
+//     font-weight: 500;
+//     color: #7d879c;
+// }
+
+// .coupon-card__arrow {
+//     font-size: 14px;
+//     color: #aeb4be;
+//     transition: transform 0.2s ease;
+
+//     .coupon-card--clickable:hover & {
+//         transform: translateX(2px);
+//         color: #42d697;
+//     }
+// }
+
+// // Semi-circular cutouts
+// .coupon-card__cutout {
+//     position: absolute;
+//     width: 20px;
+//     height: 20px;
+//     background: #f6f9fc; // Match your page background
+//     border-radius: 50%;
+//     top: 50%;
+//     transform: translateY(-50%);
+//     z-index: 1;
+
+//     &--left {
+//         left: -10px;
+//     }
+
+//     &--right {
+//         right: -10px;
+//     }
+// }
+
+// // Responsive design
+// @media (max-width: 768px) {
+//     .coupon-cards-wrapper {
+//         padding: 0 0.5rem;
+//     }
+
+//     .coupon-card {
+//         width: 200px;
+//         height: 100px;
+//     }
+
+//     .coupon-card__top {
+//         padding: 8px 12px 6px;
+//         height: 50px;
+//     }
+
+//     .coupon-card__discount {
+//         font-size: 16px;
+//     }
+
+//     .coupon-card__subtitle {
+//         font-size: 11px;
+//     }
+
+//     .coupon-card__bottom {
+//         padding: 8px 12px;
+//         height: 48px;
+//     }
+
+//     .coupon-card__code,
+//     .coupon-card__auto-applied {
+//         font-size: 12px;
+//     }
+
+//     .coupon-card__cutout {
+//         width: 16px;
+//         height: 16px;
+
+//         &--left {
+//             left: -8px;
+//         }
+
+//         &--right {
+//             right: -8px;
+//         }
+//     }
+// }
+
+// @media (max-width: 480px) {
+//     .coupon-card {
+//         width: 180px;
+//         height: 90px;
+//     }
+
+//     .coupon-card__top {
+//         height: 45px;
+//         padding: 6px 10px 4px;
+//     }
+
+//     .coupon-card__discount {
+//         font-size: 14px;
+//     }
+
+//     .coupon-card__subtitle {
+//         font-size: 10px;
+//     }
+
+//     .coupon-card__bottom {
+//         height: 43px;
+//         padding: 6px 10px;
+//     }
+// }

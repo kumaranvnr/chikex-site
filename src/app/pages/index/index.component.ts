@@ -30,10 +30,18 @@ export class IndexComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.review = Reviews;
     document.querySelector('.cart')?.classList.add('d-none');
     this.getCategory();
+    this.getGoogleReviews();
+  }
+
+  async getGoogleReviews(): Promise<any> {
+    const query: any = {};
+    query.code = '9802';
+    let review_response = await this.httpService.googlereviews(query);
+    console.log(review_response);
+
   }
 
   async getCartRequest(): Promise<any> {

@@ -70,7 +70,7 @@ export class AddressmodalComponent implements OnInit {
       this.modalService.open(NewaddressmodalComponent, { size: 'lg', centered: true });
     }
     else {
-      Swal.fire("Delivery not available in your location");
+      Swal.fire({ text: "Delivery not available in your location", timer: 1500 });
     }
   }
 
@@ -174,12 +174,12 @@ export class AddressmodalComponent implements OnInit {
         this.cd.detectChanges(); this.delivery_status = true;
       } else {
         this.ngxService.stop();
-        Swal.fire("Delivery not available in your location");
+        Swal.fire({ text: "Delivery not available in your location", timer: 1500 });
         this.delivery_status = false;
       }
     } else {
       this.ngxService.stop();
-      Swal.fire("Location not found");
+      Swal.fire({ text: "Location not found", timer: 1500 });
       this.delivery_status = false;
     }
     this.ngxService.stop();

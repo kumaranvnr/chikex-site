@@ -151,27 +151,28 @@ export class CheckoutComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async completeorder(): Promise<void> {
-    this.ngxService.start();
+
     this.submitted = true;
     this.cartproduct = cartdata;
     if (this.cartproduct.length == 0) {
       this.ngxService.stop(); this.submitted = false;
-      Swal.fire({ title: 'Message', text: `Cart is empty!.`, confirmButtonColor: '#364574' });
+      Swal.fire({ title: 'Message', text: `Cart is empty!.`, confirmButtonColor: '#364574', timer: 1500 });
       return;
     }
     let checkoutData = this.formData.value;
     if (checkoutData.payment_type == null || checkoutData.payment_type == '' || checkoutData.payment_type == undefined) {
       this.ngxService.stop(); this.submitted = false;
-      Swal.fire({ title: 'Message', text: `Choose the payment options`, confirmButtonColor: '#364574' });
+      Swal.fire({ title: 'Message', text: `Choose the payment options`, confirmButtonColor: '#364574', timer: 1500 });
       return;
     }
 
     if (checkoutData.payment_type == 'Online') {
       this.ngxService.stop(); this.submitted = false;
-      Swal.fire({ title: 'Message', text: `Technical issue with online payment.Please proceed with COD`, confirmButtonColor: '#364574' });
+      Swal.fire({ title: 'Message', text: `Technical issue with online payment.Please proceed with COD`, confirmButtonColor: '#364574', timer: 1500 });
       return;
     }
 
+    this.ngxService.start();
     const now = new Date();
     let hours = now.getHours();
     const minutes = now.getMinutes();

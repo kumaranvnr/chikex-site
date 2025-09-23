@@ -169,7 +169,7 @@ export class AccountAddressComponent implements OnInit {
         console.log(address_id);
         this.removeAddress(address_id).then(res => {
           addressData.splice(addressData.findIndex(x => x._id == address_id), 1)
-          Swal.fire({ title: 'Deleted!', text: 'Your file has been deleted.', confirmButtonColor: '#364574', icon: 'success', });
+          Swal.fire({ title: 'Deleted!', text: 'Your file has been deleted.', confirmButtonColor: '#364574', icon: 'success', timer: 1500 });
           e.target.closest('tr').remove();
         });
       }

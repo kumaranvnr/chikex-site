@@ -14,11 +14,11 @@ export class HttpService {
 
   get base_url(): string {
     // if (location.href.includes("localhost")) {
-    //   return "http://localhost:5002";
+    // return "http://localhost:5002";
     // } else {
     //   return "https://orders-api.chikex.me";
     // }
-    return "https://orders-api.chikex.me";
+    return "https://www.orders-api.chikex.me";
   }
 
   constructor(public httpClient: HttpClient,
@@ -318,6 +318,11 @@ export class HttpService {
     }).toPromise();
   }
 
+  async getNearbyLocationListTest(data: any): Promise<any> {
+    return await this.httpClient.post(this.base_url + "/locations-srv/nearby/web/test", data, {
+      headers: this.prepareAuthHeader()
+    }).toPromise();
+  }
 
   async deleteUserAddress(address_id: string): Promise<any> {
     return await this.httpClient.delete(this.base_url + `/usersaddress-srv/${address_id}`, {
@@ -348,6 +353,16 @@ export class HttpService {
     }).toPromise();
   }
 
+  async repeatOrder(data: any): Promise<any> {
+    return await this.httpClient.post(this.base_url + "/orders-srv/repeat", data, {
+      headers: this.prepareAuthHeader()
+    }).toPromise();
+  }
 
+  async googlereviews(data: any): Promise<any> {
+    return await this.httpClient.post(this.base_url + "/reviews-srv/googlereviews", data, {
+      headers: this.prepareAPIHeader()
+    }).toPromise();
+  }
 
 }

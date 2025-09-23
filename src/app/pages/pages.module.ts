@@ -24,6 +24,7 @@ import { AccessDeniedComponent } from './access-denied/access-denied.component';
 import { UnderMaintenanceComponent } from './under-maintenance/under-maintenance.component';
 import { OrderTrackingComponent } from './order-tracking/order-tracking.component';
 import { CheckoutCompleteComponent } from './checkout-complete/checkout-complete.component';
+import { ProductDetailsComponent } from './product-details/product-details.component';
 
 const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
   direction: 'horizontal',
@@ -41,7 +42,8 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     AccessDeniedComponent,
     UnderMaintenanceComponent,
     OrderTrackingComponent,
-    CheckoutCompleteComponent
+    CheckoutCompleteComponent,
+    ProductDetailsComponent
   ],
   imports: [
     CommonModule,

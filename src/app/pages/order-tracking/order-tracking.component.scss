@@ -1,0 +1,1641 @@
+@import '../../../assets/scss/variables';
+
+// =============================================================================
+// RESPONSIVE ORDER TRACKING STYLES
+// =============================================================================
+
+// Hero Section - Responsive Background
+.hero-section {
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba($black, 0.4);
+        z-index: 1;
+    }
+
+    .container {
+        position: relative;
+        z-index: 2;
+    }
+
+    @media (max-width: 767.98px) {
+        background-attachment: scroll;
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+}
+
+// =============================================================================
+// ORDER HEADER SECTION
+// =============================================================================
+
+.order-header {
+    .order-info {
+        .badge {
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+
+            i {
+                margin-right: 0.25rem;
+            }
+        }
+    }
+
+    .order-actions {
+        .btn {
+            min-width: 120px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba($primary, 0.2);
+            }
+
+            @media (max-width: 575.98px) {
+                min-width: auto;
+                width: 100%;
+                margin-bottom: 0.5rem;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+}
+
+// =============================================================================
+// ENHANCED STATUS CARDS
+// =============================================================================
+
+.status-cards {
+    .status-card {
+        position: relative;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba($primary, 0.1);
+        background: linear-gradient(135deg, rgba($white, 0.95) 0%, rgba($gray-100, 0.9) 100%);
+        backdrop-filter: blur(10px);
+        overflow: hidden;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba($primary, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        &:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 40px rgba($primary, 0.15);
+            border-color: rgba($primary, 0.3);
+
+            &::before {
+                left: 100%;
+            }
+
+            .status-card-bg {
+                transform: scale(1.1) rotate(5deg);
+            }
+
+            .icon-wrapper {
+                transform: scale(1.1);
+            }
+        }
+
+        .status-card-bg {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba($primary, 0.15) 0%, rgba($primary, 0.05) 100%);
+            border-radius: 50%;
+            transition: all 0.4s ease;
+            z-index: 1;
+        }
+
+        .status-icon {
+            position: relative;
+            z-index: 2;
+
+            .icon-wrapper {
+                position: relative;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 70px;
+                height: 70px;
+                background: linear-gradient(135deg, rgba($white, 0.9) 0%, rgba($gray-100, 0.8) 100%);
+                border-radius: 50%;
+                box-shadow: 0 8px 25px rgba($black, 0.1);
+                transition: all 0.4s ease;
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    top: -2px;
+                    left: -2px;
+                    right: -2px;
+                    bottom: -2px;
+                    background: linear-gradient(135deg, $primary, lighten($primary, 20%));
+                    border-radius: 50%;
+                    z-index: -1;
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                }
+
+                &.pulse {
+                    animation: pulse-icon 2s infinite;
+
+                    &::after {
+                        opacity: 0.3;
+                        animation: pulse-ring 2s infinite;
+                    }
+                }
+
+                i {
+                    font-size: 1.8rem;
+                    transition: all 0.3s ease;
+                }
+            }
+        }
+
+        .status-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: $gray-600;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: $gray-800;
+            line-height: 1.2;
+
+            @media (min-width: 768px) {
+                font-size: 1.2rem;
+            }
+        }
+    }
+}
+
+// =============================================================================
+// PROGRESS CARD CONTAINER
+// =============================================================================
+
+.order-progress-section {
+    .progress-card {
+        border: 1px solid rgba($primary, 0.1);
+        box-shadow: 0 4px 20px rgba($black, 0.08);
+        transition: all 0.3s ease;
+
+        &:hover {
+            box-shadow: 0 8px 30px rgba($black, 0.12);
+        }
+
+        .progress-header {
+            background: linear-gradient(135deg, $gray-100 0%, rgba($gray-200, 0.6) 100%);
+            border-bottom: 1px solid rgba($primary, 0.1);
+
+            .progress-indicator {
+                .badge {
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    padding: 0.5rem 1rem;
+                    background: linear-gradient(135deg, rgba($primary, 0.1) 0%, rgba($primary, 0.05) 100%);
+                    color: $primary;
+                    border: 1px solid rgba($primary, 0.2);
+                }
+            }
+        }
+    }
+}
+
+// =============================================================================
+// DESKTOP PROGRESS TIMELINE
+// =============================================================================
+
+.desktop-progress-timeline {
+    padding: 3rem 0;
+
+    .timeline-container {
+        position: relative;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    // Main Progress Line
+    .progress-line {
+        position: absolute;
+        top: 50%;
+        left: 5%;
+        right: 5%;
+        height: 6px;
+        background: linear-gradient(90deg, $gray-300 0%, $gray-400 100%);
+        border-radius: 3px;
+        transform: translateY(-50%);
+        z-index: 1;
+        box-shadow: inset 0 2px 4px rgba($black, 0.1);
+
+        .progress-line-fill {
+            height: 100%;
+            background: linear-gradient(90deg, $primary 0%, lighten($primary, 15%) 50%, $primary 100%);
+            border-radius: 3px;
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 2px 8px rgba($primary, 0.3);
+
+            &::after {
+                content: '';
+                position: absolute;
+                right: -6px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 12px;
+                height: 12px;
+                background: $primary;
+                border-radius: 50%;
+                box-shadow: 0 0 0 4px rgba($primary, 0.2), 0 2px 8px rgba($primary, 0.4);
+                animation: pulse-progress-dot 2s infinite;
+            }
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(90deg, transparent 0%, rgba($white, 0.3) 50%, transparent 100%);
+                border-radius: 3px;
+                animation: shimmer 2s infinite;
+            }
+        }
+    }
+
+    // Timeline Items Container
+    .timeline-items {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    // Individual Timeline Item
+    .timeline-item {
+        flex: 1;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 0 1rem;
+
+        &:hover {
+            transform: translateY(-8px);
+
+            .timeline-marker .marker-outer {
+                transform: scale(1.1);
+                box-shadow: 0 8px 25px rgba($primary, 0.2);
+            }
+
+            .timeline-content .timeline-title {
+                color: $primary;
+            }
+        }
+
+        // Timeline Marker (Circle)
+        .timeline-marker {
+            margin-bottom: 1.5rem;
+
+            .marker-outer {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 60px;
+                height: 60px;
+                border: 4px solid $gray-400;
+                border-radius: 50%;
+                background: $white;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                position: relative;
+                box-shadow: 0 4px 15px rgba($black, 0.1);
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: -4px;
+                    left: -4px;
+                    right: -4px;
+                    bottom: -4px;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, $primary, lighten($primary, 20%));
+                    z-index: -1;
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                }
+
+                .marker-inner {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                    font-size: 1.4rem;
+                    color: $gray-500;
+                    transition: all 0.3s ease;
+                    position: relative;
+                    z-index: 1;
+                }
+            }
+        }
+
+        // Timeline Content
+        .timeline-content {
+            .timeline-title {
+                font-size: 1rem;
+                font-weight: 600;
+                color: $gray-700;
+                margin-bottom: 0.5rem;
+                transition: all 0.3s ease;
+                line-height: 1.3;
+            }
+
+            .timeline-time {
+                font-size: 0.8rem;
+                color: $gray-500;
+                margin-bottom: 0.25rem;
+                font-weight: 500;
+            }
+
+            .timeline-description {
+                font-size: 0.75rem;
+                color: $gray-500;
+                line-height: 1.4;
+            }
+        }
+
+        // Completed State
+        &.completed {
+            .timeline-marker .marker-outer {
+                background: linear-gradient(135deg, $success 0%, lighten($success, 10%) 100%);
+                border-color: $success;
+                box-shadow: 0 4px 20px rgba($success, 0.3);
+
+                &::before {
+                    opacity: 0.2;
+                    background: linear-gradient(135deg, $success, lighten($success, 20%));
+                }
+
+                .marker-inner {
+                    background: $white;
+                    color: $success;
+                    font-weight: 700;
+                }
+            }
+
+            .timeline-content {
+                .timeline-title {
+                    color: $success;
+                    font-weight: 700;
+                }
+
+                .timeline-time {
+                    color: darken($success, 10%);
+                }
+            }
+        }
+
+        // Active State
+        &.active {
+            .timeline-marker .marker-outer {
+                background: linear-gradient(135deg, $primary 0%, lighten($primary, 10%) 100%);
+                border-color: $primary;
+                box-shadow: 0 4px 20px rgba($primary, 0.4);
+                animation: pulse-marker 2s infinite;
+
+                &::before {
+                    opacity: 0.3;
+                    animation: pulse-ring-marker 2s infinite;
+                }
+
+                .marker-inner {
+                    background: $white;
+                    color: $primary;
+                    font-weight: 700;
+                    animation: pulse-icon 2s infinite;
+                }
+            }
+
+            .timeline-content {
+                .timeline-title {
+                    color: $primary;
+                    font-weight: 700;
+                }
+
+                .timeline-time {
+                    color: darken($primary, 10%);
+                    font-weight: 600;
+                }
+            }
+        }
+
+        // Upcoming State
+        &.upcoming {
+            opacity: 0.7;
+
+            .timeline-marker .marker-outer {
+                border-color: $gray-300;
+                background: $gray-100;
+                box-shadow: 0 2px 8px rgba($black, 0.05);
+
+                .marker-inner {
+                    color: $gray-400;
+                }
+            }
+
+            .timeline-content {
+                .timeline-title {
+                    color: $gray-500;
+                }
+
+                .timeline-time {
+                    color: $gray-400;
+                }
+            }
+        }
+    }
+}
+
+// =============================================================================
+// MOBILE PROGRESS TIMELINE
+// =============================================================================
+
+.mobile-progress-timeline {
+    .progress-step {
+        position: relative;
+        margin-bottom: 1.5rem;
+
+        &:last-child {
+            margin-bottom: 0;
+
+            .step-connector {
+                display: none;
+            }
+        }
+
+        // Connecting Line
+        .step-connector {
+            position: absolute;
+            left: 2rem;
+            top: 5rem;
+            bottom: -1.5rem;
+            width: 3px;
+            z-index: 1;
+
+            .connector-line {
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(180deg, $gray-300 0%, $gray-400 100%);
+                border-radius: 1.5px;
+                transition: all 0.6s ease;
+                position: relative;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 0%;
+                    background: linear-gradient(180deg, $success 0%, lighten($success, 10%) 100%);
+                    border-radius: 1.5px;
+                    transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+
+                &.filled::before {
+                    height: 100%;
+                }
+            }
+        }
+
+        // Step Content
+        .step-content {
+            position: relative;
+            z-index: 2;
+
+            .step-header {
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                border: 2px solid transparent;
+                cursor: pointer;
+                min-height: 80px;
+
+                // Touch-friendly sizing
+                @media (max-width: 767.98px) {
+                    min-height: 88px;
+                    padding: 1rem !important;
+                }
+
+                &:hover {
+                    transform: translateX(8px);
+                    box-shadow: 0 8px 25px rgba($black, 0.1);
+                }
+
+                &:active {
+                    transform: translateX(4px) scale(0.98);
+                }
+
+                // Step Icon
+                .step-icon {
+                    .icon-circle {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 48px;
+                        height: 48px;
+                        border-radius: 50%;
+                        font-size: 1.2rem;
+                        transition: all 0.4s ease;
+                        position: relative;
+                        box-shadow: 0 4px 12px rgba($black, 0.15);
+
+                        &::before {
+                            content: '';
+                            position: absolute;
+                            top: -2px;
+                            left: -2px;
+                            right: -2px;
+                            bottom: -2px;
+                            border-radius: 50%;
+
+                            z-index: -1;
+                            opacity: 0;
+                            transition: opacity 0.3s ease;
+                        }
+
+                        // Touch-friendly sizing for mobile
+                        @media (max-width: 767.98px) {
+                            width: 52px;
+                            height: 52px;
+                            font-size: 1.3rem;
+                        }
+                    }
+                }
+
+                // Step Info
+                .step-info {
+                    .step-title {
+                        font-size: 1rem;
+                        font-weight: 600;
+                        margin-bottom: 0.25rem;
+                        line-height: 1.3;
+                        transition: color 0.3s ease;
+
+                        @media (min-width: 768px) {
+                            font-size: 1.1rem;
+                        }
+                    }
+
+                    .step-time {
+                        font-size: 0.85rem;
+                        font-weight: 500;
+                        opacity: 0.8;
+
+                        @media (max-width: 767.98px) {
+                            font-size: 0.8rem;
+                        }
+                    }
+                }
+
+                // Step Status Indicator
+                .step-status {
+                    .status-indicator {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 32px;
+                        height: 32px;
+                        transition: all 0.3s ease;
+
+                        &.active {
+                            animation: pulse-status 2s infinite;
+                        }
+
+                        .spinner-border-sm {
+                            width: 1.2rem;
+                            height: 1.2rem;
+                        }
+
+                        // Touch-friendly sizing for mobile
+                        @media (max-width: 767.98px) {
+                            width: 36px;
+                            height: 36px;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Completed State
+        &.completed {
+            .step-header {
+                border-color: rgba($success, 0.3);
+                background: linear-gradient(135deg, rgba($success, 0.05) 0%, rgba($success, 0.02) 100%);
+
+                &:hover {
+                    border-color: rgba($success, 0.4);
+                    box-shadow: 0 8px 25px rgba($success, 0.15);
+                }
+
+                .step-icon .icon-circle::before {
+                    opacity: 0.2;
+                }
+            }
+        }
+
+        // Active State
+        &.active {
+            .step-header {
+                border-color: rgba($primary, 0.4);
+                background: linear-gradient(135deg, rgba($primary, 0.08) 0%, rgba($primary, 0.03) 100%);
+                box-shadow: 0 0 0 1px rgba($primary, 0.1);
+
+                &:hover {
+                    border-color: rgba($primary, 0.5);
+                    box-shadow: 0 8px 25px rgba($primary, 0.2);
+                }
+
+                .step-icon .icon-circle {
+                    animation: pulse-icon 2s infinite;
+
+                    &::before {
+                        opacity: 0.3;
+                        animation: pulse-ring 2s infinite;
+                    }
+                }
+            }
+        }
+
+        // Upcoming State
+        &.upcoming {
+            opacity: 0.7;
+
+            .step-header {
+                border-color: rgba($gray-300, 0.5);
+                background: rgba($gray-100, 0.3);
+
+                &:hover {
+                    opacity: 1;
+                    border-color: rgba($gray-400, 0.5);
+                }
+            }
+        }
+    }
+}
+
+// =============================================================================
+// ACTION SECTION
+// =============================================================================
+
+.action-section {
+    .action-card {
+        border: 1px solid rgba($primary, 0.1);
+        background: linear-gradient(135deg, $gray-100 0%, rgba($gray-200, 0.4) 100%);
+        transition: all 0.3s ease;
+
+        &:hover {
+            box-shadow: 0 8px 25px rgba($black, 0.1);
+        }
+
+        .support-actions {
+            .btn {
+                min-width: 140px;
+                min-height: 44px;
+                font-weight: 500;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+                &:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 15px rgba($black, 0.15);
+                }
+
+                &:active {
+                    transform: translateY(0);
+                }
+
+                // Touch-friendly sizing for mobile
+                @media (max-width: 767.98px) {
+                    min-width: auto;
+                    min-height: 48px;
+                    width: 100%;
+                    margin-bottom: 0.5rem;
+                    font-size: 0.95rem;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+
+        .primary-action {
+            .btn {
+                min-width: 180px;
+                min-height: 44px;
+                font-weight: 600;
+                background: linear-gradient(135deg, $primary 0%, darken($primary, 5%) 100%);
+                border: none;
+                box-shadow: 0 4px 15px rgba($primary, 0.3);
+
+                &:hover {
+                    background: linear-gradient(135deg, darken($primary, 5%) 0%, darken($primary, 10%) 100%);
+                    transform: translateY(-3px);
+                    box-shadow: 0 8px 25px rgba($primary, 0.4);
+                }
+
+                &:active {
+                    transform: translateY(-1px);
+                }
+
+                // Touch-friendly sizing for mobile
+                @media (max-width: 767.98px) {
+                    min-width: auto;
+                    min-height: 48px;
+                    width: 100%;
+                    font-size: 1rem;
+                }
+            }
+        }
+    }
+}
+
+// =============================================================================
+// DELIVERY ESTIMATE CARD
+// =============================================================================
+
+.delivery-estimate-card {
+    .alert {
+        border: 1px solid rgba($info, 0.2);
+        background: linear-gradient(135deg, rgba($info, 0.1) 0%, rgba($info, 0.05) 100%);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba($info, 0.15);
+        }
+
+        .alert-icon {
+            font-size: 2rem;
+            color: $info;
+
+            @media (max-width: 767.98px) {
+                font-size: 1.5rem;
+            }
+        }
+
+        .alert-content {
+            .alert-heading {
+                color: darken($info, 10%);
+                font-size: 1.1rem;
+                font-weight: 600;
+
+                @media (max-width: 767.98px) {
+                    font-size: 1rem;
+                }
+            }
+
+            p {
+                color: darken($info, 5%);
+                font-weight: 500;
+            }
+        }
+
+        .alert-action {
+            .btn {
+                min-height: 36px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 12px rgba($info, 0.2);
+                }
+            }
+        }
+    }
+}
+
+// =============================================================================
+// MODAL ENHANCEMENTS
+// =============================================================================
+
+.modal-content {
+    border: none;
+    border-radius: 1.5rem;
+    box-shadow: 0 25px 80px rgba($black, 0.15);
+    overflow: hidden;
+
+    .modal-header {
+        border-radius: 1.5rem 1.5rem 0 0;
+        background: linear-gradient(135deg, $white 0%, $gray-100 100%);
+        border-bottom: 1px solid rgba($primary, 0.1);
+        padding: 1.5rem 2rem;
+
+        .modal-title {
+            color: $gray-800;
+            font-weight: 700;
+        }
+
+        .btn-close {
+            background-size: 1.2em;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+
+            &:hover {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+    }
+
+    .modal-body {
+        padding: 2rem;
+
+        @media (max-width: 767.98px) {
+            padding: 1.5rem;
+        }
+    }
+
+    // Status Banner
+    .status-banner {
+        border: 1px solid rgba($primary, 0.15);
+        border-radius: 1rem;
+        background: linear-gradient(135deg, rgba($primary, 0.05) 0%, rgba($primary, 0.02) 100%);
+        transition: all 0.3s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba($primary, 0.1);
+        }
+
+        .status-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba($white, 0.9);
+            box-shadow: 0 4px 15px rgba($black, 0.1);
+
+            @media (max-width: 767.98px) {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        .status-info {
+            h6 {
+                font-weight: 700;
+                margin-bottom: 0.25rem;
+            }
+
+            p {
+                font-weight: 500;
+                opacity: 0.8;
+            }
+        }
+    }
+
+    // Order Items Section
+    .order-items {
+        .section-title {
+            color: $gray-800;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid $gray-200;
+        }
+
+        .item-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba($gray-300, 0.5);
+            background: $white;
+
+            &:hover {
+                box-shadow: 0 8px 30px rgba($black, 0.1);
+                transform: translateY(-4px);
+                border-color: rgba($primary, 0.3);
+            }
+
+            .item-image {
+                .quantity-badge {
+                    .badge {
+                        font-size: 0.7rem;
+                        font-weight: 700;
+                        padding: 0.25rem 0.5rem;
+                        box-shadow: 0 2px 8px rgba($primary, 0.3);
+                    }
+                }
+
+                img {
+                    transition: transform 0.3s ease;
+                }
+
+                &:hover img {
+                    transform: scale(1.05);
+                }
+            }
+
+            .item-title {
+                color: $gray-800;
+                font-weight: 700;
+                line-height: 1.3;
+            }
+
+            .item-description {
+                font-size: 0.85rem;
+                line-height: 1.4;
+            }
+
+            .item-price {
+                font-size: 1rem;
+                font-weight: 700;
+                color: $primary;
+            }
+
+            .item-detail {
+                .detail-label {
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    font-size: 0.7rem;
+                    margin-bottom: 0.25rem;
+                }
+
+                .detail-value {
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                    color: $gray-700;
+                }
+            }
+
+            .item-total {
+                .detail-value {
+                    font-size: 1rem;
+                    font-weight: 700;
+                    color: $primary;
+                }
+            }
+        }
+    }
+
+    // Order Summary Section
+    .order-summary {
+        background: linear-gradient(135deg, $gray-100 0%, rgba($gray-200, 0.6) 100%);
+        border-radius: 1rem;
+        border: 1px solid rgba($primary, 0.1);
+
+        .summary-row {
+            padding: 0.75rem 1.5rem;
+            border-bottom: 1px solid rgba($gray-300, 0.5);
+            transition: all 0.3s ease;
+
+            &:last-child {
+                border-bottom: none;
+                background: linear-gradient(135deg, rgba($primary, 0.05) 0%, rgba($primary, 0.02) 100%);
+                font-weight: 700;
+                font-size: 1.1rem;
+
+                .summary-value {
+                    color: $primary;
+                }
+            }
+
+            &:hover {
+                background: rgba($white, 0.7);
+            }
+
+            .summary-label {
+                font-weight: 600;
+                color: $gray-700;
+            }
+
+            .summary-value {
+                font-weight: 700;
+                color: $gray-800;
+            }
+        }
+    }
+}
+
+// =============================================================================
+// ANIMATIONS AND KEYFRAMES
+// =============================================================================
+
+@keyframes pulse-icon {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(1);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.1;
+    }
+
+    100% {
+        transform: scale(1.2);
+        opacity: 0;
+    }
+}
+
+@keyframes pulse-progress-dot {
+
+    0%,
+    100% {
+        transform: translateY(-50%) scale(1);
+        box-shadow: 0 0 0 4px rgba($primary, 0.2), 0 2px 8px rgba($primary, 0.4);
+    }
+
+    50% {
+        transform: translateY(-50%) scale(1.1);
+        box-shadow: 0 0 0 8px rgba($primary, 0.1), 0 4px 12px rgba($primary, 0.5);
+    }
+}
+
+@keyframes pulse-marker {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 20px rgba($primary, 0.4);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 6px 25px rgba($primary, 0.5);
+    }
+}
+
+@keyframes pulse-ring-marker {
+    0% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.1;
+        transform: scale(1.1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.2);
+    }
+}
+
+@keyframes pulse-status {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+// =============================================================================
+// RESPONSIVE BREAKPOINTS
+// =============================================================================
+
+// Extra Small Devices (Portrait Phones)
+@media (max-width: 575.98px) {
+    .desktop-progress-timeline {
+        display: none;
+    }
+
+    .mobile-progress-timeline {
+        display: block;
+    }
+
+    .status-cards {
+        .row>div {
+            margin-bottom: 1rem;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .action-section {
+        .row>div {
+            margin-bottom: 1rem;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+// Small Devices (Landscape Phones)
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .desktop-progress-timeline {
+        display: none;
+    }
+
+    .mobile-progress-timeline {
+        display: block;
+    }
+}
+
+// Medium Devices (Tablets)
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .desktop-progress-timeline {
+        display: block;
+
+        .timeline-item {
+            padding: 0 0.5rem;
+
+            .timeline-marker .marker-outer {
+                width: 50px;
+                height: 50px;
+
+                .marker-inner {
+                    font-size: 1.2rem;
+                }
+            }
+
+            .timeline-content {
+                .timeline-title {
+                    font-size: 0.9rem;
+                }
+
+                .timeline-time {
+                    font-size: 0.75rem;
+                }
+
+                .timeline-description {
+                    font-size: 0.7rem;
+                }
+            }
+        }
+    }
+
+    .mobile-progress-timeline {
+        display: none;
+    }
+}
+
+// Large Devices (Desktops)
+@media (min-width: 992px) {
+    .desktop-progress-timeline {
+        display: block;
+    }
+
+    .mobile-progress-timeline {
+        display: none;
+    }
+
+    .status-cards {
+        .status-card {
+            &:hover {
+                transform: translateY(-12px) scale(1.03);
+            }
+        }
+    }
+}
+
+// Extra Large Devices (Large Desktops)
+@media (min-width: 1200px) {
+    .desktop-progress-timeline {
+        .timeline-item {
+            .timeline-marker .marker-outer {
+                width: 70px;
+                height: 70px;
+
+                .marker-inner {
+                    font-size: 1.6rem;
+                }
+            }
+
+            .timeline-content {
+                .timeline-title {
+                    font-size: 1.1rem;
+                }
+
+                .timeline-time {
+                    font-size: 0.85rem;
+                }
+
+                .timeline-description {
+                    font-size: 0.8rem;
+                }
+            }
+        }
+    }
+}
+
+// =============================================================================
+// ACCESSIBILITY ENHANCEMENTS
+// =============================================================================
+
+// Focus States
+.timeline-item:focus,
+.step-header:focus,
+.btn:focus {
+    outline: 2px solid $primary;
+    outline-offset: 2px;
+}
+
+// High Contrast Mode Support
+@media (prefers-contrast: high) {
+    .timeline-item.completed .timeline-marker .marker-outer {
+        border-width: 3px;
+    }
+
+    .timeline-item.active .timeline-marker .marker-outer {
+        border-width: 3px;
+    }
+
+    .progress-line .progress-line-fill {
+        box-shadow: none;
+    }
+}
+
+// Reduced Motion Support
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .timeline-item:hover {
+        transform: none;
+    }
+
+    .status-card:hover {
+        transform: none;
+    }
+
+    .btn:hover {
+        transform: none;
+    }
+}
+
+// Dark Mode Support (if implemented)
+@media (prefers-color-scheme: dark) {
+    .status-card {
+        background: linear-gradient(135deg, rgba($gray-800, 0.95) 0%, rgba($gray-900, 0.9) 100%);
+        border-color: rgba($primary, 0.3);
+
+        .status-value {
+            color: $gray-200;
+        }
+
+        .status-label {
+            color: $gray-400;
+        }
+    }
+
+    .progress-card {
+        background: $gray-800;
+        border-color: rgba($primary, 0.3);
+    }
+
+    .timeline-item {
+        .timeline-content {
+            .timeline-title {
+                color: $gray-200;
+            }
+
+            .timeline-time,
+            .timeline-description {
+                color: $gray-400;
+            }
+        }
+    }
+}
+
+// =============================================================================
+// PRINT STYLES
+// =============================================================================
+
+@media print {
+
+    .action-section,
+    .btn,
+    .modal {
+        display: none !important;
+    }
+
+    .desktop-progress-timeline,
+    .mobile-progress-timeline {
+        break-inside: avoid;
+    }
+
+    .status-cards {
+        break-inside: avoid;
+    }
+
+    * {
+        box-shadow: none !important;
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+// =============================================================================
+// UTILITY CLASSES
+// =============================================================================
+
+.order-tracking-container {
+    animation: fadeInScale 0.6s ease-out;
+}
+
+.stagger-animation {
+
+    .status-card,
+    .timeline-item,
+    .step-content {
+        animation: slideInUp 0.6s ease-out;
+        animation-fill-mode: both;
+
+        &:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        &:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        &:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        &:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        &:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+    }
+}
+
+.loading-skeleton {
+    background: linear-gradient(90deg, $gray-200 25%, $gray-100 50%, $gray-200 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 0.5rem;
+}
+
+.error-state {
+    .alert {
+        border-color: rgba($danger, 0.3);
+        background: linear-gradient(135deg, rgba($danger, 0.1) 0%, rgba($danger, 0.05) 100%);
+
+        .alert-icon {
+            color: $danger;
+        }
+
+        .alert-heading {
+            color: darken($danger, 10%);
+        }
+    }
+}
+
+.success-state {
+    .alert {
+        border-color: rgba($success, 0.3);
+        background: linear-gradient(135deg, rgba($success, 0.1) 0%, rgba($success, 0.05) 100%);
+
+        .alert-icon {
+            color: $success;
+        }
+
+        .alert-heading {
+            color: darken($success, 10%);
+        }
+    }
+}
+
+// =============================================================================
+// COMPONENT-SPECIFIC OVERRIDES
+// =============================================================================
+
+// Bootstrap Nav Tabs Override for Progress
+.nav-tabs.media-tabs {
+    border: none;
+
+    .nav-item {
+        flex: 1;
+
+        .nav-link {
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            padding: 1.5rem 1rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+
+            &::before {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: $gray-300;
+                transition: all 0.4s ease;
+            }
+
+            &.completed {
+                background: linear-gradient(135deg, rgba($success, 0.05) 0%, rgba($success, 0.02) 100%);
+
+                &::before {
+                    background: $success;
+                }
+
+                .media-tab-media i {
+                    color: $success;
+                }
+
+                h6 {
+                    color: darken($success, 10%);
+                }
+            }
+
+            &.active {
+                background: linear-gradient(135deg, rgba($primary, 0.08) 0%, rgba($primary, 0.03) 100%);
+
+                &::before {
+                    background: $primary;
+                    animation: pulse-progress-line 2s infinite;
+                }
+
+                .media-tab-media i {
+                    color: $primary;
+                    animation: pulse-icon 2s infinite;
+                }
+
+                h6 {
+                    color: darken($primary, 10%);
+                }
+            }
+
+            .media-tab-media {
+                i {
+                    font-size: 1.5rem;
+                    transition: all 0.3s ease;
+                }
+            }
+
+            h6 {
+                transition: color 0.3s ease;
+                margin-bottom: 0;
+            }
+
+            .media-tab-subtitle {
+                font-size: 0.75rem;
+                opacity: 0.8;
+            }
+        }
+    }
+}
+
+@keyframes pulse-progress-line {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: scaleX(1.05);
+    }
+}
+
+// Card Shadow Override
+.card.border-0.shadow-lg {
+    box-shadow: 0 10px 40px rgba($black, 0.1) !important;
+    border-radius: 1.5rem !important;
+    overflow: hidden;
+
+    .card-body {
+        padding: 0;
+    }
+}
+
+// Alert Override for Delivery Estimates
+.alert-info {
+    border-color: rgba($info, 0.2) !important;
+    background: linear-gradient(135deg, rgba($info, 0.1) 0%, rgba($info, 0.05) 100%) !important;
+    color: darken($info, 15%) !important;
+}
+
+// Button Group Spacing
+.btn-group-vertical {
+    .btn {
+        margin-bottom: 0.5rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+// Form Check Override
+.form-check {
+    .form-check-input {
+        &:checked {
+            background-color: $primary;
+            border-color: $primary;
+        }
+
+        &:focus {
+            border-color: lighten($primary, 25%);
+            box-shadow: 0 0 0 0.25rem rgba($primary, 0.25);
+        }
+    }
+
+    .form-check-label {
+        font-weight: 500;
+        color: $gray-700;
+    }
+}

@@ -64,14 +64,15 @@ export class AccountSigninComponent implements OnInit {
   async onSubmit() {
 
     try {
+      const login_data = this.loginForm.value;
+      if (!login_data.email) {
+        alert('Please enter email address'); return;
+      }
+      if (!login_data.password) {
+        alert('Please enter password'); return;
+      }
       if (this.loginForm.valid) {
-        const login_data = this.loginForm.value;
-        if (!login_data.email) {
-          alert('Please enter email address'); return;
-        }
-        if (!login_data.password) {
-          alert('Please enter password'); return;
-        }
+
         let save_respose = await this.restService.userLogin(login_data);
         if (save_respose.success) {
           this.loginForm.reset();
@@ -94,20 +95,20 @@ export class AccountSigninComponent implements OnInit {
 
   async SignupSubmit() {
     try {
-      if (this.SignupForm.valid) {
-        const login_data = this.SignupForm.value;
-        login_data.user_name = login_data.given_name + " " + login_data.family_name;
+      const login_data = this.SignupForm.value;
+      login_data.user_name = login_data.given_name + " " + login_data.family_name;
 
-        if (!login_data.email) {
-          alert('Please enter email address'); return;
-        }
-        if (!login_data.password) {
-          alert('Please enter password'); return;
-        }
-        if (!login_data.mobile) {
-          alert('Please enter mobile'); return;
-        }
-        console.log(login_data);
+      if (!login_data.email) {
+        alert('Please enter email address'); return;
+      }
+      if (!login_data.password) {
+        alert('Please enter password'); return;
+      }
+      if (!login_data.mobile) {
+        alert('Please enter mobile'); return;
+      }
+      if (this.SignupForm.valid) {
+
         let save_respose = await this.restService.userRegister(login_data);
         if (save_respose.success) {
           this.SignupForm.reset();
@@ -115,7 +116,6 @@ export class AccountSigninComponent implements OnInit {
           this.loginForm.controls['password'].setValue(login_data.password);
           this.onSubmit()
         }
-
       }
     } catch (error) {
       alert('Error while read data' + error);

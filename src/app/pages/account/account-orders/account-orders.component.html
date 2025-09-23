@@ -63,13 +63,14 @@
               <td class="py-3">{{this.datePipe.transform(order.updatedAt, 'dd/MM/yyyy hh:mm aa')}}</td>
               <td class="py-3"><span>{{order.status.split("_").join(" ")|titlecase}}</span></td>
               <!-- <td class="py-3"><span class="badge bg-{{data.status_color}} m-0">{{data.status}}</span></td> -->
-              <td class="py-3">AED {{order.total_price|number:'1.2-2'}}</td>
+              <td class="py-3 text-accents"><img src="assets/aedsymbol.png" alt="aed symbol" />
+                {{order.total_price|number:'1.2-2'}}</td>
               <td class="py-3"><a class="nav-link-style fw-medium fs-sm text-center" href=" javascript:void(0);"
                   ngbTooltip="Show the Order Items" data-bs-toggle="modal"
                   (click)="orderModal(ordertDetailModal,order)"><i class="ci-view-list opacity-60 me-2"></i></a>
-                <!-- <a class="nav-link-style fw-medium fs-sm" href="javascript:void(0);" data-bs-toggle="modal"
+                <a class="nav-link-style fw-medium fs-sm" href="javascript:void(0);" data-bs-toggle="modal"
                   ngbTooltip="Repeat this order" (click)="repeatOrder(order)"><i
-                    class="ci-reload opacity-60 me-2"></i></a> -->
+                    class="ci-reload opacity-60 me-2"></i></a>
               </td>
 
             </tr>
@@ -92,46 +93,185 @@
 <!-- Footer-->
 <app-footer></app-footer>
 
-<!-- Order Details Modal-->
 <ng-template #ordertDetailModal let-modal>
   <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title">Order No - {{single_order.order_no}}</h5>
-      <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
+    <!-- Modal Header -->
+    <div class="modal-header " style="background-color: aliceblue;">
+      <div class="d-flex flex-column">
+        <h4 class="modal-title mb-1">Order Details</h4>
+        <small class="opacity-75">Order #{{single_order.order_no}}</small>
+      </div>
+      <button class="btn-close btn-close-white" type="button" data-bs-dismiss="modal" aria-label="Close"
         (click)="modal.dismiss('Cross click')"></button>
     </div>
-    <div class="modal-body pb-0">
-      <!-- Item-->
-      <div class="d-sm-flex justify-content-between mb-4 pb-3 pb-sm-2 border-bottom"
-        *ngFor="let order_item of single_order.cart_items;let i= index;trackBy:fromDataResolver.identify;">
-        <div class="d-sm-flex text-center text-sm-start"><a class="d-inline-block flex-shrink-0 mx-auto"
-            href="javascript:void(0);" style="width: 10rem;"><img src="{{order_item.img_url}}" alt="Product"></a>
-          <div class="ps-sm-4 pt-2">
-            <h3 class="product-title fs-base mb-2"><a href="javascript:void(0);">{{order_item.title}}</a></h3>
-            <div class="fs-lg text-accent pt-2"> {{order_item.price|number:'1.2-2'}} AED</div>
+
+    <!-- Modal Body -->
+    <div class="modal-body p-0">
+      <!-- Order Summary Section -->
+      <div class="bg-light p-4 border-bottom">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <h6 class="text-muted mb-1">Customer Name</h6>
+            <p class="mb-0 fw-medium">{{single_order?.useraddress[0]?.name || 'N/A'}}</p>
+            <p class="mb-0 fw-medium">{{single_order?.useraddress[0]?.mobile || 'N/A'}}</p>
+          </div>
+          <div class="col-md-6">
+            <h6 class="text-muted mb-1">Order Date</h6>
+            <p class="mb-0 fw-medium">{{this.datePipe.transform(single_order.createdAt || single_order.updatedAt, 'dd
+              MMM yyyy, hh:mm aa')}}</p>
+          </div>
+          <div class="col-md-6">
+            <h6 class="text-muted mb-1">Order Status</h6>
+            <span class="badge bg-{{getStatusColor(single_order.status)}} fs-sm">
+              {{single_order.status.split("_").join(" ") | titlecase}}
+            </span>
+          </div>
+          <div class="col-md-6">
+            <h6 class="text-muted mb-1">Delivery Address</h6>
+            <p class="mb-0 fw-medium">{{single_order?.useraddress[0]?.flat}} {{single_order?.useraddress[0]?.building}}
+              {{single_order?.useraddress[0]?.city}}{{single_order?.useraddress[0]?.region}}
+            </p>
+            <p class="mb-0 fw-medium"> {{single_order?.useraddress[0]?.landmark}} </p>
           </div>
         </div>
-        <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
-          <div class="text-muted mb-2">Quantity:</div>{{order_item.qty}}
+      </div>
+
+      <!-- Order Items Section -->
+      <div class="p-4">
+        <h5 class="mb-4">
+          <i class="ci-bag me-2 text-primary"></i>
+          Ordered Items ({{single_order.cart_items?.length || 0}})
+        </h5>
+
+        <!-- Item List -->
+        <div class="order-items-list">
+          <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom position-relative"
+            *ngFor="let order_item of single_order.cart_items; let i = index; trackBy: fromDataResolver.identify;">
+
+            <!-- Item Image and Details -->
+            <div class="d-flex align-items-start flex-grow-1">
+              <div class="flex-shrink-0 me-3">
+                <img src="{{order_item.img_url}}" alt="{{order_item.title}}" class="rounded"
+                  style="width: 80px; height: 80px; object-fit: cover;">
+              </div>
+              <div class="flex-grow-1">
+                <h5 class="mb-2">{{order_item?.title}}</h5>
+                <p class="mb-2">{{order_item?.description}}</p>
+                <div class="d-flex align-items-center mb-2">
+                  <img src="assets/aedsymbol.png" alt="AED" class="me-1" style="width: 12px;">
+                  <span class="text-primary fw-medium">{{order_item.price | number:'1.2-2'}}</span>
+                  <span class="text-muted ms-2">× {{order_item.qty}}</span>
+                </div>
+                <div class="small text-muted" *ngIf="order_item.addon_total > 0">
+                  Add-ons:
+                  <img src="assets/aedsymbol.png" alt="AED" class="me-1" style="width: 10px;">
+                  {{order_item.addon_total | number:'1.2-2'}}
+                </div>
+              </div>
+            </div>
+
+            <!-- Item Total -->
+            <div class="text-end ms-3">
+              <div class="fw-bold text-dark">
+                <img src="assets/aedsymbol.png" alt="AED" class="me-1" style="width: 14px;">
+                {{order_item.total_price | number:'1.2-2'}}
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
-          <div class="text-muted mb-2">Add On Total:</div>{{order_item.addon_total|number:'1.2-2'}} AED
+      </div>
+
+      <!-- Order Summary Section -->
+      <div class="bg-light p-4 border-top">
+        <h5 class="mb-3">
+          <i class="ci-calculator me-2 text-primary"></i>
+          Order Summary
+        </h5>
+        <div class="row g-2">
+          <div class="col-6">
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Subtotal:</span>
+              <span>
+                <img src="assets/aedsymbol.png" alt="AED" class="me-1" style="width: 12px;">
+                {{single_order.sub_total | number:'1.2-2'}}
+              </span>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Delivery:</span>
+              <span>
+                <img src="assets/aedsymbol.png" alt="AED" class="me-1" style="width: 12px;">
+                {{single_order.delivery_charges | number:'1.2-2'}}
+              </span>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Discount:</span>
+              <span class="text-success">
+                -<img src="assets/aedsymbol.png" alt="AED" class="me-1" style="width: 12px;">
+                {{single_order.discount | number:'1.2-2'}}
+              </span>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Tax:</span>
+              <span>
+                <img src="assets/aedsymbol.png" alt="AED" class="me-1" style="width: 12px;">
+                {{single_order.tax || 0 | number:'1.2-2'}}
+              </span>
+            </div>
+          </div>
         </div>
-        <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
-          <div class="text-muted mb-2">Subtotal</div> {{order_item.total_price| number: '1.2-2'}} AED
+        <hr class="my-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Total Amount:</h5>
+          <h4 class="mb-0 text-primary">
+            <img src="assets/aedsymbol.png" alt="AED" class="me-2" style="width: 16px;">
+            {{single_order.total_price | number:'1.2-2'}}
+          </h4>
         </div>
       </div>
     </div>
-    <!-- Footer-->
-    <div class="modal-footer flex-wrap justify-content-between bg-secondary fs-md">
-      <div class="px-2 py-1"><span class="text-muted">Subtotal:&nbsp;</span><span>
-          {{single_order.sub_total|number:'1.2-2'}} AED</span></div>
-      <div class="px-2 py-1"><span class="text-muted">Delivery Charges :&nbsp;</span><span>
-          {{single_order.delivery_charges |number:'1.2-2'}} AED</span></div>
-      <div class="px-2 py-1"><span class="text-muted">Discount:&nbsp;</span><span>
-          {{single_order.discount |number:'1.2-2'}} AED</span></div>
-      <div class="px-2 py-1"><span class="text-muted">Total:&nbsp;</span><span class="fs-lg">
-          {{single_order.total_price |number:'1.2-2'}} AED</span></div>
+
+    <!-- Modal Footer with Action Buttons -->
+    <div class="modal-footer bg-white border-top">
+      <div class="d-flex flex-wrap gap-2 w-100 justify-content-between">
+        <!-- Left side buttons -->
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="printOrder(single_order)">
+            <i class="ci-printer me-1"></i>
+            Print
+          </button>
+          <button type="button" class="btn btn-outline-info btn-sm" (click)="contactSupport(single_order)">
+            <i class="ci-support me-1"></i>
+            Support
+          </button>
+
+          <button type="button" class="btn btn-outline-info btn-sm" (click)="contactUs(single_order)">
+            <i class="ci-whatsapp me-1"></i>
+            Contact Us
+          </button>
+        </div>
+
+        <!-- Right side buttons -->
+        <div class="d-flex gap-2">
+          <!-- <button type="button" class="btn btn-outline-warning btn-sm" *ngIf="canCancelOrder(single_order.status)"
+            (click)="cancelOrder(single_order)">
+            <i class="ci-close me-1"></i>
+            Cancel Order
+          </button> -->
+          <button type="button" class="btn btn-primary btn-sm" (click)="repeatOrder(single_order)">
+            <i class="ci-reload me-1"></i>
+            Reorder
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" (click)="modal.dismiss('Close')">
+            Close
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </ng-template>

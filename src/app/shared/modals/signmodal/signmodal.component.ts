@@ -4,6 +4,7 @@ import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms
 import { HttpService } from 'src/app/services/http.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-signmodal',
@@ -16,6 +17,7 @@ export class SignmodalComponent implements OnInit {
   signinformData!: UntypedFormGroup;
   signupformData!: UntypedFormGroup;
   signupPassfield!: boolean;
+  signupConfirmPassfield!: boolean;
   fieldTextType: any;
   submitted = false;
   signupsubmit = false;
@@ -52,12 +54,17 @@ export class SignmodalComponent implements OnInit {
     this.fieldTextType = !this.fieldTextType
   }
 
+
   /**
  * Password Hide/Show
  */
   togglesignupPassfield() {
     this.signupPassfield = !this.signupPassfield;
   }
+  togglesignupConfirmPassfield() {
+    this.signupConfirmPassfield = !this.signupConfirmPassfield;
+  }
+
 
   /**
  * Returns form
@@ -79,17 +86,25 @@ export class SignmodalComponent implements OnInit {
   async signin() {
 
     try {
+      const login_data = this.signinformData.value;
+      if (!login_data.email) {
+        Swal.fire({ text: 'Please enter user name', timer: 1500 }); return;
+      }
+      if (!login_data.password) {
+        Swal.fire({ text: 'Please enter password', timer: 1500 }); return;
+      }
       if (this.signinformData.valid) {
-        this.ngxService.start();
+
         const login_data = this.signinformData.value;
         if (!login_data.email) {
-          alert('Please enter user name'); return;
+          Swal.fire({ text: 'Please enter user name', timer: 1500 }); return;
         }
         if (!login_data.password) {
-          alert('Please enter password'); return;
+          Swal.fire({ text: 'Please enter password', timer: 1500 }); return;
         }
+        this.ngxService.start();
         let save_respose = await this.restService.userLogin(login_data);
-        this.ngxService.stop();
+
         if (save_respose.success) {
           this.signupformData.reset();
           this.modalService.dismissAll();
@@ -101,10 +116,15 @@ export class SignmodalComponent implements OnInit {
             }
           });
         }
+        else {
+          Swal.fire({ text: 'Invalid user name or password', timer: 1500 });
+        }
       }
     } catch (error) {
-      alert('Error while read data' + error);
+      Swal.fire({ text: 'Invalid user name or password', timer: 1500 });
+      this.ngxService.stop();
     } finally {
+      this.ngxService.stop();
     }
 
   }
@@ -113,17 +133,18 @@ export class SignmodalComponent implements OnInit {
   async signup() {
     try {
       if (this.signupformData.valid) {
-        this.ngxService.start();
+
         const login_data = this.signupformData.value;
         if (!login_data.email) {
-          alert('Please enter user name'); return;
+          Swal.fire({ text: 'Please enter user name', timer: 1500 }); return;
         }
         if (!login_data.password) {
-          alert('Please enter password'); return;
+          Swal.fire({ text: 'Please enter password', timer: 1500 }); return;
         }
         if (!login_data.user_name) {
-          alert('Please enter name'); return;
+          Swal.fire({ text: 'Please enter name', timer: 1500 }); return;
         }
+        this.ngxService.start();
         login_data.main_role = 'user';
         let save_respose = await this.restService.userRegister(login_data);
 
@@ -136,7 +157,7 @@ export class SignmodalComponent implements OnInit {
           login_datails.email = login_data.email;
           login_datails.password = login_data.password;
           let login_response = await this.restService.userLogin(login_datails);
-          this.ngxService.stop();
+
           if (login_response.success) {
             this.router.navigate(['/portal/handle/token'], {
               queryParams:
@@ -149,7 +170,9 @@ export class SignmodalComponent implements OnInit {
       }
     } catch (error) {
       alert('Error while read data' + error);
+      this.ngxService.stop();
     } finally {
+      this.ngxService.stop();
     }
   }
 }

@@ -44,6 +44,17 @@ export class AddresslistmodalComponent implements OnInit, OnDestroy {
     if (user_address_response?.data) {
       this.address_list = user_address_response?.data;
     }
+    if (this.address_list?.length != 0) {
+      const defaultAddress = this.address_list.find((address: any) => address.primary == true);
+      if (defaultAddress) {
+        this.selectedAddress = defaultAddress;
+      } else {
+        this.selectedAddress = this.address_list[0];
+      }
+    }
+    if (this.selectedAddress) {
+      this.selectAddress(this.selectedAddress);
+    }
     if (user_address_response?.data.length == 0) {
       CookieStore.saveDataAsync('current_address', {});
       this.sharedService.changeMessage({});

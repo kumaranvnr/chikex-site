@@ -14,8 +14,8 @@
     transition: background-color 0.3s;
 
     &.selected-address {
-        border-color: #bc202e; // Highlight color
-        background-color: rgba(188, 32, 46, 0.1); // Light highlight
+        border-color: #747474; // Highlight color
+        background-color: rgba(255, 202, 206, 0.1); // Light highlight
     }
 
     .address-details {

@@ -27,30 +27,79 @@
 <!-- Page navigation-->
 
 <!-- <nav class="container mt-n5 " *ngIf="category_list.length>0"> -->
-<nav class="container " style="max-width: 100%;" *ngIf="category_list.length>0">
-    <div class="d-flex align-items-center bg-white rounded-3 shadow-lg py-2 ps-sm-2 pe-4 pe-lg-2">
-        <!-- <img
-                    class="d-block rounded-3" src="assets/img/side-logo.png" width="150" alt="Chikex"> -->
+<nav class="container" style="max-width: 100%;" *ngIf="category_list.length > 0">
+    <div class="d-flex align-items-center bg-white rounded-3 shadow-lg py-2 ps-sm-2 pe-lg-2">
         <div class="ps-lg-3 w-100 text-end">
-            <!-- For desktop-->
-            <ul class="nav nav-tabs d-none d-lg-flex border-0 mb-0 " id="filter-list">
+            <!-- For desktop -->
+            <ul class="nav nav-tabs d-none d-lg-flex border-0 mb-0" id="filter-list">
                 <li class="nav-item"
-                    *ngFor="let category of category_list;let i = index;trackBy:fromDataResolver.identify;"
-                    (click)="selectcategory(category._id,$event)">
-                    <a class="nav-link" href="javascript:void(0);">{{category.title}}</a>
+                    *ngFor="let category of category_list; let i = index; trackBy: fromDataResolver.identify;"
+                    (click)="selectcategory(category?._id, $event)">
+                    <a class="nav-link" href="javascript:void(0);">{{ category?.title }}</a>
                 </li>
             </ul>
-            <!-- For mobile-->
-            <div ngbDropdown class="btn-group dropdown d-lg-none ms-auto">
-                <button class="btn btn-primary  " type="button" data-bs-toggle="dropdown" ngbDropdownToggle
-                    aria-haspopup="true" aria-expanded="false"><i class="ci-menu fs-base me-2"></i>Categories</button>
-                <div ngbDropdownMenu class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item fs-base"
-                        *ngFor="let category of category_list;let j = index;trackBy:fromDataResolver.identify;"
-                        (click)="selectcategory(category._id,$event)" href="javascript:void(0);">{{category.title}}
-                    </a>
+
+
+            <!-- For mobile -->
+
+            <div class="d-flex align-items-center">
+                <div ngbDropdown class="  dropdown d-lg-none ms-auto">
+                    <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="dropdown" ngbDropdownToggle
+                        aria-haspopup="true" aria-expanded="false"><i class="ci-menu fs-base me-2"></i></button>
+                    <div ngbDropdownMenu class="dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item fs-base"
+                            *ngFor="let category of category_list;let j = index;trackBy:fromDataResolver.identify;"
+                            (click)="selectcategory(category._id,$event)" href="javascript:void(0);">{{category.title}}
+                        </a>
+                    </div>
+                </div>
+                <div class="vertical-category-list d-lg-none">
+
+                    <div class="category-container">
+                        <a *ngFor="let category of category_list" class="category-item"
+                            (click)="selectcategory(category?._id, $event)" [class.active]="isActive(category?._id)"
+                            tabindex="0" href="javascript:void(0);">
+                            {{ category.title }}
+                        </a>
+                    </div>
                 </div>
             </div>
+
+            <!-- <div class="coupon-cards-container">
+                <div class="coupon-cards-wrapper">
+                    <div *ngFor="let coupon of coupons; let i = index; trackBy: fromDataResolver.identify;"
+                        class="coupon-card" [class.coupon-card--active]="coupon.isActive"
+                        [class.coupon-card--clickable]="!coupon.isAutoApplied" (click)="onCouponClick(coupon)"
+                        [attr.tabindex]="coupon.isAutoApplied ? -1 : 0" role="button">
+
+
+                        <div class="coupon-card__top">
+                            <div class="coupon-card__discount">{{ coupon.discount }}</div>
+                            <div class="coupon-card__subtitle">{{ coupon.subtitle }}</div>
+                        </div>
+
+
+                        <div class="coupon-card__separator"></div>
+
+
+                        <div class="coupon-card__bottom">
+                            <span class="coupon-card__code" *ngIf="!coupon.isAutoApplied">
+                                {{ coupon.code }}
+                            </span>
+                            <span class="coupon-card__auto-applied" *ngIf="coupon.isAutoApplied">
+                                Auto Applied
+                            </span>
+                            <i class="ci-arrow-right coupon-card__arrow" *ngIf="showArrows"></i>
+                        </div>
+
+
+                        <div class="coupon-card__cutout coupon-card__cutout--left"></div>
+
+                        <div class="coupon-card__cutout coupon-card__cutout--right"></div>
+                    </div>
+                </div>
+            </div> -->
+
         </div>
     </div>
 </nav>
@@ -64,29 +113,29 @@
     </div>
 </div>
 
-
 <!-- Menu (Products grid/list)-->
 <div class="activation-area" *ngIf="!loading">
-    <section class="container tab-content py-4 py-sm-5">
+    <section class="container tab-content py-sm-5">
         <div class="row pt-3 pt-sm-0">
-            <div *ngFor="let item of products; let i = index; trackBy: fromDataResolver.identify;"
-                class="col-12 col-sm-6 col-md-4 col-lg-3 mb-grid-gutter">
+            <div *ngFor="let item of  products ; let i = index; trackBy: fromDataResolver.identify;"
+                class="col-12 col-sm-6 col-md-4 col-lg-3 " style="padding: 5px;">
 
                 <!-- Desktop/Tablet Grid View -->
                 <div class="card product-card border pb-2 d-none d-sm-block" style="background-color: transparent;">
                     <a class="d-block" data-bs-target="#quick-view" data-bs-toggle="modal"
                         (click)="openModal(content, i)">
-                        <img class="card-img-top" src="{{item.img_url}}" alt="{{item.title}}"
-                            style="height: 250px; object-fit: cover;">
+                        <img class="card-img-top" src="{{item?.img_url}}" alt="{{item?.title}}"
+                            style="height: 250px; object-fit: fill;">
                     </a>
                     <div class="card-body pt-1 pb-2" style="background-color: transparent;">
                         <h3 class="product-title fs-md">
-                            <a href="#quick-view" data-bs-toggle="modal">{{item.title}}</a>
+                            <a href="#quick-view" data-bs-toggle="modal">{{item?.title}}</a>
                         </h3>
-                        <p class="fs-ms text-muted">{{item.description}}</p>
+                        <p class="fs-ms text-muted">{{item?.description}}</p>
                         <div class="d-flex align-items-center justify-content-between">
-                            <div class="product-price"><span class="text-accent">{{item.price | number: '1.2-2'}}
-                                    AED</span></div>
+                            <div class="product-price"><span class="text-accents"><img src="assets/aedsymbol.png"
+                                        alt="aed symbol" /> {{item?.price | number: '1.2-2'}}
+                                </span></div>
                             <button *ngIf="!getItemStatus(item._id)" class="btn btn-primary btn-sm" type="button"
                                 (click)="openModal(content, i)">
                                 <i class="ci-cart fs-base ms-1"></i>
@@ -102,7 +151,7 @@
                                     style="border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
                                     <input type="text" class="form-control mx-1 text-center" min="1" disabled
                                         style="text-decoration-color: black; width: 50px; padding: 10px; border: none; background: transparent; outline: none; margin-left: 5px; margin-right: 5px;"
-                                        value="{{item.qty}}" [(ngModel)]="item.qty" (change)="onQuantityChange(item)"
+                                        value="{{item?.qty}}" [(ngModel)]="item.qty" (change)="onQuantityChange(item)"
                                         aria-label="Quantity">
                                 </div>
                                 <button class="btn btn-outline-secondary"
@@ -114,9 +163,80 @@
                 </div>
 
                 <!-- Mobile List View -->
-                <div class="card product-card-mobile border d-block d-sm-none mb-3"
-                    style="background-color: transparent;">
-                    <div class="row g-0">
+                <div class="d-block d-sm-none" style="background-color: transparent;">
+                    <div class="col-12">
+                        <!-- <div class="product-section">
+                            {{getCategoryName(item?.category_code)}}
+                        </div> -->
+                        <div class="card d-flex  flex-row align-items-center p-2" tabindex="0"
+                            style="background-color: white;">
+                            <div class="d-flex flex-column flex-grow-1 col-8">
+                                <div class="d-flex align-items-center">
+                                    <h5 class="mb-0 fw-bold fs-6 ">{{item.title}}</h5>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <span class="text-success fw-bold fs-7 text-accents"> <img
+                                            src="assets/aedsymbol.png" alt="aed symbol" /> {{item.price | number:
+                                        '1.2-2' }}
+                                    </span>
+                                    <span class="text-muted text-decoration-line-through ms-1 fs-7 text-accents"
+                                        *ngIf="item?.list_price"> <img src="assets/aedsymbol.png"
+                                            alt="aed symbol" />{{item?.list_price}}
+                                    </span>
+
+                                </div>
+                                <p class="text-muted mb-1 fs-7" *ngIf="!expandedItems.has(item._id)">{{item?.description
+                                    |
+                                    slice:0:100}}<span *ngIf="item.description.length > 100">...</span>
+                                </p>
+                                <div *ngIf="expandedItems.has(item._id)">
+                                    <p class="text-muted fs-8">{{item?.description}}</p>
+
+                                </div>
+                                <a href="javascript:void(0);" (click)="showMore(item)" class="fs-7"
+                                    *ngIf="item?.description?.length > 100">
+                                    {{ expandedItems.has(item._id) ? 'Show less' : 'Show more' }}
+                                </a>
+                            </div>
+                            <div class="d-fixed flex-column flex-grow-1 align-items-center col-4 ms-2"
+                                style="padding:5px;background-color: white;">
+                                <button class="btn btn-sm position-absolute top-0 end-0 m-1 fs-5"
+                                    style="padding: 7px; display:flex" (click)="addToFavorites(item)">
+                                    <i class="ci-heart"></i>
+                                </button>
+                                <div class="position-relative " style="display: contents;">
+                                    <img src="{{item?.img_url}}" alt="{{item.title}}" class="img-fluid"
+                                        style="width: 100px; height: auto;">
+                                </div>
+                                <div class="mt-2">
+                                    <button *ngIf="!getItemStatus(item._id)" class="btn btn-sm btn-primary w-100"
+                                        type="button" (click)="openModal(content, i)">
+                                        <i class="ci-cart fs-base me-2"></i>Add
+                                    </button>
+
+                                    <div class="d-flex align-items-center justify-content-center"
+                                        *ngIf="getItemStatus(item._id)">
+                                        <button class="btn btn-sm btn-outline-secondary  " style="padding: 5px 10px;"
+                                            (click)="decreaseQuantity(item)">
+                                            <span *ngIf="item?.qty >= 2">-</span>
+                                            <span class="ci-trash" *ngIf="item.qty == 1"></span>
+                                        </button>
+                                        <div class="mobile-qty-display fs-8">
+                                            <input type="text" class="form-control text-center" min="1" disabled
+                                                value="{{item?.qty}}" [(ngModel)]="item.qty"
+                                                (change)="onQuantityChange(item)" aria-label="Quantity">
+                                        </div>
+                                        <button class="btn btn-sm btn-outline-secondary  " style="padding: 5px 10px;"
+                                            (click)="increaseQuantity(item)">+</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <!-- <div class="row g-0">
                         <div class="col-4">
                             <a class="d-block h-100" data-bs-target="#quick-view" data-bs-toggle="modal"
                                 (click)="openModal(content, i)">
@@ -133,12 +253,12 @@
                                     </h4>
                                     <p class="fs-sm text-muted mb-2 mobile-description">{{item.description}}</p>
                                     <div class="product-price mb-2">
-                                        <span class="text-accent fw-bold fs-lg">{{item.price | number: '1.2-2'}}
-                                            AED</span>
+                                        <span class="text-accents fw-bold fs-lg"> <img src="assets/aedsymbol.png" alt="aed symbol" /> {{item.price | number: '1.2-2'}}
+                                             </span>
                                     </div>
                                 </div>
 
-                                <!-- Mobile Action Buttons -->
+                              
                                 <div class="mobile-actions">
                                     <button *ngIf="!getItemStatus(item._id)" class="btn btn-primary btn-mobile w-100"
                                         type="button" (click)="openModal(content, i)">
@@ -163,12 +283,14 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
     </section>
 </div>
+
+
 
 <app-footer></app-footer>
 
@@ -199,7 +321,7 @@
                                         Required</span></label>
 
                             </div>
-                            <div class="d-flex flex-wrap overflow-auto"
+                            <div class="mobile-modifiers d-flex flex-wrap overflow-auto"
                                 style="max-height: 200px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                                 <div *ngFor="let modifier of group_modifier.modifiers_list" class="form-check"
                                     style="flex: 1 1 calc(33.33% - 10px); margin: 5px;"
@@ -208,8 +330,9 @@
                                         [checked]="modifier.selected" value="{{ modifier.price }}"
                                         class="form-check-input">
                                     <label id="{{ modifier.id }}-label" for="{{ modifier.id }}"
-                                        class="form-check-label">
-                                        {{ modifier.title }} + ({{ modifier.price | number: '1.2-2' }} AED)
+                                        class="form-check-label text-accents">
+                                        {{ modifier.title }} + ( <img src="assets/aedsymbol.png" alt="aed symbol" /> {{
+                                        modifier.price | number: '1.2-2' }} )
                                     </label>
                                 </div>
                             </div>
@@ -217,8 +340,8 @@
                         <div class="mb-1" *ngIf="group_modifier.mtype == 1">
                             <label id="{{ group_modifier.id }}-label" class="form-label">{{ group_modifier.title
                                 }}</label>
-                            <div class="d-flex flex-wrap overflow-auto"
-                                style="max-height: 200px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            <div class="mobile-modifiers d-flex flex-wrap overflow-auto"
+                                style=" padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                                 <div *ngFor="let modifier of group_modifier.modifiers_list" class="form-check"
                                     style="flex: 1 1 calc(33.33% - 10px); margin: 5px;"
                                     (click)="onModifierChange(productdetail,group_modifier,modifier)">
@@ -226,8 +349,9 @@
                                         [checked]="modifier.selected" value="{{ modifier.price }}"
                                         class="form-check-input">
                                     <label id="{{ modifier.id }}-label" for="{{ modifier.id }}"
-                                        class="form-check-label">
-                                        {{ modifier.title }} + ({{ modifier.price | number: '1.2-2' }} AED)
+                                        class="form-check-label text-accents">
+                                        {{ modifier.title }} + ( <img src="assets/aedsymbol.png" alt="aed symbol" /> {{
+                                        modifier.price | number: '1.2-2' }})
                                     </label>
                                 </div>
                             </div>
@@ -246,11 +370,12 @@
 
         <div class="modal-footer d-flex">
             <div class="row col-lg-12 d-flex align-items-center pb-3">
-                <div class="mb-1 col-md-4">
-                    <strong>Total Price: <span class="text-accent">{{productdetail.total_price|number:'1.2-2'}}
-                            AED</span></strong>
+                <div class="mb-1 col-md-4 d-flex align-items-center justify-content-center">
+                    <strong>Total Price: <span class="text-accents"><img src="assets/aedsymbol.png" alt="aed symbol" />
+                            {{productdetail.total_price|number:'1.2-2'}}
+                        </span></strong>
                 </div>
-                <div class="col-md-4 ">
+                <div class="col-md-4 d-flex align-items-center justify-content-center">
 
                     <div class="d-flex mb-3 ">
                         <button class="btn btn-outline-secondary"

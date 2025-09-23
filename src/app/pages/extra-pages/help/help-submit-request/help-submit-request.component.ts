@@ -86,7 +86,7 @@ export class HelpSubmitRequestComponent implements OnInit {
     }
     let response = await this.restservice.saveGuestRequest(obj);
     if (response) {
-      Swal.fire("Thank you for Your Message. Our executive will contact you shortly.");
+      Swal.fire({ text: "Thank you for Your Message. Our executive will contact you shortly.", timer: 1500 });
       this.contactForm.reset();
       this.submitted = false;
     }

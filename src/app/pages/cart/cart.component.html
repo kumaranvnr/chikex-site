@@ -1,129 +1,200 @@
 <app-header></app-header>
 <div class="activation-area">
-  <div class="container pt-4 pb-3 py-sm-4">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb flex-lg-nowrap justify-content-center justify-content-lg-start">
-        <li class="breadcrumb-item"><a class="text-nowrap" routerLink="/"><i class="ci-home"></i>Home</a></li>
-        <li class="breadcrumb-item text-nowrap active" aria-current="page"><a class="text-nowrap"> Cart</a></li>
+  <div class="container-fluid px-3 pt-4 pb-3 py-sm-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb flex-nowrap justify-content-start">
+        <li class="breadcrumb-item">
+          <a class="text-nowrap" routerLink="/">
+            <i class="ci-home"></i>Home
+          </a>
+        </li>
+        <li class="breadcrumb-item text-nowrap active" aria-current="page">Cart</li>
       </ol>
     </nav>
-    <div class="rounded-3 shadow-lg mt-4 mb-5">
-      <ul class="nav nav-tabs nav-justified mb-4">
-        <li class="nav-item"><a class="nav-link fs-lg fw-medium py-4 active" href="javascript:void(0);"
-            data-bs-toggle="tab" role="tab" aria-selected="true">1. Your order</a>
-        </li>
-        <li class="nav-item"><a class="nav-link fs-lg fw-medium py-4" href="/checkout" aria-selected="true">2.
-            Checkout</a>
-        </li>
-      </ul>
 
-      <div class="px-3 px-sm-4 px-xl-5 pt-1 pb-4 pb-sm-5">
-        <div class="row">
-          <!-- Items in cart-->
-          <div class="col-lg-8 col-md-7 pt-sm-2">
-            <!-- Item-->
-            <div *ngFor="let cart of cartItems;let i = index;trackBy:fromDataResolver.identify;"
-              class="d-sm-flex justify-content-between align-items-center mt-3 mb-6 pb-3 border-bottom">
-              <div class="d-block d-sm-flex align-items-center text-center text-sm-start"><a
-                  class="d-inline-block flex-shrink-0 mx-auto me-sm-4" href="javascript:void(0);"><img
-                    src="{{cart.img_url}}" width="120" alt="{{cart.title}}"></a>
-                <div class="pt-2">
-                  <div class="fs-lg text-accent pt-2">{{cart.title}} - {{cart.price|number:'1.2-2'}} AED</div>
+    <!-- Progress Steps -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body p-0">
+        <ul class="nav nav-pills nav-justified">
+          <li class="nav-item">
+            <span class="nav-link active py-3">
+              <span class="d-none d-sm-inline">1. </span>Your Order
+            </span>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link py-3" href="/checkout">
+              <span class="d-none d-sm-inline">2. </span>Checkout
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
 
-                  <h3 class="product-title fs-base mb-2">{{cart.description}}</h3>
+    <!-- Cart Items -->
+    <div class="cart-items mb-1 pb-1">
+      <div *ngIf="cartItems.length === 0" class="text-center py-5">
+        <i class="ci-cart fs-1 text-muted mb-3"></i>
+        <h3 class="h5 text-muted">Your cart is empty</h3>
+        <a routerLink="/" class="btn btn-primary mt-3">Continue Shopping</a>
+      </div>
+
+      <div *ngFor="let cart of cartItems; let i = index; trackBy: fromDataResolver.identify"
+        class="cart-item card mb-3 shadow-sm">
+        <div class="card-body p-3">
+          <div class="row align-items-center">
+            <!-- Product Image -->
+            <div class="col-4 col-sm-3 col-md-2">
+              <div class="product-image">
+                <img [src]="cart.img_url" [alt]="cart.title" class="img-fluid rounded">
+              </div>
+            </div>
+
+            <!-- Product Details -->
+            <div class="col-8 col-sm-9 col-md-10">
+              <div class="row">
+                <div class="col-12 col-md-8">
+                  <h5 class="product-title mb-1 fs-6 fw-medium">{{cart.title}}</h5>
+                  <p class="product-description text-muted small mb-2">{{cart.description}}</p>
+
+                  <!-- Modifiers -->
                   <div
-                    *ngFor="let group_modifier of cart.group_modifiers_list;let j = index;trackBy:fromDataResolver.identify;">
+                    *ngFor="let group_modifier of cart.group_modifiers_list; let j = index; trackBy: fromDataResolver.identify">
                     <div
-                      *ngFor="let modifier of group_modifier.modifiers_list;let k = index;trackBy:fromDataResolver.identify;">
-                      <h4 *ngIf="modifier.selected" class="product-title fs-base mb-1">
-                        {{modifier.title}} - {{
-                        modifier.price|number:'1.2-2'}} AED</h4>
+                      *ngFor="let modifier of group_modifier.modifiers_list; let k = index; trackBy: fromDataResolver.identify">
+                      <small *ngIf="modifier.selected" class="text-primary d-block">
+                        + {{modifier.title}}
+                        <img src="assets/aedsymbol.png" alt="aed symbol" class="ms-1" style="height: 12px;">
+                        {{modifier.price | number:'1.2-2'}}
+                      </small>
+                    </div>
+                  </div>
+
+                  <!-- <div class="price-info mt-2">
+                    <span class="text-primary fw-medium">
+                      <img src="assets/aedsymbol.png" alt="aed symbol" class="me-1" style="height: 16px;">
+                      {{cart.price | number:'1.2-2'}}
+                    </span>
+                  </div> -->
+                </div>
+
+                <!-- Quantity and Total -->
+                <div class="col-12 col-md-4 mt-3 mt-md-0">
+                  <div class="d-flex flex-column align-items-end">
+                    <!-- Total Price -->
+                    <div class="total-price mb-2">
+                      <span class="fw-bold text-primary">
+                        <img src="assets/aedsymbol.png" alt="aed symbol" class="me-1" style="height: 18px;">
+                        {{cart.total_price | number:'1.2-2'}}
+                      </span>
+                    </div>
+
+                    <!-- Quantity Controls -->
+                    <div class="quantity-controls d-flex align-items-center">
+                      <button class="btn btn-outline-secondary btn-sm quantity-btn" (click)="decreaseQuantity(cart)"
+                        [attr.aria-label]="cart.qty === 1 ? 'Remove item' : 'Decrease quantity'">
+                        <i *ngIf="cart.qty >= 2" class="ci-minus">-</i>
+                        <i *ngIf="cart.qty === 1" class="ci-trash"></i>
+                      </button>
+
+                      <div class="quantity-display mx-2">
+                        <input type="number" class="form-control form-control-sm text-center quantity-input"
+                          [value]="cart.qty" [(ngModel)]="cart.qty" (change)="onQuantityChange(cart)" min="1" readonly
+                          aria-label="Quantity">
+                      </div>
+
+                      <button class="btn btn-outline-secondary btn-sm quantity-btn" (click)="increaseQuantity(cart)"
+                        aria-label="Increase quantity">
+                        <i class="ci-plus">+</i>
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="pt-2 pt-sm-0 ps-sm-3 mx-auto mx-sm-0 text-center align-items-center align-justify-center">
-                <div class="fs-lg text-accent pt-2"> {{cart.total_price|number:'1.2-2'}} AED</div>
-                <div class=" mb-3" style="display: inline-flex;">
-                  <button class="btn btn-outline-secondary" style="margin-left: 5px;margin-right: 5px;padding:10px;"
-                    (click)="decreaseQuantity(cart)">
-                    <span *ngIf="cart.qty>=2">-</span>
-                    <span class="ci-trash" *ngIf="cart.qty==1"></span>
-                  </button>
-                  <div class="d-flex justify-content-center align-items-center"
-                    style="border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
-                    <input disabled type="text" class="form-control text-center" min="1"
-                      style="text-decoration-color: black;padding:auto; width: 60px; border: none; background: transparent; outline: none;margin-left: 5px;margin-right: 5px;"
-                      value="{{cart.qty}}" [(ngModel)]="cart.qty" (change)="onQuantityChange(cart)"
-                      aria-label="Quantity">
-                  </div>
-                  <button class="btn btn-outline-secondary" style="margin-left: 5px;margin-right: 5px;padding:10px;"
-                    (click)="increaseQuantity(cart)">+</button>
-                </div>
-
-              </div>
-
-            </div>
-            <!-- <button type="button" class="btn btn-outline-primary d-block w-100 mt-4"><i
-                class="ci-loading fs-base me-2"></i>Update cart</button> -->
-          </div>
-          <!-- Sidebar-->
-          <div class="col-lg-4 col-md-5 pt-3 pt-sm-4">
-            <div class="rounded-3 bg-secondary px-3 px-sm-4 py-4">
-              <div class="text-center mb-4 pb-3 border-bottom ">
-                <h3 class="h5 mb-3 pb-1">Sub Total</h3>
-                <h4 class="fw-normal"> {{calculatePrice()| number:'1.2-2'}} AED</h4>
-              </div>
-              <form (ngSubmit)="applycode()" [formGroup]="formData" class="needs-validation" method="post" novalidate>
-                <div class="mb-4">
-                  <label class="form-label mb-3" for="order-comments"><span
-                      class="badge bg-info fs-xs me-2">Note</span>Additional comments</label>
-                  <textarea class="form-control" rows="4" id="order-comments" formControlName="comments"></textarea>
-                </div>
-                <h3 class="h6 mb-4">Apply promo code</h3>
-
-                <div class="mb-3">
-                  <div class="invalid-feedback">Please enter your name!</div>
-                  <input class="form-control" type="text" placeholder="Promo code" formControlName="promocode"
-                    [ngClass]="{ 'is-invalid': submitted && form['promocode'].errors }">
-                  <div class="invalid-feedback">Please provide promo code.</div>
-                  <div class="text-center text-danger" *ngIf="invalid_coupon">invalid Promo code</div>
-                  <div class="text-center text-success" *ngIf="valid_coupon">Promo code Applied
-                    <i class="ci-money-bag fs-lg me-2"></i>
-                    <button class="btn btn-link px-0 text-danger" type="button" (click)="removecode()"><i
-                        class="ci-close-circle me-2"></i><span class="fs-sm"></span></button>
-                  </div>
-                </div>
-                <button class="btn btn-outline-primary d-block w-100 mb-4" type="submit">Apply promo code</button>
-              </form>
-              <div class="text-center mt-1 mb-4 pb-3 border-bottom d-flex justify-content-between">
-                <h3 class="h5 mb-3 pb-1">Total</h3>
-                <h4 *ngIf="!valid_coupon" class="h5"> {{calculatePrice()| number:'1.2-2'}} AED</h4>
-              </div>
-
-              <div *ngIf="valid_coupon" class="d-fle flex-column h-100 rounded-3 bg-secondary">
-
-                <div class="d-flex justify-content-between fs-md border-bottom pb-3 mb-3">
-                  <span>Subtotal:</span><span class="text-heading">
-                    {{calculatePrice()| number:'1.2-2'}} AED</span>
-                </div>
-                <div class="d-flex justify-content-between fs-md border-bottom pb-3 mb-3">
-                  <span>Promo Code ({{this.coupon_response.data.code}})</span><span class="text-heading">
-                    {{discountprice| number:'1.2-2'}} AED</span>
-                </div>
-                <div class="d-flex justify-content-between fs-md mb-2"><span>Total:</span><span
-                    class="text-heading fw-medium"> {{setprice(finalprice)| number:'1.2-2'}} AED</span>
-                </div>
-              </div>
-
-              <a class="btn btn-primary btn-shadow d-block w-100 mt-4 mb-3" href="javascript:void(0);"
-                (click)="checkoutClick()"><i class="ci-card fs-lg me-2"></i>Proceed to
-                Checkout</a>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Promo Code Section (Mobile) -->
+    <div class="card shadow-sm mb-4" *ngIf="cartItems.length > 0">
+      <div class="card-body">
+        <form (ngSubmit)="applycode()" [formGroup]="formData" class="needs-validation" method="post" novalidate>
+          <div class="mb-3">
+            <label class="form-label" for="order-comments">
+              <span class="badge bg-info fs-xs me-2">Note</span>Additional comments
+            </label>
+            <textarea class="form-control" rows="3" id="order-comments" formControlName="comments"
+              placeholder="Any special instructions..."></textarea>
+          </div>
+
+          <h6 class="mb-3">Apply Promo Code</h6>
+          <div class="input-group mb-3">
+            <input class="form-control" type="text" placeholder="Enter promo code" formControlName="promocode"
+              [ngClass]="{ 'is-invalid': submitted && form['promocode'].errors }">
+            <button class="btn btn-outline-primary" type="submit">Apply</button>
+          </div>
+
+          <div class="invalid-feedback" *ngIf="submitted && form['promocode'].errors">
+            Please provide promo code.
+          </div>
+          <div class="alert alert-danger py-2" *ngIf="invalid_coupon">
+            <small>Invalid promo code</small>
+          </div>
+          <div class="alert alert-success py-2 d-flex justify-content-between align-items-center" *ngIf="valid_coupon">
+            <small>
+              <i class="ci-check-circle me-1"></i>
+              Promo code applied successfully
+            </small>
+            <button class="btn btn-link btn-sm text-danger p-0" type="button" (click)="removecode()">
+              <i class="ci-close-circle"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Footer -->
+  <div class="cart-footer bg-white border-top shadow-lg" *ngIf="cartItems.length > 0">
+    <div class="container-fluid px-3 py-3">
+      <!-- Price Breakdown -->
+      <div class="price-summary mb-3" *ngIf="valid_coupon">
+        <div class="d-flex justify-content-between small text-muted mb-1">
+          <span>Subtotal:</span>
+          <span>
+            <img src="assets/aedsymbol.png" alt="aed symbol" style="height: 12px;">
+            {{calculatePrice() | number:'1.2-2'}}
+          </span>
+        </div>
+        <div class="d-flex justify-content-between small text-success mb-1">
+          <span>Discount ({{coupon_response?.data?.code}}):</span>
+          <span>
+            -<img src="assets/aedsymbol.png" alt="aed symbol" style="height: 12px;">
+            {{discountprice | number:'1.2-2'}}
+          </span>
+        </div>
+      </div>
+
+      <!-- Total and Checkout -->
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="total-section">
+          <div class="small text-muted">Total</div>
+          <div class="h5 mb-0 text-primary fw-bold">
+            <img src="assets/aedsymbol.png" alt="aed symbol" class="me-1" style="height: 20px;">
+            <span *ngIf="!valid_coupon">{{calculatePrice() | number:'1.2-2'}}</span>
+            <span *ngIf="valid_coupon">{{setprice(finalprice) | number:'1.2-2'}}</span>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-lg checkout-btn" (click)="checkoutClick()">
+          <i class="ci-card me-2"></i>
+          <span class="d-none d-sm-inline">Proceed to </span>Checkout
+        </button>
+      </div>
+    </div>
   </div>
 </div>
+
 <app-footer></app-footer>

@@ -89,8 +89,9 @@
                 </div>
                 <div class="d-flex flex-wrap justify-content-between align-items-center py-3">
                   <div class="fs-sm me-2 py-2"><span class="text-muted">Total:</span><span
-                      class="text-accent fs-base ms-1">AED {{calculatetotal(total)}}</span></div><a
-                    class="btn btn-outline-secondary btn-sm" href="javascript:void(0);" routerLink="/cart">Expand cart<i
+                      class="text-accent fs-base ms-1 text-accents"><img src="assets/aedsymbol.png" alt="aed symbol" />
+                      {{calculatetotal(total)}}</span></div><a class="btn btn-outline-secondary btn-sm"
+                    href="javascript:void(0);" routerLink="/cart">Expand cart<i
                       class="ci-arrow-right ms-1 me-n1"></i></a>
                 </div><a class="btn btn-primary btn-sm d-block w-100" href="javascript:void(0);"
                   routerLink="/checkout"><i class="ci-card me-2 fs-base align-middle"></i>Checkout</a>
@@ -177,7 +178,7 @@
           <li class="nav-item"><a class="nav-link" routerLink="/home">HOME</a></li>
           <li class="nav-item"><a class="nav-link" routerLink="/pages/about">
               ABOUT US</a></li>
-          <li class="nav-item"><a class="nav-link" routerLink="/menu">CATALOGUE</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="/menu">MENU</a></li>
           <li class="nav-item"><a class="nav-link" routerLink="/pages/contacts">
               CONTACT US</a></li>
         </ul>
@@ -233,7 +234,8 @@
       <span class="handheld-toolbar-icon"><i class="ci-cart"></i>
         <span class="badge bg-primary rounded-pill ms-1">{{carts.length}}</span>
       </span>
-      <span class="handheld-toolbar-label">{{calculatetotal(total)|number:'1.2-2'}} AED</span>
+      <span class="handheld-toolbar-label text-accents"><img src="assets/aedsymbol.png" alt="aed symbol" />
+        {{calculatetotal(total)|number:'1.2-2'}} </span>
     </a>
 
     <a *ngIf="!loginstatus" class="d-table-cell handheld-toolbar-item" href="javascript:void(0)" data-bs-toggle="modal"
@@ -241,7 +243,8 @@
       <span class="handheld-toolbar-icon"><i class="ci-cart"></i>
         <span class="badge bg-primary rounded-pill ms-1">{{carts.length}}</span>
       </span>
-      <span class="handheld-toolbar-label">{{calculatetotal(total)|number:'1.2-2'}} AED</span>
+      <span class="handheld-toolbar-label text-accents"><img src="assets/aedsymbol.png"
+          alt="aed symbol" />{{calculatetotal(total)|number:'1.2-2'}} </span>
     </a>
   </div>
 </div>

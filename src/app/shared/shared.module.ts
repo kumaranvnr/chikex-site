@@ -25,7 +25,6 @@ import { NewaddressmodalComponent } from './modals/newaddressmodal/newaddressmod
     HeaderComponent,
     FooterComponent,
     SignmodalComponent,
-
     BreadcrumbsComponent,
     AddressmodalComponent,
     AddresslistmodalComponent,

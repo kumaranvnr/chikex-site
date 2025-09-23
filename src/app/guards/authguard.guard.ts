@@ -33,7 +33,7 @@ export class AuthguardGuard implements CanActivate {
         showCancelButton: true,
         confirmButtonColor: 'green',
         cancelButtonColor: 'rgb(243, 78, 78)',
-        confirmButtonText: 'Login'
+        confirmButtonText: 'Login', timer: 1500
       }).then(result => {
         if (result.value) {
 
