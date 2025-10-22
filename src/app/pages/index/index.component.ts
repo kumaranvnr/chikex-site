@@ -3,12 +3,12 @@ import { Reviews } from './data';
 
 // Swiper Slider
 import { SwiperComponent, SwiperDirective } from 'ngx-swiper-wrapper';
-import { SwiperOptions } from 'swiper';
 import { Router } from '@angular/router';
 import { cart_details, cartdata } from '../cart/data';
 import { HttpService } from 'src/app/services/http.service';
 import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { SwiperOptions } from 'swiper/types/swiper-options';
 
 @Component({
   selector: 'app-index',
@@ -24,6 +24,16 @@ export class IndexComponent implements OnInit {
   location_list: any = {};
   @ViewChild(SwiperComponent, { static: false }) componentRef?: SwiperComponent;
   @ViewChild(SwiperDirective, { static: false }) directiveRef?: SwiperDirective;
+
+  carouselImages: string[] = [
+    'assets/img/food-delivery/hero-bg.jpg',
+    'assets/img/food-delivery/discount20.png',
+  ];
+  slider_config: any = {
+    autoplay: { delay: 500, disableOnInteraction: false },
+    pagination: { clickable: false },
+    navigation: false
+  };
 
   constructor(public router: Router, private httpService: HttpService, private ngxService: NgxUiLoaderService,) {
     // this.getCartRequest();
@@ -41,7 +51,6 @@ export class IndexComponent implements OnInit {
     query.code = '9802';
     let review_response = await this.httpService.googlereviews(query);
     console.log(review_response);
-
   }
 
   async getCartRequest(): Promise<any> {
@@ -87,7 +96,8 @@ export class IndexComponent implements OnInit {
     initialSlide: 0,
     slidesPerView: 1,
     spaceBetween: 500,
-    autoplay: true
+    autoplay: true,
+    loop: true
   };
 
   /**
@@ -97,18 +107,19 @@ export class IndexComponent implements OnInit {
     initialSlide: 1,
     slidesPerView: 1,
     spaceBetween: 25,
+    loop: true,
     breakpoints: {
       575: {
         slidesPerView: 2,
-        pagination: false
+
       },
       850: {
         slidesPerView: 3,
-        pagination: false
+
       },
       1080: {
         slidesPerView: 4,
-        pagination: false
+
       }
     }
   };

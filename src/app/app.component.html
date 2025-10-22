@@ -1,2 +1,6 @@
 <ngx-ui-loader fgscolor="#ff0000"> </ngx-ui-loader>
 <router-outlet (activate)="onActivate($event)"></router-outlet>
+
+<app-whatsapp-button [phoneNumber]="whatsappConfig.phoneNumber" [message]="whatsappConfig.message"
+    [position]="whatsappConfig.position">
+</app-whatsapp-button>

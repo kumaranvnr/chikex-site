@@ -4,6 +4,7 @@ import { HttpService } from 'src/app/services/http.service';
 import { cart_details } from '../cart/data';
 import { CookieStore } from 'src/app/services/helpers/CookieStore';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-checkout-complete',
@@ -17,7 +18,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 export class CheckoutCompleteComponent implements OnInit {
 
   constructor(public formBuilder: UntypedFormBuilder,
-    private ngxService: NgxUiLoaderService,
+    private ngxService: NgxUiLoaderService, private router: Router,
     private resetService: HttpService) {
     this.ngxService.start();
     this.getOrderRequest();
@@ -30,9 +31,15 @@ export class CheckoutCompleteComponent implements OnInit {
   order_no: string = '';
   async getOrderRequest(): Promise<void> {
     let order_data = await this.resetService.getOrderDetailsById();
-    console.log(order_data);
+
     if (order_data) {
       this.order_no = order_data.orderNo;
     }
+  }
+
+  trackOrder(order_no: string): void {
+    this.router.navigate(["/order-tracking"], {
+      queryParams: { order_no: order_no }
+    });
   }
 }

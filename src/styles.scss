@@ -11,3 +11,13 @@
     height: auto;
     vertical-align: middle;
 }
+
+.whatsapp-float {
+    z-index: 1050 !important;
+}
+
+@media (max-width: 767px) {
+    .whatsapp-text {
+        display: none !important;
+    }
+}

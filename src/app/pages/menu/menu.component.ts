@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { cart_details, cartdata } from '../cart/data';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from 'src/app/services/http.service';
 import Swal from 'sweetalert2';
 import { CookieStore } from 'src/app/services/helpers/CookieStore';
@@ -16,7 +16,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 })
 export class MenuComponent {
   fromDataResolver = FromDataResolver;
-  products: any[] = [];
+  products: any;
   productdetail: any = {};
   category_name_header: any;
   category_list: any = {};
@@ -34,29 +34,24 @@ export class MenuComponent {
 
 
   constructor(private modalService: NgbModal, private cd: ChangeDetectorRef, private ngxService: NgxUiLoaderService,
-    private restService: HttpService, private route: ActivatedRoute) {
+    private restService: HttpService, private route: ActivatedRoute, private router: Router) {
     this.ngxService.start();
     this.getCategory();
     this.getLocationList();
     this.getProductList();
     this.ngxService.stop();
-    // this.getCartRequest();
-    // this.coupons = [{
-    //   code: '10OFF',
-    //   discount: 10,
-    //   isAutoApplied: true,
-    //   id: '3453w-=sdfsdf',
-    //   subtitle: 'Test Coupon',
-    // },
-    // {
-    //   code: '20OFF',
-    //   discount: 20,
-    //   isAutoApplied: true,
-    //   id: '45dfgd34dfsdf',
-    //   subtitle: 'Test Coupon 2',
-    // }]
+
   }
 
+
+  gotoProductView(product_id: string) {
+    this.router.navigate(['/products'], {
+      queryParams:
+      {
+        product_id: product_id
+      }
+    });
+  }
 
   isActive(category_id: any): boolean {
     return this.selected_category_id === category_id; // Check if the category is active
@@ -255,6 +250,13 @@ export class MenuComponent {
     }
   }
 
+  scrollToCategory(categoryId: string) {
+    const element = document.getElementById('category-' + categoryId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
   async getProductList(): Promise<any> {
     try {
       let product_response = await this.restService.getProductList();
@@ -291,15 +293,16 @@ export class MenuComponent {
   }
 
   // open modal
-  openModal(content: any, i: any) {
+  openModal(content: any, product_id: string) {
     // var sub = CookieStore.getUserInfo()?.sub;
     // if (sub == "" || sub == undefined) {
     //   this.modalService.open(SignmodalComponent, { size: 'md', centered: true });
     //   return;
     // }
-    this.productdetail = this.products[i];
+    this.productdetail = this.complete_product_list.find((c: any) => c._id == product_id);
 
     var location_id = this.productdetail.locations.find((location: any) => location === this.outlet_id);
+
 
     // if (!location_id) {
     //   Swal.fire({ title: 'Message', text: `Stock not available`, confirmButtonColor: '#364574',timer:1500  });
@@ -311,9 +314,20 @@ export class MenuComponent {
     }, 100);
 
     this.modalService.open(content, { size: 'xl', centered: true });
+
+  }
+
+  checkLoginStatus(): boolean {
+    var sub = CookieStore.getUserInfo()?.sub;
+    if (sub == "" || sub == undefined) {
+      this.modalService.open(SignmodalComponent, { size: 'md', centered: true });
+      return true;
+    }
+    return false;
   }
 
   async removecart(product: any) {
+    if (this.checkLoginStatus()) { return; }
     this.ngxService.start();
     // this.cartdata.splice(product, 1);
     const index = cartdata.findIndex((cart: any) => cart.product_id == product.product_id);
@@ -332,6 +346,7 @@ export class MenuComponent {
   }
 
   async decreaseQuantity(product: any): Promise<void> {
+    if (this.checkLoginStatus()) { return; }
 
     if (product.qty == 1) {
       this.removecart(product);
@@ -345,6 +360,8 @@ export class MenuComponent {
 
 
   async onQuantityChange(product: any): Promise<void> {
+    if (this.checkLoginStatus()) { return; }
+
     if (product.qty < 0) {
       product.qty = 1;
     }
@@ -353,6 +370,7 @@ export class MenuComponent {
   }
 
   async increaseQuantity(product: any): Promise<void> {
+    if (this.checkLoginStatus()) { return; }
     product.qty++;
     this.calculateAddontotal(product);
     this.updateTempCart(product);
@@ -398,8 +416,10 @@ export class MenuComponent {
     return false;
   }
   async updateTempCart(product: any) {
-    this.ngxService.start();
+    if (this.checkLoginStatus()) { return; }
     var sub = CookieStore.getUserInfo()?.sub;
+
+    this.ngxService.start();
 
     product.sub = sub;
     let cart_data = cartdata.find(data => data.product_id == product.product_id);
@@ -423,14 +443,10 @@ export class MenuComponent {
   }
 
   async addnewitem(product: any): Promise<void> {
+    if (this.checkLoginStatus()) { return; }
     this.ngxService.start();
     var sub = CookieStore.getUserInfo()?.sub;
-    if (sub == "" || sub == undefined) {
-      this.modalService.open(SignmodalComponent, { size: 'md', centered: true });
-      this.ngxService.stop();
-      return;
 
-    }
     if (product.quantity == 0) {
       this.ngxService.stop();
       return;
@@ -494,10 +510,11 @@ export class MenuComponent {
         })
       });
       this.category_name_header = category_id;
+      this.products = this.groupProductsByCategory();
 
-      this.products = this.complete_product_list.filter((item: any) => {
-        return item.category_code === category_id
-      });
+      // this.products = this.complete_product_list.filter((item: any) => {
+      //   return item.category_code === category_id
+      // });
       if (this.checkMobileDevice()) {
         this.scrollToCategory(category_id);
         // this.scrollToProductsByCategory(category_id)
@@ -507,6 +524,21 @@ export class MenuComponent {
       console.log(error);
     }
 
+  }
+
+  groupProductsByCategory(): any {
+    let groupedProducts: { cat_desc: string, cat_index: number, product_items: any }[] = [];
+
+    this.complete_category_list.forEach((category: any) => {
+      const category_data: any = {};
+      category_data.cat_id = category._id;
+      category_data.cat_desc = category.title;
+      category_data.cat_index = category.sortorder;
+      category_data.product_items = this.complete_product_list.filter((c: any) => c.category_code === category._id);
+      groupedProducts.push(category_data);
+    });
+    // groupedProducts = groupedProducts.sort(c => c.cat_index);
+    return groupedProducts;
   }
 
   scrollToProductsByCategory(categoryId: string): void {
@@ -519,18 +551,17 @@ export class MenuComponent {
     }
   }
 
-  scrollToCategory(categoryId: string): void {
-    const categoryElements = document.querySelectorAll('.category-item') as NodeListOf<HTMLElement>;
-    const targetElement = Array.from(categoryElements).find((el: HTMLElement) => {
-      return el.textContent?.trim() === this.getCategoryName(categoryId); // Ensure proper comparison
-    });
+  // scrollToCategory(categoryId: string): void {
+  //   const categoryElements = document.querySelectorAll('.category-item') as NodeListOf<HTMLElement>;
+  //   const targetElement = Array.from(categoryElements).find((el: HTMLElement) => {
+  //     return el.textContent?.trim() === this.getCategoryName(categoryId); // Ensure proper comparison
+  //   });
 
-    if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      targetElement.focus();
-    }
-  }
-
+  //   if (targetElement) {
+  //     targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  //     targetElement.focus();
+  //   }
+  // }
 
   checkMobileDevice(): boolean {
     const mobileBreakpoints = [576, 768];

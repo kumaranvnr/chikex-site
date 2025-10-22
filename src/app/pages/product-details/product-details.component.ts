@@ -1,6 +1,13 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SwiperOptions } from 'swiper';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { CookieStore } from 'src/app/services/helpers/CookieStore';
+import { HttpService } from 'src/app/services/http.service';
+import { SignmodalComponent } from 'src/app/shared/modals/signmodal/signmodal.component';
+import { cart_details, cartdata } from '../cart/data';
+import Swal from 'sweetalert2';
+import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
 
 
 @Component({
@@ -9,121 +16,8 @@ import { SwiperOptions } from 'swiper';
   styleUrls: ['./product-details.component.scss']
 })
 export class ProductDetailsComponent {
-  product: Product = {
-    id: 1,
-    name: "Premium Organic Quinoa Bowl",
-    category: "Healthy Foods",
-    description: "A nutritious and delicious organic quinoa bowl packed with fresh vegetables and superfoods.",
-    detailedDescription: "Our Premium Organic Quinoa Bowl is carefully crafted with the finest organic ingredients. This nutrient-dense meal combines fluffy quinoa with a colorful array of fresh vegetables, creating a perfect balance of taste and nutrition. Each bowl is prepared with love and attention to detail, ensuring you get the best quality meal every time.",
-    currentPrice: 99.99,
-    originalPrice: 129.99,
-    rating: 4.5,
-    reviewCount: 127,
-    inStock: true,
-    maxQuantity: 10,
-    images: [
-      'assets/logo.png',
-      'assets/logo.png',
-      'assets/logo.png',
-      'assets/logo.png',
-    ],
-    sizes: [
-      { name: 'Small', available: true },
-      { name: 'Medium', available: true },
-      { name: 'Large', available: false }
-    ],
-    colors: [
-      { name: 'Original', hex: '#8B4513', available: true },
-      { name: 'Spicy', hex: '#FF4500', available: true },
-      { name: 'Mild', hex: '#90EE90', available: true }
-    ],
-    ingredients: [
-      'Organic Quinoa',
-      'Fresh Avocado',
-      'Cherry Tomatoes',
-      'Red Bell Pepper',
-      'Cucumber',
-      'Red Onion',
-      'Fresh Herbs',
-      'Lemon Dressing'
-    ],
-    specifications: [
-      { name: 'Weight', value: '350g' },
-      { name: 'Serving Size', value: '1 Bowl' },
-      { name: 'Shelf Life', value: '3 Days' },
-      { name: 'Storage', value: 'Refrigerate' }
-    ],
-    nutrition: [
-      { name: 'Calories', value: '420 kcal' },
-      { name: 'Protein', value: '15g' },
-      { name: 'Carbohydrates', value: '65g' },
-      { name: 'Fat', value: '12g' },
-      { name: 'Fiber', value: '8g' },
-      { name: 'Sugar', value: '6g' }
-    ],
-    allergens: ['May contain traces of nuts', 'Gluten-free'],
-    reviews: [
-      {
-        id: 1,
-        userName: 'Sarah Johnson',
-        userAvatar: '/placeholder.svg?height=40&width=40',
-        rating: 5,
-        comment: 'Absolutely delicious! The quinoa was perfectly cooked and the vegetables were fresh and crispy. Will definitely order again.',
-        date: new Date('2024-01-15'),
-        images: ['/placeholder.svg?height=100&width=100']
-      },
-      {
-        id: 2,
-        userName: 'Mike Chen',
-        rating: 4,
-        comment: 'Great healthy option. The portion size was good and it kept me full for hours. The dressing was particularly tasty.',
-        date: new Date('2024-01-10')
-      },
-      {
-        id: 3,
-        userName: 'Emma Wilson',
-        userAvatar: '/placeholder.svg?height=40&width=40',
-        rating: 5,
-        comment: 'Perfect for my diet plan. Fresh ingredients and great taste. The packaging was also eco-friendly which I appreciate.',
-        date: new Date('2024-01-08')
-      }
-    ]
-  };
-
-  relatedProducts: RelatedProduct[] = [
-    {
-      id: 2,
-      name: 'Mediterranean Salad Bowl',
-      image: '/placeholder.svg?height=200&width=200',
-      price: 89.99,
-      rating: 4.3,
-      reviewCount: 89
-    },
-    {
-      id: 3,
-      name: 'Protein Power Bowl',
-      image: '/placeholder.svg?height=200&width=200',
-      price: 119.99,
-      rating: 4.7,
-      reviewCount: 156
-    },
-    {
-      id: 4,
-      name: 'Vegan Buddha Bowl',
-      image: '/placeholder.svg?height=200&width=200',
-      price: 94.99,
-      rating: 4.4,
-      reviewCount: 203
-    },
-    {
-      id: 5,
-      name: 'Asian Fusion Bowl',
-      image: '/placeholder.svg?height=200&width=200',
-      price: 104.99,
-      rating: 4.6,
-      reviewCount: 78
-    }
-  ];
+  fromDataResolver = FromDataResolver;
+  relatedProducts: any;
 
   ratingBreakdown: RatingBreakdown[] = [
     { stars: 5, count: 78, percentage: 61 },
@@ -140,39 +34,59 @@ export class ProductDetailsComponent {
   isInWishlist: boolean = false;
   hasMoreReviews: boolean = true;
 
-  carouselConfig: SwiperOptions = {
-    slidesPerView: 1,
-    spaceBetween: 20,
-    navigation: true,
-    pagination: {
-      clickable: true
-    },
-    breakpoints: {
-      576: {
-        slidesPerView: 2
-      },
-      768: {
-        slidesPerView: 3
-      },
-      992: {
-        slidesPerView: 4
-      }
-    }
-  };
+  product_id: string | undefined;
+  product_name: string | undefined;
+  category_name_header: string | undefined;
+  category_list: any;
+  complete_product_list: any;
+  productDetails: any;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router
-  ) { }
+    private route: ActivatedRoute, private modalService: NgbModal,
+    private router: Router, private restService: HttpService, private ngxService: NgxUiLoaderService,
+  ) {
+
+    this.getCategory();
+    this.getProductList();
+    this.route.queryParams.subscribe(params => {
+      this.product_id = params['product_id'];
+    });
+    console.log(this.product_id);
+
+  }
+
+  async getCategory(): Promise<any> {
+    try {
+      let category_response = await this.restService.getCategoryList();
+      if (category_response.data) {
+        this.category_list = category_response.data;
+
+      }
+    }
+    catch (error) {
+      console.error('Error fetching category list', error);
+    }
+  }
+
+  async getProductList(): Promise<any> {
+    try {
+      let product_response = await this.restService.getProductList();
+      if (product_response.data) {
+        this.complete_product_list = product_response.data;
+        this.product_name = this.complete_product_list.find((c: any) => c._id == this.product_id)?.title;
+        const category_code = this.complete_product_list.find((c: any) => c._id == this.product_id)?.category_code;
+        this.category_name_header = this.category_list.find((c: any) => c._id == category_code)?.title;
+        this.productDetails = this.complete_product_list.find((c: any) => c._id == this.product_id);
+        this.relatedProducts = this.complete_product_list.filter((c: any) => c.category_code === category_code);
+      }
+    }
+    catch (error) {
+      console.error('Error fetching product list', error);
+    }
+  }
 
   ngOnInit(): void {
-    this.selectedImage = this.product.images[0];
-    if (this.product.sizes && this.product.sizes.length > 0) {
-      this.selectedSize = this.product.sizes.find(size => size.available) || null;
-    }
-    if (this.product.colors && this.product.colors.length > 0) {
-      this.selectedColor = this.product.colors.find(color => color.available) || null;
-    }
+
   }
 
   selectImage(image: string): void {
@@ -190,45 +104,63 @@ export class ProductDetailsComponent {
       this.selectedColor = color;
     }
   }
-
-  increaseQuantity(): void {
-    if (this.quantity < this.product.maxQuantity) {
-      this.quantity++;
-    }
-  }
-
-  decreaseQuantity(): void {
-    if (this.quantity > 1) {
-      this.quantity--;
-    }
-  }
-
   getDiscountPercentage(): number {
-    if (this.product.originalPrice > this.product.currentPrice) {
-      return Math.round(((this.product.originalPrice - this.product.currentPrice) / this.product.originalPrice) * 100);
+    if (this.productDetails.list_price > this.productDetails.price) {
+      return Math.round(((this.productDetails.list_price - this.productDetails.price) / this.productDetails.price) * 100);
     }
     return 0;
   }
 
-  addToCart(): void {
-    if (!this.product.inStock) return;
+  async addnewitem(product: any): Promise<void> {
+    if (this.checkLoginStatus()) { return; }
+    this.ngxService.start();
+    var sub = CookieStore.getUserInfo()?.sub;
 
-    const cartItem = {
-      productId: this.product.id,
-      name: this.product.name,
-      price: this.product.currentPrice,
-      quantity: this.quantity,
-      size: this.selectedSize?.name,
-      color: this.selectedColor?.name,
-      image: this.selectedImage
-    };
+    if (product.quantity == 0) {
+      this.ngxService.stop();
+      return;
+    }
 
-    // Add to cart logic here
-    console.log('Adding to cart:', cartItem);
-    // You can implement your cart service here
-    // this.cartService.addToCart(cartItem);
+    if (product.group_modifiers_list.length != 0) {
+      var required = false;
+      product.group_modifiers_list.forEach((group_modifier: any) => {
+        if (group_modifier.mtype == 0 && group_modifier.selected == false) {
+          required = true;
+        }
+      });
+      if (required) {
+
+        Swal.fire({ title: 'Message', text: `Please choose required options`, confirmButtonColor: '#364574', timer: 1500 });
+        this.ngxService.stop();
+        return;
+      }
+    }
+
+    product.sub = sub;
+    let cart_data = cartdata.find(data => data.product_id == product.product_id);
+    if (cart_data) {
+      cart_data.price = product.price;
+      cart_data.qty = product.qty;
+      cart_data.addon_total = product.addon_total;
+      cart_data.total_price = product.total_price;
+      cart_data.group_modifiers_list = product.group_modifiers_list;
+    } else {
+      cartdata.push(product);
+    }
+
+    const cart_info: any = {};
+    cart_info.sub = sub;
+    cart_info.cart_items = [];
+    cart_info.cart_items.push(product);
+
+    let response = await this.restService.addCartItems(cart_info);
+    this.ngxService.stop();
+    if (response.data) {
+      this.modalService.dismissAll();
+      Swal.fire({ title: 'Added!', text: `${product.title} has been Added to cart.`, confirmButtonColor: '#364574', icon: 'success', position: 'bottom-end', width: '500px', timer: 1500 });
+    }
+
   }
-
   toggleWishlist(): void {
     this.isInWishlist = !this.isInWishlist;
     // Implement wishlist logic here
@@ -242,9 +174,7 @@ export class ProductDetailsComponent {
     // You can use a modal library like ng-bootstrap modal here
   }
 
-  viewProduct(productId: number): void {
-    this.router.navigate(['/product-details', productId]);
-  }
+
 
   loadMoreReviews(): void {
     // Implement load more reviews functionality
@@ -252,6 +182,151 @@ export class ProductDetailsComponent {
     // You can load more reviews from your service here
     this.hasMoreReviews = false; // Set to false when no more reviews
   }
+
+  async decreaseQuantity(product: any): Promise<void> {
+    if (this.checkLoginStatus()) { return; }
+
+    if (product.qty == 1) {
+      this.removecart(product);
+      return;
+    }
+
+    product.qty--;
+    this.calculateAddontotal(product);
+    this.updateTempCart(product);
+  }
+
+  async updateTempCart(product: any) {
+    if (this.checkLoginStatus()) { return; }
+    var sub = CookieStore.getUserInfo()?.sub;
+
+    this.ngxService.start();
+
+    product.sub = sub;
+    let cart_data = cartdata.find(data => data.product_id == product.product_id);
+    if (cart_data) {
+      cart_data.price = product.price;
+      cart_data.qty = product.qty;
+      cart_data.addon_total = product.addon_total;
+      cart_data.total_price = product.total_price;
+      cart_data.group_modifiers_list = product.group_modifiers_list;
+    } else {
+      cartdata.push(product);
+    }
+
+    const cart_info: any = {};
+    cart_info.sub = sub;
+    cart_info.cart_items = [];
+    cart_info.cart_items.push(product);
+
+    await this.restService.addCartItems(cart_info);
+    this.ngxService.stop();
+  }
+
+  calculateAddontotal(product: any) {
+    let addons_total_price = 0;
+    if (product.group_modifiers_list.length != 0) {
+      product.group_modifiers_list.forEach((group_modifier: any) => {
+        group_modifier.modifiers_list.forEach((modifier: any) => {
+          if (modifier.selected) {
+            addons_total_price = addons_total_price + modifier.price;
+          }
+        });
+      });
+    }
+    product.addon_total = addons_total_price;
+    product.total_price = product.qty * (addons_total_price + product.price);
+  }
+
+  async onModifierChange(product: any, group_modifier: any, modifier: any): Promise<void> {
+    if (group_modifier.mtype == 0) {
+      group_modifier.modifiers_list.forEach((element: any) => {
+        element.selected = false;
+      });
+      group_modifier.selected = true;
+    }
+    modifier.selected = !modifier.selected;
+    this.calculateAddontotal(product);
+
+  }
+
+  gotoProduct(product_id: string) {
+    const currentProductId = this.product_id; // Store the current product ID
+
+    if (currentProductId === product_id) {
+      // If navigating to the same product, refresh the route with updated parameters
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { product_id: product_id },
+        queryParamsHandling: 'merge', // Merge with existing query params
+      });
+    } else {
+      // Navigate to a different product
+      this.router.navigate(['/products'], {
+        queryParams: { product_id: product_id }
+      });
+    }
+
+    this.product_name = this.complete_product_list.find((c: any) => c._id == product_id)?.title;
+    this.productDetails = this.complete_product_list.find((c: any) => c._id == product_id);
+    this.scrollToTop();
+  }
+
+  async removecart(product: any) {
+    if (this.checkLoginStatus()) { return; }
+    this.ngxService.start();
+    // this.cartdata.splice(product, 1);
+    const index = cartdata.findIndex((cart: any) => cart.product_id == product.product_id);
+    if (index !== -1) {
+      cartdata.splice(index, 1);
+    }
+    if (product.sub == undefined) {
+      product.sub = CookieStore.getUserInfo()?.sub
+    }
+    let remove_obj: any = {
+      sub: product.sub,
+      product_id: product.product_id
+    };
+    await this.restService.removeCartItems(remove_obj);
+    this.ngxService.stop();
+  }
+
+  getItemStatus(productId: string) {
+    const productStatus = cartdata.find(data => data.product_id == productId);
+    if (productStatus) {
+      return true;
+    }
+    return false;
+  }
+
+  scrollToTop(): void {
+    window.scrollTo({ top: 100, behavior: 'smooth' });
+  }
+  async onQuantityChange(product: any): Promise<void> {
+    if (this.checkLoginStatus()) { return; }
+
+    if (product.qty < 0) {
+      product.qty = 1;
+    }
+    this.calculateAddontotal(product);
+    this.updateTempCart(product);
+  }
+
+  async increaseQuantity(product: any): Promise<void> {
+    if (this.checkLoginStatus()) { return; }
+    product.qty++;
+    this.calculateAddontotal(product);
+    this.updateTempCart(product);
+  }
+  checkLoginStatus(): boolean {
+    var sub = CookieStore.getUserInfo()?.sub;
+    if (sub == "" || sub == undefined) {
+      this.modalService.open(SignmodalComponent, { size: 'md', centered: true });
+      return true;
+    }
+    return false;
+  }
+
 }
 
 

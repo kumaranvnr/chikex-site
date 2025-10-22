@@ -8,6 +8,11 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 })
 export class AppComponent {
   title = 'Chikex | Fried Chicken and Restaurant LLC, UAE';
+  whatsappConfig = {
+    phoneNumber: '971507230280',
+    message: 'Hello! I would like to know more about Chikex menu and place an order.',
+    position: 'bottom-right' as 'bottom-right' | 'bottom-left'
+  };
   constructor() {
 
   }
@@ -20,7 +25,7 @@ export class AppComponent {
     let scrollToTop = window.setInterval(() => {
       let pos = window.pageYOffset;
       if (pos > 0) {
-        window.scrollTo(0, 0); // how far to scroll on each step
+        window.scrollTo(0, 0);
       } else {
         window.clearInterval(scrollToTop);
       }

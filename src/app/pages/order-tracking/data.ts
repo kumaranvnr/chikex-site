@@ -37,7 +37,8 @@ const orderStatus = [
     { id: "ORDER_INITIATED", text: "Order Initiated", icon_text: "ci-bag", flag: "", time: "" },
     { id: "ORDER_PLACED", text: "Order Placed", icon_text: "ci-settings", flag: "", time: "" },
     { id: "ORDER_ACCEPTED", text: "Order Accepted", icon_text: "ci-cart", flag: "", time: "" },
-    { id: "ORDER_TRANSIST", text: "Order Dispatched", icon_text: "ci-star", flag: "", time: "" },
+    { id: "ORDER_READY", text: "Food Ready", icon_text: "ci-thumb-up", flag: "", time: "" },
+    { id: "ORDER_TRANSIT", text: "Order Dispatched", icon_text: "ci-star", flag: "", time: "" },
     { id: "ORDER_DELIVERED", text: "Order Delivered", icon_text: "ci-package", flag: "", time: "" },
 
 ]

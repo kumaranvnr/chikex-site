@@ -10,8 +10,8 @@ import { TokenComponent } from './token/token.component';
 import { CheckoutCompleteComponent } from './checkout-complete/checkout-complete.component';
 import { OrderTrackingComponent } from './order-tracking/order-tracking.component';
 import { AuthguardGuard } from '../guards/authguard.guard';
-import { UnderMaintenanceComponent } from './under-maintenance/under-maintenance.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
+import { QrcodeComponent } from './qrcode/qrcode.component';
 
 const routes: Routes = [
 
@@ -36,10 +36,16 @@ const routes: Routes = [
     path: 'menu', component: MenuComponent
   },
   {
-    path: 'cart', component: CartComponent
+    path: 'cart',
+    component: CartComponent,
+    canActivate: [AuthguardGuard],
+    data: { allowed_roles: ['user'] },
   },
   {
-    path: 'checkout', component: CheckoutComponent
+    path: 'checkout',
+    component: CheckoutComponent,
+    canActivate: [AuthguardGuard],
+    data: { allowed_roles: ['user'] },
   },
   {
     path: 'order-confirmation',
@@ -50,8 +56,6 @@ const routes: Routes = [
   {
     path: 'order-tracking',
     component: OrderTrackingComponent,
-    canActivate: [AuthguardGuard],
-    data: { allowed_roles: ['user'] },
   },
 
   {
@@ -62,7 +66,9 @@ const routes: Routes = [
     path: 'pages',
     loadChildren: () => import('./extra-pages/extra-pages.module').then(m => m.ExtraPagesModule)
   },
-
+  {
+    path: 'qr', component: QrcodeComponent
+  },
   {
     path: '', component: IndexComponent
   },

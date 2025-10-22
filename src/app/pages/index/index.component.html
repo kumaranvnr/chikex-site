@@ -1,19 +1,27 @@
 <app-header></app-header>
 <!-- Hero section-->
-<section class="bg-darker bg-size-cover bg-position-center py-3 py-lg-10"
-    style="background-image: url(assets/img/food-delivery/hero-bg.jpg);">
-    <div class="container pb-5">
-        <div class="row   pb-5">
-            <div class="col-xl-6 col-lg-7 col-md-8 col-sm-10 ">
-                <h5 class="text-light fw-light">#1 Fried Chicken Restaurant since 2022</h5>
-                <div class="h1 text-light mb-3 pb-4">We deliver your favorite food fresh &amp; fast in UAE
-
-                </div><a class="btn btn-primary" style="background-color: #991a25;" href="javascript:void(0)"
-                    [ngxScrollTo]="'#cuisine'" data-scroll>Order
-                    Now</a>
+<section class=" ">
+    <swiper class="swiper-container" [config]="slider_config">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" *ngFor="let image of carouselImages">
+                <div class="bg-size-cover bg-position-center bg-darker py-3 py-lg-10"
+                    [style.background-image]="'url(' + image + ')'">
+                    <div class="container pb-5">
+                        <div class="row pb-5">
+                            <div class="col-xl-6 col-lg-7 col-md-8 col-sm-10">
+                                <h5 class="text-light fw-light">#1 Fried Chicken Restaurant since 2022</h5>
+                                <div class="h1 text-light mb-3 pb-4">We deliver your favorite food fresh &amp; fast in
+                                    UAE</div>
+                                <a class="btn btn-primary" style="background-color: #991a25;" href="javascript:void(0)"
+                                    [ngxScrollTo]="'#cuisine'" data-scroll>Order Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+
+    </swiper>
 </section>
 <!-- Categories (cuisine) grid-->
 <div class="activation-area">
@@ -37,7 +45,7 @@
 <!-- Hero slider-->
 <section class="tns-carousel mb-3 mb-md-5 bg-size-cover bg-position-center"
     style="background-image: url(assets/img/slider.png);">
-    <swiper class="swiper-container" [config]="config" [(index)]=" index">
+    <swiper class="swiper-container" [config]="Coverflow" [(index)]=" index">
 
         <div class="swiper-wrapper">
             <div class="swiper-slide">

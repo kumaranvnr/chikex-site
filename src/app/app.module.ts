@@ -16,7 +16,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 
 import { NgxUiLoaderConfig, NgxUiLoaderModule, PB_DIRECTION, POSITION, SPINNER } from 'ngx-ui-loader';
-
+import { WhatsappButtonComponent } from './shared/whatsapp-button/whatsapp-button.component';
+import { QrcodeComponent } from './pages/qrcode/qrcode.component';
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -40,8 +41,8 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-
-
+    WhatsappButtonComponent,
+    QrcodeComponent
   ],
   imports: [
     TranslateModule.forRoot({

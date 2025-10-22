@@ -25,8 +25,9 @@
         <p class="fs-sm mb-3">Make sure you make note of your order number, which is <br><br><span
             class='h3 fw-medium text-accent'>{{this.order_no}}</span></p>
         <p class="fs-sm">You will be receiving an call shortly with confirmation of your order.</p>
-        <a class="btn btn-secondary mt-3 me-3" routerLink="/menu">Go back shopping</a><a class="btn btn-primary mt-3"
-          routerLink="/order-tracking"><i class="ci-location"></i>&nbsp;Track
+        <a class="btn btn-secondary mt-3 me-3" routerLink="/menu">Go back shopping</a>
+        <a class="btn btn-primary mt-3" href="javascript:void(0);" (click)="trackOrder(this.order_no)"><i
+            class="ci-location"></i>&nbsp;Track
           order</a>
       </div>
     </div>

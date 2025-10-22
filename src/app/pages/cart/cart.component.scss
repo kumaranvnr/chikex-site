@@ -162,3 +162,132 @@
     opacity: 0.7;
     pointer-events: none;
 }
+
+.coupons-section {
+    margin-top: 20px;
+}
+
+.coupon-card {
+    display: flex;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.corner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30px;
+    height: 30px;
+    background-color: #25D366;
+    /* Yellow */
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.left-section {
+    background-color: #2c3e50;
+    /* Dark blue */
+    color: #f1c40f;
+    /* Yellow */
+    padding: 20px;
+    align-content: center;
+    position: relative;
+    flex: 1;
+}
+
+.discount-text {
+    font-weight: bold;
+
+    font-size: 1.5rem;
+    color: white;
+}
+
+.center-section {
+    padding: 10px;
+    align-content: center;
+    flex: 5;
+}
+
+.right-section {
+    align-content: center;
+    padding: 10px;
+    flex: 2;
+}
+
+.loyalty-points {
+    display: flex;
+    align-items: center;
+}
+
+.trophy-icon {
+    margin-right: 5px;
+}
+
+.coupon-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.show-more {
+    background: none;
+    border: none;
+    color: #2c3e50;
+    cursor: pointer;
+}
+
+.usage-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wifi-icon {
+    margin-right: 5px;
+    color: green;
+    /* Green accent */
+}
+
+.share-button {
+    background: none;
+    border: none;
+    color: green;
+    /* Green accent */
+    cursor: pointer;
+}
+
+.code-box {
+    align-content: center;
+    display: flex;
+    justify-content: space-between;
+    border: 1px dashed #2c3e50;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.coupon-code {
+    font-weight: bold;
+    color: #2c3e50;
+    padding: 5px 10px;
+}
+
+.copy-button {
+    background-color: #25D366;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.dotted-border {
+    border: 1px dotted #2c3e50;
+    background-color: #e6e6e6;
+}
+
+// Responsive Design
+@media (max-width: 576px) {
+    .coupon-card {
+        flex-direction: column;
+    }
+}

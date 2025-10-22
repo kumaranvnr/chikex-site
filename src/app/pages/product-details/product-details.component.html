@@ -1,377 +1,470 @@
 <app-header></app-header>
-
-<section class="product-details py-5">
-    <div class="container">
-        <!-- Breadcrumb -->
-        <nav aria-label="breadcrumb" class="mb-4">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Home</a></li>
-                <li class="breadcrumb-item"><a href="#" class="text-decoration-none">{{product.category}}</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{product.name}}</li>
+<!-- Page title-->
+<section class="bg-darker bg-size-cover bg-position-center py-5"
+    style="background-image: url(assets/img/food-delivery/restaurants/single/pt-bg.jpg);">
+    <div class="container py-md-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
+                <li class="breadcrumb-item"><a class="text-nowrap" href="javascript:void(0);" routerLink="/"><i
+                            class="ci-home"></i>Home</a>
+                </li>
+                <li class="breadcrumb-item text-nowrap"><a routerLink="/menu">Menu</a>
+                </li>
+                <ng-container *ngIf="category_name_header">
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page">
+                        <a routerLink="/menu">{{category_name_header |
+                            titlecase}}</a>
+                    </li>
+                </ng-container>
+                <ng-container *ngIf="product_name">
+                    <li class="breadcrumb-item text-nowrap active" aria-current="page">
+                        {{productDetails?.title |
+                        titlecase}}</li>
+                </ng-container>
             </ol>
         </nav>
+        <ng-container *ngIf="product_name">
+            <h1 class="text-light text-center text-lg-start py-3">{{productDetails?.title}}</h1>
+        </ng-container>
+    </div>
+</section>
 
-        <div class="row">
-            <ng-container>
-                <!-- Product Image Gallery Section -->
-                <div class="col-lg-6 mb-4">
-                    <div class="product-gallery">
-                        <!-- Main Image Display -->
-                        <div class="product-gallery-preview mb-3">
-                            <div class="position-relative">
-                                <img [src]="selectedImage" [alt]="product.name"
-                                    class="img-fluid rounded-3 main-product-image" (click)="openImageModal()"
-                                    style="cursor: zoom-in;" />
-                                <!-- Zoom Icon -->
-                                <div class="zoom-icon position-absolute top-0 end-0 m-3">
-                                    <button class="btn btn-light btn-sm rounded-circle" (click)="openImageModal()">
-                                        <i class="fas fa-search-plus"></i>
-                                    </button>
-                                </div>
-                                <!-- Product Badge -->
-                                <div class="product-badge product-available" *ngIf="product.inStock">
-                                    <i class="fas fa-check"></i>In Stock
-                                </div>
-                                <div class="product-badge product-not-available" *ngIf="!product.inStock">
-                                    <i class="fas fa-times"></i>Out of Stock
+<div *ngIf="!productDetails">
+    <div class="loading-container">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p>Loading product details, please wait...</p>
+    </div>
+</div>
+
+<ng-container>
+    <section class="product-detail product-top py-5" *ngIf="productDetails">
+        <div class="container">
+
+            <div class="row">
+                <ng-container>
+                    <!-- Product Image Gallery Section -->
+                    <div class="col-lg-3 mb-4">
+                        <div class="product-gallery">
+
+                            <div class="product-gallery-preview mb-3">
+                                <div class="position-relative">
+                                    <img [src]="productDetails.img_url" [alt]="productDetails.name"
+                                        class=" main-product-image" style="cursor: zoom-in;" />
+
+                                    <!-- <div class="zoom-icon position-absolute top-0 end-0 m-3">
+                                        <button class="btn btn-light btn-sm rounded-circle" (click)="openImageModal()">
+                                            <i class="fas fa-search-plus"></i>
+                                        </button>
+                                    </div>
+
+                                    <div class="product-badge product-available" *ngIf="product.inStock">
+                                        <i class="fas fa-check"></i>In Stock
+                                    </div>
+                                    <div class="product-badge product-not-available" *ngIf="!product.inStock">
+                                        <i class="fas fa-times"></i>Out of Stock
+                                    </div> -->
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Thumbnail Gallery -->
-                        <div class="product-gallery-thumblist d-flex flex-wrap justify-content-center">
+                            <!-- Thumbnail Gallery -->
+                            <!-- <div class="product-gallery-thumblist d-flex flex-wrap justify-content-center">
                             <div *ngFor="let image of product.images; let i = index"
                                 class="product-gallery-thumblist-item" [class.active]="selectedImage === image"
                                 (click)="selectImage(image)">
                                 <img [src]="image" [alt]="product.name + ' view ' + (i + 1)" class="img-fluid" />
                             </div>
+                        </div> -->
                         </div>
                     </div>
-                </div>
 
-                <!-- Product Info Section -->
-                <div class="col-lg-6">
-                    <div class="product-details-content">
-                        <!-- Product Title and Rating -->
-                        <div class="mb-3">
-                            <h1 class="product-title h2 mb-2">{{product.name}}</h1>
-                            <div class="d-flex align-items-center mb-2">
-                                <ng-template #t let-fill="fill">
-                                    <span class="star" [class.full]="fill === 100">
-                                        <span class="half" [style.width.%]="fill">★</span>☆
-                                    </span>
-                                </ng-template>
-                                <ngb-rating class="d-inline-flex stars align-middle star-rating me-2"
-                                    [(rate)]="product.rating" [starTemplate]="t" [readonly]="true" [max]="5">
-                                </ngb-rating>
-                                <span class="text-muted">({{product.reviewCount}} reviews)</span>
-                            </div>
-                        </div>
-
-                        <!-- Product Description -->
-                        <p class="product-description text-muted mb-4">{{product.description}}</p>
-
-                        <!-- Pricing -->
-                        <div class="product-price mb-4">
-                            <div class="d-flex align-items-center">
-                                <span class="current-price h3 text-primary fw-bold me-3">AED {{product.currentPrice |
-                                    number:'1.2-2'}}</span>
-                                <span *ngIf="product.originalPrice > product.currentPrice"
-                                    class="original-price text-muted text-decoration-line-through me-2">
-                                    AED {{product.originalPrice | number:'1.2-2'}}
-                                </span>
-                                <span *ngIf="product.originalPrice > product.currentPrice" class="badge bg-danger">
-                                    {{getDiscountPercentage()}}% OFF
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Product Options -->
-                        <div class="product-options mb-4">
-                            <!-- Size Selection -->
-                            <div class="mb-3" *ngIf="product.sizes && product.sizes.length > 0">
-                                <label class="form-label fw-medium">Size:</label>
-                                <div class="size-options d-flex flex-wrap gap-2">
-                                    <button *ngFor="let size of product.sizes"
-                                        class="btn btn-outline-secondary size-btn"
-                                        [class.active]="selectedSize === size" (click)="selectSize(size)"
-                                        [disabled]="!size.available">
-                                        {{size.name}}
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Color Selection -->
-                            <div class="mb-3" *ngIf="product.colors && product.colors.length > 0">
-                                <label class="form-label fw-medium">Color:</label>
-                                <div class="color-options d-flex flex-wrap gap-2">
-                                    <button *ngFor="let color of product.colors" class="btn color-btn"
-                                        [class.active]="selectedColor === color" [style.background-color]="color.hex"
-                                        (click)="selectColor(color)" [disabled]="!color.available" [title]="color.name">
-                                        <i class="fas fa-check text-white" *ngIf="selectedColor === color"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Quantity Selection -->
-                            <div class="mb-4">
-                                <label for="quantity" class="form-label fw-medium">Quantity:</label>
-                                <div class="quantity-selector d-flex align-items-center">
-                                    <button class="btn btn-outline-secondary quantity-btn" (click)="decreaseQuantity()"
-                                        [disabled]="quantity <= 1">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                    <input type="number" id="quantity"
-                                        class="form-control quantity-input mx-2 text-center" [(ngModel)]="quantity"
-                                        [min]="1" [max]="product.maxQuantity" />
-                                    <button class="btn btn-outline-secondary quantity-btn" (click)="increaseQuantity()"
-                                        [disabled]="quantity >= product.maxQuantity">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                </div>
-                                <small class="text-muted">Maximum {{product.maxQuantity}} items</small>
-                            </div>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="product-actions mb-4">
-                            <div class="d-grid gap-2 d-md-flex">
-                                <button class="btn btn-primary btn-lg flex-fill" (click)="addToCart()"
-                                    [disabled]="!product.inStock">
-                                    <i class="fas fa-shopping-cart me-2"></i>
-                                    Add to Cart
-                                </button>
-                                <button class="btn btn-outline-primary btn-lg" (click)="toggleWishlist()">
-                                    <i class="fas fa-heart" [class.text-danger]="isInWishlist"></i>
-                                </button>
-                            </div>
-                            <button class="btn btn-success btn-lg w-100 mt-2" *ngIf="product.inStock">
-                                <i class="fas fa-bolt me-2"></i>Buy Now
-                            </button>
-                        </div>
-
-                        <!-- Product Features -->
-                        <div class="product-features mb-4">
-                            <div class="row g-3">
-                                <div class="col-6">
-                                    <div class="feature-item text-center p-3 bg-light rounded">
-                                        <i class="fas fa-shipping-fast text-primary mb-2"></i>
-                                        <div class="small">Free Delivery</div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="feature-item text-center p-3 bg-light rounded">
-                                        <i class="fas fa-undo text-primary mb-2"></i>
-                                        <div class="small">Easy Returns</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </ng-container>
-
-        </div>
-
-        <!-- Product Details Tabs -->
-        <div class="product-tabs mt-5">
-            <ul class="nav nav-tabs" id="productTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="description-tab" data-bs-toggle="tab"
-                        data-bs-target="#description" type="button" role="tab">
-                        Description
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="nutrition-tab" data-bs-toggle="tab" data-bs-target="#nutrition"
-                        type="button" role="tab">
-                        Nutrition
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews"
-                        type="button" role="tab">
-                        Reviews ({{product.reviewCount}})
-                    </button>
-                </li>
-            </ul>
-
-            <div class="tab-content mt-4" id="productTabsContent">
-                <!-- Description Tab -->
-                <div class="tab-pane fade show active" id="description" role="tabpanel">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <h5>Product Details</h5>
-                            <p>{{product.detailedDescription}}</p>
-
-                            <h6 class="mt-4">Ingredients</h6>
-                            <ul class="list-unstyled">
-                                <li *ngFor="let ingredient of product.ingredients" class="mb-1">
-                                    <i class="fas fa-check text-success me-2"></i>{{ingredient}}
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-md-4">
-                            <h6>Product Specifications</h6>
-                            <table class="table table-sm">
-                                <tr *ngFor="let spec of product.specifications">
-                                    <td class="fw-medium">{{spec.name}}:</td>
-                                    <td>{{spec.value}}</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Nutrition Tab -->
-                <div class="tab-pane fade" id="nutrition" role="tabpanel">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5>Nutritional Information</h5>
-                            <div class="nutrition-facts bg-light p-4 rounded">
-                                <div class="d-flex justify-content-between border-bottom pb-2 mb-2"
-                                    *ngFor="let nutrition of product.nutrition">
-                                    <span class="fw-medium">{{nutrition.name}}</span>
-                                    <span>{{nutrition.value}}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <h6>Allergen Information</h6>
-                            <div class="allergen-info">
-                                <span *ngFor="let allergen of product.allergens"
-                                    class="badge bg-warning text-dark me-2 mb-2">
-                                    {{allergen}}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Reviews Tab -->
-                <div class="tab-pane fade" id="reviews" role="tabpanel">
-                    <div class="reviews-section">
-                        <!-- Review Summary -->
-                        <div class="review-summary row mb-4">
-                            <div class="col-md-4 text-center">
-                                <div class="rating-overview">
-                                    <div class="display-4 fw-bold text-primary">{{product.rating}}</div>
+                    <!-- Product Info Section -->
+                    <div class="col-lg-9">
+                        <div class="product-details-content">
+                            <!-- Product Title and Rating -->
+                            <div class="mb-3">
+                                <h1 class="product-title h2 mb-2">{{productDetails.name}}</h1>
+                                <div class="d-flex align-items-center mb-2">
                                     <ng-template #t let-fill="fill">
                                         <span class="star" [class.full]="fill === 100">
                                             <span class="half" [style.width.%]="fill">★</span>☆
                                         </span>
                                     </ng-template>
-                                    <ngb-rating class="d-flex justify-content-center stars star-rating mb-2"
+                                    <!-- <ngb-rating class="d-inline-flex stars align-middle star-rating me-2"
                                         [(rate)]="product.rating" [starTemplate]="t" [readonly]="true" [max]="5">
                                     </ngb-rating>
-                                    <div class="text-muted">Based on {{product.reviewCount}} reviews</div>
+                                    <span class="text-muted">({{productDetails?.reviewCount}} reviews)</span> -->
                                 </div>
                             </div>
+
+                            <!-- Product Description -->
+                            <p class="product-description text-600 fw-bold mb-4">{{productDetails.title}}</p>
+
+                            <!-- Product Description -->
+                            <p class="product-description text-muted mb-4">{{productDetails.description}}</p>
+
+                            <!-- Pricing -->
+                            <div class="product-price mb-4">
+                                <div class="d-flex align-items-center">
+                                    <span class="current-price h3 text-primary fw-bold me-3 text-accents"><img
+                                            src="assets/aedsymbol.png" alt="aed symbol" /> {{productDetails.price
+                                        |
+                                        number:'1.2-2'}}</span>
+                                    <span *ngIf="productDetails.list_price"
+                                        class="original-price text-muted text-decoration-line-through me-2 text-accents">
+                                        <img src="assets/aedsymbol.png" alt="aed symbol" /> {{productDetails?.list_price
+                                        | number:'1.2-2'}}
+                                    </span>
+                                    <span *ngIf="productDetails.list_pric" class="badge bg-danger">
+                                        {{getDiscountPercentage()}}% OFF
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Product Options -->
+                            <div class="product-options mb-4">
+                                <!-- Size Selection -->
+                                <!-- <div class="mb-3" *ngIf="product.sizes && product.sizes.length > 0">
+                                    <label class="form-label fw-medium">Size:</label>
+                                    <div class="size-options d-flex flex-wrap gap-2">
+                                        <button *ngFor="let size of product.sizes"
+                                            class="btn btn-outline-secondary size-btn"
+                                            [class.active]="selectedSize === size" (click)="selectSize(size)"
+                                            [disabled]="!size.available">
+                                            {{size.name}}
+                                        </button>
+                                    </div>
+                                </div> -->
+
+                                <ng-container *ngIf="productDetails.group_modifiers_list.length>0">
+                                    <div *ngFor="let group_modifier of productDetails.group_modifiers_list">
+                                        <div class="mb-1" *ngIf="group_modifier.mtype == 0">
+                                            <div class="row justify-content-between">
+                                                <label class="form-label">{{ group_modifier.title }} <span
+                                                        class="text-danger"
+                                                        *ngIf="group_modifier.mtype == 0 && group_modifier.selected==false">
+                                                        *
+                                                        Required</span></label>
+
+                                            </div>
+                                            <div class="mobile-modifiers d-flex flex-wrap overflow-auto"
+                                                style="max-height: 200px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                                                <div *ngFor="let modifier of group_modifier.modifiers_list"
+                                                    class="form-check"
+                                                    style="flex: 1 1 calc(33.33% - 10px); margin: 5px;"
+                                                    (click)="onModifierChange(productDetails,group_modifier,modifier)">
+                                                    <input type="radio" id="{{ modifier.id }}"
+                                                        name="{{ group_modifier.title }}" [checked]="modifier.selected"
+                                                        value="{{ modifier.price }}" class="form-check-input">
+                                                    <label id="{{ modifier.id }}-label" for="{{ modifier.id }}"
+                                                        class="form-check-label text-accents">
+                                                        {{ modifier.title }} + ( <img src="assets/aedsymbol.png"
+                                                            alt="aed symbol" /> {{
+                                                        modifier.price | number: '1.2-2' }} )
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="mb-1" *ngIf="group_modifier.mtype == 1">
+                                            <label id="{{ group_modifier.id }}-label" class="form-label">{{ group_modifier.title
+                                                }}</label>
+                                            <div class="mobile-modifiers d-flex flex-wrap overflow-auto"
+                                                style=" padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                                                <div *ngFor="let modifier of group_modifier.modifiers_list" class="form-check"
+                                                    style="flex: 1 1 calc(33.33% - 10px); margin: 5px;"
+                                                    (click)="onModifierChange(productDetails,group_modifier,modifier)">
+                                                    <input type="checkbox" id="{{ modifier.id }}" name="{{ group_modifier.title }}"
+                                                        [checked]="modifier.selected" value="{{ modifier.price }}" class="form-check-input">
+                                                    <label id="{{ modifier.id }}-label" for="{{ modifier.id }}" class="form-check-label text-accents">
+                                                        {{ modifier.title }} + ( <img src="assets/aedsymbol.png" alt="aed symbol" /> {{
+                                                        modifier.price | number: '1.2-2' }})
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                    </div>
+                                </ng-container>
+
+                                <!-- Special Instructions -->
+                                <div class="mb-1">
+                                    <label class="form-label">Special Instructions</label>
+                                    <!-- <input type="text" class="form-control" [(ngModel)]="specialInstructions"
+                                                        placeholder="Instructions"> -->
+                                    <input type="text" class="form-control" placeholder="Instructions">
+                                </div>
+
+
+                                <!-- Quantity Selection -->
+                                <!-- <div class="mb-4">
+                                    <label for="quantity" class="form-label fw-medium">Quantity:</label>
+                                    <div class="quantity-controls d-flex align-items-center">
+                                        <button class="btn btn-outline-secondary btn-sm quantity-btn"
+                                            (click)="decreaseQuantity(productDetails)"
+                                            [attr.aria-label]="productDetails.qty === 1 ? 'Remove item' : 'Decrease quantity'">
+                                            <i *ngIf="productDetails.qty >= 2" class="ci-minus">-</i>
+                                            <i *ngIf="productDetails.qty === 1" class="ci-trash"></i>
+                                        </button>
+                                        <div class="quantity-display mx-2">
+                                            <input type="number"
+                                                class="form-control form-control-sm text-center quantity-input"
+                                                [value]="productDetails.qty" [(ngModel)]="productDetails.qty"
+                                                (change)="onQuantityChange(productDetails)" min="1" readonly
+                                                aria-label="Quantity">
+                                        </div>
+                                        <button class="btn btn-outline-secondary btn-sm quantity-btn"
+                                            (click)="increaseQuantity(productDetails)" aria-label="Increase quantity">
+                                            <i class="ci-plus">+</i>
+                                        </button>
+                                    </div>
+                                </div> -->
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="product-actions mb-4 justify-content-end">
+                                <div class="d-grid gap-2 d-md-flex">
+                                    <button *ngIf="!getItemStatus(productDetails?._id)" class="btn btn-primary btn-lg"
+                                        (click)="addnewitem(productDetails)">
+                                        <i class="fas fa-shopping-cart me-2"></i>
+                                        Add to Cart
+                                    </button>
+                                    <button *ngIf="getItemStatus(productDetails?._id)" class="btn btn-primary btn-lg"
+                                        (click)="removecart(productDetails)">
+                                        <i class="fas fa-shopping-cart me-2"></i>
+                                        Remove From Cart
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+
+            <!-- Product Details Tabs -->
+            <!-- <div class="product-tabs mt-5">
+                <ul class="nav nav-tabs" id="productTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="description-tab" data-bs-toggle="tab"
+                            data-bs-target="#description" type="button" role="tab">
+                            Description
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="nutrition-tab" data-bs-toggle="tab" data-bs-target="#nutrition"
+                            type="button" role="tab">
+                            Nutrition
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews"
+                            type="button" role="tab">
+                            Reviews ({{product.reviewCount}})
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content mt-4" id="productTabsContent">
+              
+                    <div class="tab-pane fade show active" id="description" role="tabpanel">
+                        <div class="row">
                             <div class="col-md-8">
-                                <div class="rating-breakdown">
-                                    <div *ngFor="let rating of ratingBreakdown" class="d-flex align-items-center mb-2">
-                                        <span class="me-2">{{rating.stars}} ★</span>
-                                        <div class="progress flex-fill me-2">
-                                            <div class="progress-bar bg-warning" [style.width.%]="rating.percentage">
-                                            </div>
-                                        </div>
-                                        <span class="text-muted small">{{rating.count}}</span>
+                                <h5>Product Details</h5>
+                                <p>{{product.detailedDescription}}</p>
+
+                                <h6 class="mt-4">Ingredients</h6>
+                                <ul class="list-unstyled">
+                                    <li *ngFor="let ingredient of product.ingredients" class="mb-1">
+                                        <i class="fas fa-check text-success me-2"></i>{{ingredient}}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <h6>Product Specifications</h6>
+                                <table class="table table-sm">
+                                    <tr *ngFor="let spec of product.specifications">
+                                        <td class="fw-medium">{{spec.name}}:</td>
+                                        <td>{{spec.value}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+               
+                    <div class="tab-pane fade" id="nutrition" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Nutritional Information</h5>
+                                <div class="nutrition-facts bg-light p-4 rounded">
+                                    <div class="d-flex justify-content-between border-bottom pb-2 mb-2"
+                                        *ngFor="let nutrition of product.nutrition">
+                                        <span class="fw-medium">{{nutrition.name}}</span>
+                                        <span>{{nutrition.value}}</span>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <h6>Allergen Information</h6>
+                                <div class="allergen-info">
+                                    <span *ngFor="let allergen of product.allergens"
+                                        class="badge bg-warning text-dark me-2 mb-2">
+                                        {{allergen}}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
+                    </div>
 
-                        <!-- Individual Reviews -->
-                        <div class="reviews-list">
-                            <div *ngFor="let review of product.reviews" class="review-item border-bottom pb-3 mb-3">
-                                <div class="d-flex align-items-start">
-                                    <img [src]="review.userAvatar || '/placeholder.svg?height=40&width=40'"
-                                        [alt]="review.userName" class="rounded-circle me-3" width="40" height="40" />
-                                    <div class="flex-fill">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <div>
-                                                <h6 class="mb-1">{{review.userName}}</h6>
-                                                <ng-template #t let-fill="fill">
-                                                    <span class="star" [class.full]="fill === 100">
-                                                        <span class="half" [style.width.%]="fill">★</span>☆
-                                                    </span>
-                                                </ng-template>
-                                                <ngb-rating class="d-inline-flex stars star-rating small"
-                                                    [(rate)]="review.rating" [starTemplate]="t" [readonly]="true"
-                                                    [max]="5">
-                                                </ngb-rating>
+                
+                    <div class="tab-pane fade" id="reviews" role="tabpanel">
+                        <div class="reviews-section">
+                           
+                            <div class="review-summary row mb-4">
+                                <div class="col-md-4 text-center">
+                                    <div class="rating-overview">
+                                        <div class="display-4 fw-bold text-primary">{{product.rating}}</div>
+                                        <ng-template #t let-fill="fill">
+                                            <span class="star" [class.full]="fill === 100">
+                                                <span class="half" [style.width.%]="fill">★</span>☆
+                                            </span>
+                                        </ng-template>
+                                        <ngb-rating class="d-flex justify-content-center stars star-rating mb-2"
+                                            [(rate)]="product.rating" [starTemplate]="t" [readonly]="true" [max]="5">
+                                        </ngb-rating>
+                                        <div class="text-muted">Based on {{product.reviewCount}} reviews</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="rating-breakdown">
+                                        <div *ngFor="let rating of ratingBreakdown"
+                                            class="d-flex align-items-center mb-2">
+                                            <span class="me-2">{{rating.stars}} ★</span>
+                                            <div class="progress flex-fill me-2">
+                                                <div class="progress-bar bg-warning"
+                                                    [style.width.%]="rating.percentage">
+                                                </div>
                                             </div>
-                                            <small class="text-muted">{{review.date | date:'mediumDate'}}</small>
-                                        </div>
-                                        <p class="mb-2">{{review.comment}}</p>
-                                        <div class="review-images" *ngIf="review.images && review.images.length > 0">
-                                            <img *ngFor="let image of review.images" [src]="image"
-                                                class="review-image rounded me-2 mb-2" width="60" height="60"
-                                                style="object-fit: cover; cursor: pointer;"
-                                                (click)="openImageModal(image)" />
+                                            <span class="text-muted small">{{rating.count}}</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Load More Reviews -->
-                        <div class="text-center mt-4" *ngIf="hasMoreReviews">
-                            <button class="btn btn-outline-primary" (click)="loadMoreReviews()">
-                                Load More Reviews
-                            </button>
+                      
+                            <div class="reviews-list">
+                                <div *ngFor="let review of product.reviews" class="review-item border-bottom pb-3 mb-3">
+                                    <div class="d-flex align-items-start">
+                                        <img [src]="review.userAvatar || '/placeholder.svg?height=40&width=40'"
+                                            [alt]="review.userName" class="rounded-circle me-3" width="40"
+                                            height="40" />
+                                        <div class="flex-fill">
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <div>
+                                                    <h6 class="mb-1">{{review.userName}}</h6>
+                                                    <ng-template #t let-fill="fill">
+                                                        <span class="star" [class.full]="fill === 100">
+                                                            <span class="half" [style.width.%]="fill">★</span>☆
+                                                        </span>
+                                                    </ng-template>
+                                                    <ngb-rating class="d-inline-flex stars star-rating small"
+                                                        [(rate)]="review.rating" [starTemplate]="t" [readonly]="true"
+                                                        [max]="5">
+                                                    </ngb-rating>
+                                                </div>
+                                                <small class="text-muted">{{review.date | date:'mediumDate'}}</small>
+                                            </div>
+                                            <p class="mb-2">{{review.comment}}</p>
+                                            <div class="review-images"
+                                                *ngIf="review.images && review.images.length > 0">
+                                                <img *ngFor="let image of review.images" [src]="image"
+                                                    class="review-image rounded me-2 mb-2" width="60" height="60"
+                                                    style="object-fit: cover; cursor: pointer;"
+                                                    (click)="openImageModal(image)" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                    
+                            <div class="text-center mt-4" *ngIf="hasMoreReviews">
+                                <button class="btn btn-outline-primary" (click)="loadMoreReviews()">
+                                    Load More Reviews
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div> -->
 
-        <!-- Related Products Carousel -->
-        <div class="related-products mt-5">
-            <h3 class="mb-4">Related Products</h3>
-            <swiper [config]="carouselConfig" class="related-products-swiper">
-                <ng-template swiperSlide *ngFor="let relatedProduct of relatedProducts">
-                    <div class="product-card h-100">
-                        <div class="position-relative">
-                            <img [src]="relatedProduct.image" [alt]="relatedProduct.name" class="card-img-top"
-                                style="height: 200px; object-fit: cover;" />
-                            <div class="product-card-actions position-absolute top-0 end-0 p-2">
-                                <button class="btn btn-sm btn-light rounded-circle me-1">
-                                    <i class="fas fa-heart"></i>
-                                </button>
-                                <button class="btn btn-sm btn-light rounded-circle">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <h6 class="card-title">{{relatedProduct.name}}</h6>
-                            <div class="d-flex align-items-center mb-2">
-                                <ng-template #t let-fill="fill">
-                                    <span class="star" [class.full]="fill === 100">
-                                        <span class="half" [style.width.%]="fill">★</span>☆
-                                    </span>
-                                </ng-template>
-                                <ngb-rating class="d-inline-flex stars star-rating small me-2"
-                                    [(rate)]="relatedProduct.rating" [starTemplate]="t" [readonly]="true" [max]="5">
-                                </ngb-rating>
-                                <small class="text-muted">({{relatedProduct.reviewCount}})</small>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="price">
-                                    <span class="text-primary fw-bold">AED {{relatedProduct.price |
-                                        number:'1.2-2'}}</span>
+            <!-- Related Products Carousel -->
+
+
+            <div *ngIf="!relatedProducts">
+                <div class="loading-container">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p>Loading product details, please wait...</p>
+                </div>
+            </div>
+
+            <ng-container>
+                <section class="product-detail py-3" *ngIf="relatedProducts">
+                    <div class="container">
+
+                        <div class="related-products mt-5">
+                            <h3 class="mb-4">Related Products</h3>
+                            <div class="col-lg-12 col-md-12 product-list-container">
+
+                                <div class="activation-area product-list">
+                                    <section class="tab-content py-sm-2">
+                                        <div class="row   d-flex">
+                                            <div *ngFor="let item of relatedProducts; let j = index; trackBy: fromDataResolver.identify;"
+                                                class="product-item col-12 col-md-6" style="padding: 10px;">
+                                                <div class="card product-card border pb-2"
+                                                    style="padding: 8px; background-color: white;">
+                                                    <div class="d-flex">
+                                                        <img class="card-img-top" src="{{item?.img_url}}"
+                                                            alt="{{item?.title}}"
+                                                            style="height: 125px; width: 125px; object-fit: cover; margin-left: 10px;">
+                                                        <div class="flex-grow-1">
+                                                            <h3 class="product-title fs-md">{{item?.title}}</h3>
+                                                            <p class="fs-ms text-muted">{{item?.description}}
+                                                            </p>
+                                                            <div
+                                                                class="d-flex align-items-center justify-content-between">
+                                                                <div class="product-price">
+                                                                    <span class="text-accents">
+                                                                        <img src="assets/aedsymbol.png"
+                                                                            alt="aed symbol" />
+                                                                        {{item?.price | number: '1.2-2'}}
+                                                                    </span>
+                                                                </div>
+                                                                <button class="btn btn-primary btn-sm" type="button"
+                                                                    (click)="gotoProduct(item._id)">
+                                                                    <i class="ci-cart fs-base me-1"></i>View
+                                                                </button>
+
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
                                 </div>
-                                <button class="btn btn-sm btn-outline-primary" (click)="viewProduct(relatedProduct.id)">
-                                    View
-                                </button>
                             </div>
                         </div>
                     </div>
-                </ng-template>
-            </swiper>
+                </section>
+            </ng-container>
+
+
         </div>
-    </div>
-</section>
+    </section>
+</ng-container>
 
 <app-footer></app-footer>

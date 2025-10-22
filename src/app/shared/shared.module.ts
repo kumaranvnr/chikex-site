@@ -18,6 +18,7 @@ import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { AddressmodalComponent } from './modals/addressmodal/addressmodal.component';
 import { AddresslistmodalComponent } from './modals/addresslistmodal/addresslistmodal.component';
 import { NewaddressmodalComponent } from './modals/newaddressmodal/newaddressmodal.component';
+import { WhatsappButtonComponent } from './whatsapp-button/whatsapp-button.component';
 
 
 @NgModule({
@@ -28,7 +29,7 @@ import { NewaddressmodalComponent } from './modals/newaddressmodal/newaddressmod
     BreadcrumbsComponent,
     AddressmodalComponent,
     AddresslistmodalComponent,
-    NewaddressmodalComponent
+    NewaddressmodalComponent,
   ],
   imports: [
     CommonModule,
@@ -46,7 +47,6 @@ import { NewaddressmodalComponent } from './modals/newaddressmodal/newaddressmod
   exports: [
     HeaderComponent,
     FooterComponent,
-
     BreadcrumbsComponent
   ],
 

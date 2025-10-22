@@ -38,6 +38,60 @@
 
 <!-- Main Content -->
 <div class="container py-3 py-md-4">
+
+
+  <div class="order-search-section mb-4 mb-md-5">
+    <div class="search-card bg-white rounded-4 shadow-sm border-0 p-3 p-md-4">
+      <div class="row align-items-center g-3">
+        <div class="col-12 col-md-8 col-lg-9">
+          <div class="search-input-group">
+            <label for="orderNumberInput" class="form-label fw-semibold mb-2 d-none d-md-block">
+              Search for a different order
+            </label>
+            <div class="input-group input-group-lg">
+              <span class="input-group-text bg-light border-end-0">
+                <i class="ci-search text-muted"></i>
+              </span>
+              <input type="text" class="form-control border-start-0 ps-0" id="orderNumberInput"
+                placeholder="Enter order number (e.g., #12345)" [(ngModel)]="searchOrderNumber"
+                (keyup.enter)="searchOrder()" aria-label="Order number" aria-describedby="orderSearchHelp">
+            </div>
+            <div id="orderSearchHelp" class="form-text small text-muted mt-1 d-none d-md-block">
+              Enter your order number to track a different order
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-4 col-lg-3">
+          <div class="search-actions d-grid">
+            <button type="button" class="btn btn-primary btn-lg d-flex align-items-center justify-content-center"
+              (click)="searchOrder()" [disabled]="!searchOrderNumber || searchOrderNumber.trim().length === 0"
+              aria-label="Search for order">
+              <i class="ci-search me-2"></i>
+              <span>Search Order</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Results/Status -->
+      <div class="search-status mt-3" *ngIf="searchStatus">
+        <div class="alert" [class.alert-info]="searchStatus.type === 'searching'"
+          [class.alert-success]="searchStatus.type === 'success'" [class.alert-danger]="searchStatus.type === 'error'"
+          [class.alert-warning]="searchStatus.type === 'warning'" role="alert">
+          <div class="d-flex align-items-center">
+            <i class="ci-loading spinner-border spinner-border-sm me-2" *ngIf="searchStatus.type === 'searching'"></i>
+            <i class="ci-check-circle me-2" *ngIf="searchStatus.type === 'success'"></i>
+            <i class="ci-close-circle me-2" *ngIf="searchStatus.type === 'error'"></i>
+            <i class="ci-info-circle me-2" *ngIf="searchStatus.type === 'warning'"></i>
+            <span>{{searchStatus.message}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <!-- Order Header - Enhanced -->
   <div class="order-header mb-4 mb-md-5">
     <div class="row align-items-center g-3">
@@ -52,7 +106,8 @@
           </p>
           <!-- Mobile Order Status Badge -->
           <div class="d-flex justify-content-center">
-            <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
+
+            <span class=" fw-semibold  bg-primary-subtle text-primary px-3 py-2 rounded-pill">
               <i class="ci-clock me-1"></i>
               {{orderDatas?.status.split('_').join(" ") | titlecase}}
             </span>
@@ -127,7 +182,7 @@
           </div>
           <h6 class="status-label text-muted small mb-1">Expected Delivery</h6>
           <p class="status-value fw-semibold mb-0 text-dark">
-            {{orderDatas?.estimated_delivery || '30-45 mins'}}
+            {{orderDatas?.estimated_delivery || '20-30 mins'}}
           </p>
         </div>
       </div>

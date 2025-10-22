@@ -105,17 +105,18 @@
                                             src="assets/aedsymbol.png" alt="aed symbol" />
                                         {{checkoutInfo?.sub_total|number:'1.2-2'}}</span>
                                 </div>
+                                <div class="d-flex justify-content-between fs-md border-bottom pb-3 mb-3">
+                                    <span>Delivery Charges:</span><span class="text-heading text-accents"><img
+                                            src="assets/aedsymbol.png" alt="aed symbol" />
+                                        {{checkoutInfo?.delivery_charges|number:'1.2-2'}}</span>
+                                </div>
                                 <div *ngIf="checkoutInfo?.coupon_applied"
                                     class="d-flex justify-content-between fs-md border-bottom pb-3 mb-3">
                                     <span>Discount:</span><span class="text-heading text-accents"><img
                                             src="assets/aedsymbol.png" alt="aed symbol" />
                                         {{checkoutInfo?.discount|number:'1.2-2'}}<small></small></span>
                                 </div>
-                                <div class="d-flex justify-content-between fs-md border-bottom pb-3 mb-3">
-                                    <span>Delivery Charges:</span><span class="text-heading text-accents"><img
-                                            src="assets/aedsymbol.png" alt="aed symbol" />
-                                        {{checkoutInfo?.delivery_charges|number:'1.2-2'}}</span>
-                                </div>
+
                                 <div class="d-flex justify-content-between fs-md mb-2"><span>Total:</span><span
                                         class="text-heading fw-medium text-accents"> <img src="assets/aedsymbol.png"
                                             alt="aed symbol" />

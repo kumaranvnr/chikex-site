@@ -23,8 +23,15 @@ export class CartComponent implements OnInit, AfterViewInit {
   qty: any = 1;
   cartItems: any[] = [];
   cart_details: any;
-  total_price: any;
+  sub_total: number = 0;
+  delivery_charges: number = 3;
+  discount: number = 0;
+  total_price: number = 0;
   submitted = false;
+  loading: boolean = false;
+  copy_code: string = '';
+  error: string | null = null;
+  coupons: any = {};
   invalid_coupon = false; valid_coupon = false; finalprice: any; discountprice: any; discount_percentage: any;
 
   constructor(
@@ -81,6 +88,7 @@ export class CartComponent implements OnInit, AfterViewInit {
       cart_details._id = cart_reponse.data._id;
       cart_details.sub = cart_reponse.data.sub;
       cart_details.total_price = cart_reponse.data.total_price;
+      this.total_price = cart_reponse.data.total_price;
       cartdata.splice(0);
       cart_reponse.data.cart_items.forEach((element: any) => {
         cartdata.push(element);
@@ -108,6 +116,7 @@ export class CartComponent implements OnInit, AfterViewInit {
     cartdata.forEach((element: any) => {
       total_price += parseFloat(element.total_price);
     });
+    this.total_price = total_price;
     return total_price;
   }
 
@@ -177,7 +186,7 @@ export class CartComponent implements OnInit, AfterViewInit {
   }
 
   async removecart(product: any) {
-    // this.cartItems.splice(product, 1);
+
     this.ngxService.start();
     const index = this.cartItems.findIndex((cart: any) => cart.product_id == product.product_id);
     if (index !== -1) {
@@ -200,6 +209,7 @@ export class CartComponent implements OnInit, AfterViewInit {
   setprice(price: any) {
     return price;
   }
+
   coupon_response: any;
   async applycode(): Promise<void> {
     this.ngxService.start();
@@ -208,16 +218,34 @@ export class CartComponent implements OnInit, AfterViewInit {
     if (data.promocode) {
       this.coupon_response = await this.resetService.checkCouponData(data.promocode);
       if (this.coupon_response.data != null) {
-        if ((new Date(this.coupon_response?.data?.expiry_date)) >= new Date()) {
-          let price = this.calculatePrice();
-          this.invalid_coupon = false;
-          this.valid_coupon = true;
-          this.discountprice = ((price * parseFloat(this.coupon_response.data.percentage)) / 100);
-          this.finalprice = price - ((price * parseFloat(this.coupon_response.data.percentage)) / 100);
 
-        } else {
-          this.invalid_coupon = true; this.valid_coupon = false;
+        this.invalid_coupon = false;
+        this.valid_coupon = true;
+        this.sub_total = 0; this.discount = 0; this.total_price = 0;
+        let total_amount: number = 0;
+
+        for (const items of this.cartItems) {
+          if (this.coupon_response?.data?.product_ids.includes(items.product_id)) {
+            total_amount = total_amount + items.total_price;
+          }
+          this.sub_total = this.sub_total + items.total_price;
         }
+        if (total_amount == 0) { this.discount = 0; }
+        if (total_amount < this.coupon_response?.data?.min_order_value) { this.discount = 0; this.invalid_coupon = true; this.valid_coupon = false; }
+
+        if (this.coupon_response?.data?.discount_type == "Flat") {
+          this.discount = this.coupon_response?.data?.percentage;
+        }
+
+        if (this.coupon_response?.data?.discount_type == "Percentage") {
+          this.discount = (total_amount * this.coupon_response?.data?.percentage) / 100;
+          if (this.coupon_response?.data?.max_cap && this.discount >= this.coupon_response?.data?.max_cap) {
+            this.discount = this.coupon_response?.data?.max_cap;
+          }
+        }
+
+        this.total_price = (this.sub_total + this.delivery_charges) - this.discount;
+
       }
       else {
         this.invalid_coupon = true; this.valid_coupon = false;
@@ -226,11 +254,66 @@ export class CartComponent implements OnInit, AfterViewInit {
     this.ngxService.stop();
   }
 
+  async fetchCoupons(): Promise<void> {
+    this.ngxService.start();
+    try {
+      this.loading = true;
+      const query: any = {};
+      query.sub = CookieStore.getUserInfo()?.sub;
+
+      const coupon_response = await this.resetService.getCoupons(query);
+      if (coupon_response) {
+        this.coupons = coupon_response.data;
+        this.coupons.forEach((coupon: any) => {
+          coupon.copied = false;
+        });
+      }
+      this.loading = false;
+    } catch (error) {
+      this.error = 'Failed to load coupons. Please try again later.';
+      console.error('Error fetching coupons:', error);
+    } finally {
+      this.ngxService.stop();
+    }
+  }
+
   async removecode(): Promise<void> {
     this.valid_coupon = false;
     this.coupon_response = null;
+    this.sub_total = 0; this.discount = 0; this.total_price = 0;
     this.calculatePrice();
+    this.formData.controls['promocode'].setValue('');
+  }
 
+  async viewCoupons(content: any): Promise<void> {
+    this.fetchCoupons();
+    this.modalService.open(content, { size: 'xl', centered: true });
+  }
+
+  copyToClipboard(coupon: any): void {
+    this.coupons.forEach((coupon: any) => {
+      coupon.copied = false;
+    });
+    coupon.copied = true;
+
+    this.formData.controls['promocode'].setValue(coupon.code);
+    this.modalService.dismissAll();
+
+    this.applycode();
+
+    // navigator.clipboard.writeText(coupon.code).then(() => {
+    //   this.coupons.forEach((coupon: any) => {
+    //     coupon.copied = false;
+    //   });
+    //   coupon.copied = true;
+    // }).catch(err => {
+    //   console.error('Failed to copy: ', err);
+    // });
+  }
+
+  shareCoupon(couponCode: string): void {
+    // Implement share functionality (e.g., using a sharing library or API)
+    alert(`Share this coupon code: ${couponCode}`);
   }
 
   async checkoutClick(): Promise<void> {
@@ -244,7 +327,7 @@ export class CartComponent implements OnInit, AfterViewInit {
     this.ngxService.start();
     let formdata = this.formData.value;
     let obj: any = {};
-    obj.sub = CookieStore.getUserInfo()?.sub;
+    obj.user_sub = CookieStore.getUserInfo()?.sub;
     obj.comments = formdata.comments;
     obj.coupon_applied = false;
     if (this.valid_coupon) {
@@ -256,7 +339,6 @@ export class CartComponent implements OnInit, AfterViewInit {
     this.router.navigate(["/checkout"]);
   }
 }
-
 
 export interface ICartItems {
   _id: string;

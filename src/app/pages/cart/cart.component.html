@@ -120,7 +120,7 @@
     <!-- Promo Code Section (Mobile) -->
     <div class="card shadow-sm mb-4" *ngIf="cartItems.length > 0">
       <div class="card-body">
-        <form (ngSubmit)="applycode()" [formGroup]="formData" class="needs-validation" method="post" novalidate>
+        <form (ngSubmit)="applycode( )" [formGroup]="formData" class="needs-validation" method="post" novalidate>
           <div class="mb-3">
             <label class="form-label" for="order-comments">
               <span class="badge bg-info fs-xs me-2">Note</span>Additional comments
@@ -129,13 +129,16 @@
               placeholder="Any special instructions..."></textarea>
           </div>
 
-          <h6 class="mb-3">Apply Promo Code</h6>
+
+          <h6 class="mb-2">Apply Promo Code</h6>
           <div class="input-group mb-3">
             <input class="form-control" type="text" placeholder="Enter promo code" formControlName="promocode"
               [ngClass]="{ 'is-invalid': submitted && form['promocode'].errors }">
             <button class="btn btn-outline-primary" type="submit">Apply</button>
           </div>
-
+          <a href="javascript:void(0);" (click)="viewCoupons(content)">
+            <i class="ci-discount"></i>&nbsp;&nbsp;View Available Coupons
+          </a>
           <div class="invalid-feedback" *ngIf="submitted && form['promocode'].errors">
             Please provide promo code.
           </div>
@@ -161,20 +164,29 @@
     <div class="container-fluid px-3 py-3">
       <!-- Price Breakdown -->
       <div class="price-summary mb-3" *ngIf="valid_coupon">
-        <div class="d-flex justify-content-between small text-muted mb-1">
+        <div class="d-flex justify-content-between small text-muted mb-1" *ngIf="this.sub_total > 0">
           <span>Subtotal:</span>
           <span>
             <img src="assets/aedsymbol.png" alt="aed symbol" style="height: 12px;">
-            {{calculatePrice() | number:'1.2-2'}}
+            {{this.sub_total | number:'1.2-2'}}
           </span>
         </div>
-        <div class="d-flex justify-content-between small text-success mb-1">
-          <span>Discount ({{coupon_response?.data?.code}}):</span>
+        <div class="d-flex justify-content-between small   mb-1" *ngIf="this.delivery_charges > 0">
+          <span>Delivery Charges </span>
+          <span>
+            <img src="assets/aedsymbol.png" alt="aed symbol" style="height: 12px;">
+            +{{this.delivery_charges | number:'1.2-2'}}
+          </span>
+        </div>
+        <div class="d-flex justify-content-between small text-success mb-1" *ngIf="this.discount > 0">
+          <span>Coupon Discount</span>
           <span>
             -<img src="assets/aedsymbol.png" alt="aed symbol" style="height: 12px;">
-            {{discountprice | number:'1.2-2'}}
+            {{this.discount | number:'1.2-2'}}
           </span>
         </div>
+
+
       </div>
 
       <!-- Total and Checkout -->
@@ -183,8 +195,8 @@
           <div class="small text-muted">Total</div>
           <div class="h5 mb-0 text-primary fw-bold">
             <img src="assets/aedsymbol.png" alt="aed symbol" class="me-1" style="height: 20px;">
-            <span *ngIf="!valid_coupon">{{calculatePrice() | number:'1.2-2'}}</span>
-            <span *ngIf="valid_coupon">{{setprice(finalprice) | number:'1.2-2'}}</span>
+            <span *ngIf="!valid_coupon">{{this.total_price | number:'1.2-2'}}</span>
+            <span *ngIf="valid_coupon">{{this.total_price | number:'1.2-2'}}</span>
           </div>
         </div>
 
@@ -198,3 +210,61 @@
 </div>
 
 <app-footer></app-footer>
+
+
+<!-- Quick View Modal-->
+<ng-template #content role="document" let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">Available Coupons</h4>
+      <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
+        (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body d-flex flex-column">
+      <ng-container *ngIf="coupons.length>0">
+        <div class="coupons-section">
+
+          <div *ngIf="loading" class="text-muted">Loading coupons...</div>
+          <div *ngIf="error" class="text-danger">{{ error }}</div>
+          <div *ngIf="coupons.length === 0 && !loading" class="text-muted">No coupons available.</div>
+          <div class="row">
+            <div *ngFor="let coupon of coupons" class="col-12 mb-3">
+              <div class="coupon-card">
+                <div class="left-section">
+                  <div class="corner"></div>
+                  <h5 class="discount-text" *ngIf="coupon.discount_type=='Percentage'">{{ coupon.percentage }}
+                    %
+                    Offer Code</h5>
+                  <h5 class="discount-text" *ngIf="coupon.discount_type!='Percentage'">{{ coupon.percentage }} Flat
+                    Dicount Code</h5>
+                </div>
+                <div class="center-section">
+                  <!-- <h5 class="coupon-title">{{ coupon.title }}</h5>
+                  <h6>
+                    {{coupon.description}}
+                  </h6> -->
+                  <p>
+                    {{coupon.long_description}}
+                  </p>
+
+                </div>
+
+                <div class="right-section">
+
+                  <div class="code-box" [ngClass]="{'dotted-border': coupon.copied}">
+                    <span class="coupon-code">{{ coupon.code }}</span>
+                    <button class="copy-button" (click)="copyToClipboard(coupon)">
+                      {{ coupon.copied ? 'Applied' : 'Apply Code' }}
+                    </button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+</ng-template>

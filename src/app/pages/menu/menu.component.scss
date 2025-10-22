@@ -442,3 +442,151 @@
 //         padding: 6px 10px;
 //     }
 // }
+
+
+.cart-list {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.category-list {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.product-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+
+    .cart-list,
+    .category-list {
+        display: none; // Hide on mobile
+    }
+}
+
+.product-list-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto; // Enable vertical scrolling
+}
+
+.category-list {
+    flex: 0 0 auto; // Fixed height for category list
+}
+
+.category-list-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%; // Allow it to take full height
+}
+
+.product-list-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%; // Allow it to take full height
+    overflow-y: auto; // Enable vertical scrolling
+}
+
+.category-list {
+    flex: 0 0 auto; // Allow category list to take its height
+}
+
+.activation-area {
+    flex: 1;
+    // overflow-y: auto;  
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.quantity-controls {
+    .quantity-btn {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+
+        i {
+            font-size: 14px;
+        }
+
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+
+    .quantity-input {
+        width: 50px;
+        align-items: center;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        font-weight: 500;
+
+        &:focus {
+            box-shadow: 0 0 0 0.2rem rgba(188, 32, 46, 0.25);
+            border-color: var(--bs-primary);
+        }
+    }
+}
+
+.menu-layout {
+    display: flex;
+    height: 100vh; // Full viewport height
+
+    .category-list {
+        position: sticky;
+        top: 0; // Stick to the top of the viewport
+        height: 100vh; // Full height
+        overflow-y: auto; // Allow scrolling if content overflows
+        // width: 250px; // Fixed width for the category list
+        // background-color: $light; // Background color for visibility
+        padding: 1rem; // Padding for aesthetics
+
+        h2 {
+            margin-bottom: 1rem; // Space below the heading
+        }
+
+        ul {
+            list-style: none; // Remove default list styles
+            padding: 0; // Remove padding
+        }
+
+        li {
+            padding: 0.5rem 1rem; // Padding for list items
+            cursor: pointer; // Pointer cursor on hover
+
+            &:hover {
+                background-color: gray; // Highlight on hover
+            }
+        }
+    }
+
+    .product-list {
+        flex: 1; // Take remaining space
+        overflow-y: auto; // Allow scrolling for product list
+        // padding: 1rem; // Padding for aesthetics
+
+        h2 {
+            margin-bottom: 1rem; // Space below the heading
+        }
+
+        .row {
+            display: flex; // Flexbox for product cards
+            flex-wrap: wrap; // Wrap cards to next line
+        }
+    }
+}

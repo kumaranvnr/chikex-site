@@ -6,7 +6,8 @@ import { CartData, orderStatus } from './data';
 import { HttpService } from 'src/app/services/http.service';
 import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CookieStore } from 'src/app/services/helpers/CookieStore';
 
 @Component({
   selector: 'app-order-tracking',
@@ -22,11 +23,72 @@ export class OrderTrackingComponent implements OnInit {
   orderDatas: any;
   order_status: any;
   location_List: any;
+  order_no: string = '';
 
-  constructor(private modalService: NgbModal, private ngxService: NgxUiLoaderService,
+  searchOrderNumber: string = '';
+  searchStatus: {
+    type: 'searching' | 'success' | 'error' | 'warning';
+    message: string;
+  } | null = null;
+
+  constructor(private modalService: NgbModal, private ngxService: NgxUiLoaderService, private route: ActivatedRoute,
     private restService: HttpService, private router: Router) {
-    this.getOrderDetails();
+    this.route.queryParams.subscribe(params => {
+      this.order_no = params['order_no'];
+    });
     this.getLocationList();
+    this.getOrderDetails();
+
+  }
+
+  searchOrder(): void {
+    if (!this.searchOrderNumber || this.searchOrderNumber.trim().length === 0) {
+      this.searchStatus = {
+        type: 'warning',
+        message: 'Please enter an order number to search.'
+      };
+      return;
+    }
+
+    // Clean the order number (remove # if present)
+    const cleanOrderNumber = this.searchOrderNumber.replace('#', '').trim();
+
+    // Set searching status
+    this.searchStatus = {
+      type: 'searching',
+      message: 'Searching for order...'
+    };
+
+    this.order_no = cleanOrderNumber;
+    // Simulate API call or implement actual search logic
+    this.performOrderSearch(cleanOrderNumber);
+  }
+
+  private performOrderSearch(orderNumber: string): void {
+    this.getOrderDetails();
+
+    setTimeout(() => {
+      if (this.orderDatas && this.orderDatas.order_no === orderNumber) {
+        this.searchStatus = {
+          type: 'success',
+          message: `Order #${orderNumber} is already displayed below.`
+        };
+      } else {
+
+        this.searchStatus = {
+          type: 'error',
+          message: `Order #${orderNumber} not found. Please check the order number and try again.`
+        };
+      }
+      // Clear status after 5 seconds
+      setTimeout(() => {
+        this.searchStatus = null;
+      }, 5000);
+    }, 1000);
+  }
+
+  clearSearchStatus(): void {
+    this.searchStatus = null;
   }
 
   async getLocationList(): Promise<any> {
@@ -43,24 +105,34 @@ export class OrderTrackingComponent implements OnInit {
   }
 
   async getOrderDetails(): Promise<any> {
-    this.ngxService.start();
-    let orderDetails = await this.restService.getOrderTrackingById();
-    if (orderDetails) {
-      this.orderDatas = orderDetails.data[0];
-      this.order_status = orderStatus;
-      for (let i: number = 0; i < orderStatus.length; i++) {
-        const order_timing = this.orderDatas.orderStatus.find((data: any) => data.status == orderStatus[i].id.toUpperCase());
-        if (order_timing) {
-          orderStatus[i].time = order_timing.createdAt;
-        }
-        if (orderStatus[i].id.toUpperCase() == this.orderDatas.status) {
-          orderStatus[i].flag = "completed";
-        } else {
-          orderStatus[i].flag = "active";
+    try {
+      this.ngxService.start();
+      if (this.order_no == '') {
+        const order_data = await CookieStore.getDataAsync("order_info");
+        this.order_no = order_data.order_no;
+      }
+      let orderDetails = await this.restService.getOrderTrackingByOrderNo(this.order_no);
+      if (orderDetails) {
+        this.orderDatas = orderDetails.data;
+        this.order_status = orderStatus;
+        for (let i: number = 0; i < orderStatus?.length; i++) {
+          const order_timing = this.orderDatas?.orderStatus.find((data: any) => data?.status == orderStatus?.[i].id.toUpperCase());
+          if (order_timing) {
+            orderStatus[i].time = new Date(order_timing?.createdAt).toLocaleString();
+            orderStatus[i].flag = "completed";
+          }
+          else {
+            orderStatus[i].flag = "active";
+          }
         }
       }
+      this.ngxService.stop();
     }
-    this.ngxService.stop();
+    catch (error) {
+      console.log(error);
+      this.ngxService.stop();
+    }
+
   }
   /**
   * Open center modal and product data get
@@ -83,7 +155,7 @@ export class OrderTrackingComponent implements OnInit {
 
   // Calculate progress percentage for desktop timeline
   getProgressPercentage(): number {
-    if (!this.order_status || this.order_status.length === 0) return 0;
+    if (!orderStatus || orderStatus.length === 0) return 0;
 
     const completedSteps = this.order_status.filter((step: { flag: string; }) => step.flag === 'completed').length;
     const activeStepIndex = this.order_status.findIndex((step: { flag: string; }) => step.flag === 'active');
@@ -110,8 +182,10 @@ export class OrderTrackingComponent implements OnInit {
   callSupport(): void {
     if (this.orderDatas && this.location_List.length > 0) {
       let location = this.location_List.find((data: any) => data.code == this.orderDatas.outlet_code);
+      const mobile = location.loc_whatsapp.replace(/\+/g, '').replace(/\s/g, '');
+      console.log(mobile);
       if (location) {
-        window.open(`tel:${location.loc_contact_number}`, '_self');
+        window.open(`tel:${mobile}`, '_self');
 
       }
     }
@@ -120,8 +194,10 @@ export class OrderTrackingComponent implements OnInit {
   msgSupport(): void {
     if (this.orderDatas && this.location_List.length > 0) {
       let location = this.location_List.find((data: any) => data.code == this.orderDatas.outlet_code);
+      const mobile = location.loc_whatsapp.replace(/\+/g, '').replace(/\s/g, '');
+      console.log(mobile);
       if (location) {
-        window.open(`https://wa.me/${location.loc_whatsapp}`, '_blank');
+        window.open(`https://wa.me/${mobile}`, '_blank');
       }
     }
   }

@@ -3,8 +3,9 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 
 // Data Get
 import { TeamData } from './data';
-import { SwiperOptions } from 'swiper';
+
 import { SwiperComponent, SwiperDirective } from 'ngx-swiper-wrapper';
+import { SwiperOptions } from 'swiper/types/swiper-options';
 
 @Component({
   selector: 'app-about',
@@ -33,15 +34,15 @@ export class AboutComponent implements OnInit {
     breakpoints: {
       575: {
         slidesPerView: 2,
-        pagination: false
+
       },
       850: {
         slidesPerView: 3,
-        pagination: false
+
       },
       1080: {
         slidesPerView: 4,
-        pagination: false
+
       }
     }
   };

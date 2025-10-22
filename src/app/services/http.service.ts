@@ -44,6 +44,7 @@ export class HttpService {
     }
     return headers;
   }
+
   prepareAPIHeader() {
     let headers = this.prepareHeader();
     const token = CookieStore.getBasicToken();
@@ -124,6 +125,11 @@ export class HttpService {
       headers: this.prepareAuthHeader()
     }).toPromise();
   }
+  async getCoupons(data: any): Promise<any> {
+    return await this.httpClient.post(this.base_url + "/coupons-srv/user/list", data, {
+      headers: this.prepareAuthHeader()
+    }).toPromise();
+  }
 
   async saveCheckoutData(data: any): Promise<any> {
     return await this.httpClient.post(this.base_url + "/checkout-srv", data, {
@@ -179,20 +185,20 @@ export class HttpService {
     return Promise.resolve(new_items);
   }
 
-
-  async getOrderTrackingById(): Promise<any> {
-    const order_data = await CookieStore.getDataAsync("order_info");
-
-    const order_info = await this.httpClient.get(this.base_url + `/orders-srv/${order_data.orderNo}`, {
+  async getOrderTrackingById(orderNo: string): Promise<any> {
+    const order_info = await this.httpClient.get(this.base_url + `/orders-srv/${orderNo}`, {
       headers: this.prepareAuthHeader()
     }).toPromise();
 
     return Promise.resolve(order_info);
-
-
   }
+  async getOrderTrackingByOrderNo(orderNo: string): Promise<any> {
+    const order_info = await this.httpClient.get(this.base_url + `/orders-srv/orderstatus/${orderNo}`, {
+      headers: this.prepareAPIHeader()
+    }).toPromise();
 
-
+    return Promise.resolve(order_info);
+  }
 
   async getCartId(): Promise<any> {
     return await CookieStore.getDataAsync("cart_id");
