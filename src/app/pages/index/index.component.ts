@@ -30,7 +30,7 @@ export class IndexComponent implements OnInit {
     'assets/img/food-delivery/discount20.png',
   ];
   slider_config: any = {
-    autoplay: { delay: 500, disableOnInteraction: false },
+    autoplay: { delay: 1000, disableOnInteraction: true },
     pagination: { clickable: false },
     navigation: false
   };
