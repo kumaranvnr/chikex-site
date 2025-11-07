@@ -78,7 +78,7 @@
                 </div>
             </div>
 
-            <div class="activation-area product-list" *ngIf="!loading">
+            <div class="activation-area product-list" *ngIf="!loading ">
                 <section class="tab-content py-sm-2">
                     <div class="row pt-3 d-flex">
                         <div class="col-12"
@@ -141,6 +141,9 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <!-- <div *ngIf="getDiscountDisplay(item._id)">
+                                            {{ getDiscountDisplay(item._id)| number: '1.2-2'}} % discount
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>

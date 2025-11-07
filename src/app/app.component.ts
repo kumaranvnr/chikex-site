@@ -9,10 +9,12 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 export class AppComponent {
   title = 'Chikex | Fried Chicken and Restaurant LLC, UAE';
   whatsappConfig = {
-    phoneNumber: '971507230280',
+    phoneNumber: '971565339280',
     message: 'Hello! I would like to know more about Chikex menu and place an order.',
     position: 'bottom-right' as 'bottom-right' | 'bottom-left'
   };
+
+
   constructor() {
 
   }
@@ -20,6 +22,8 @@ export class AppComponent {
   ngOnInit() {
 
   }
+
+
 
   onActivate(event: any) {
     let scrollToTop = window.setInterval(() => {

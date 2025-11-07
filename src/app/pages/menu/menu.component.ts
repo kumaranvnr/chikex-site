@@ -29,6 +29,12 @@ export class MenuComponent {
   loading: boolean = true;
   expandedItems: Set<string> = new Set();
   selected_category_id: string = '';
+  coupons: any = {};
+  coupon_product_list: {
+    product_id: string,
+    discount_type: string;
+    percentage: number
+  }[] = [];
   // coupons: CouponData[] = [];
   // showArrows: boolean = true;
 
@@ -39,10 +45,45 @@ export class MenuComponent {
     this.getCategory();
     this.getLocationList();
     this.getProductList();
+    this.fetchCoupons();
     this.ngxService.stop();
-
   }
 
+  async fetchCoupons(): Promise<void> {
+    this.ngxService.start();
+    try {
+      this.loading = true;
+      const query: any = {};
+      query.sub = CookieStore.getUserInfo()?.sub;
+
+      const coupon_response = await this.restService.getCoupons(query);
+      if (coupon_response) {
+        this.coupons = coupon_response.data;
+
+        if (this.coupons.length > 0) {
+          for (let coupon of this.coupons) {
+            for (let product_id of coupon.product_ids) {
+              this.coupon_product_list.push({
+                product_id: product_id,
+                discount_type: coupon.discount_type,
+                percentage: coupon.percentage
+              });
+            }
+          }
+          this.coupon_product_list.sort((a, b) => b.percentage - a.percentage);
+        }
+      }
+      this.loading = false;
+    } catch (error) {
+      console.error('Error fetching coupons:', error);
+    } finally {
+      this.ngxService.stop();
+    }
+  }
+
+  getDiscountDisplay(product_id: string) {
+    return this.coupon_product_list.find(item => item.product_id == product_id)?.percentage;
+  }
 
   gotoProductView(product_id: string) {
     this.router.navigate(['/products'], {
@@ -130,7 +171,7 @@ export class MenuComponent {
       if (user_address_response?.data.length > 0) {
         this.address = user_address_response?.data.find((data: any) => data.primary == true);
         CookieStore.saveDataAsync("current_address", this.address);
-        this.outlet_code = this.address.nearbyStore;
+        this.outlet_code = this.address?.nearbyStore;
       } else {
         getlocation = true;
       }
@@ -259,6 +300,7 @@ export class MenuComponent {
 
   async getProductList(): Promise<any> {
     try {
+      this.loading = true;
       let product_response = await this.restService.getProductList();
       if (product_response.data) {
         this.complete_product_list = product_response.data;

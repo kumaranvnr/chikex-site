@@ -42,6 +42,7 @@ export class CartComponent implements OnInit, AfterViewInit {
     private router: Router,
     private modalService: NgbModal,
     private restService: HttpService) {
+    this.getCartDetails();
 
   }
 
@@ -53,7 +54,8 @@ export class CartComponent implements OnInit, AfterViewInit {
       promocode: ['', [Validators.required]],
     });
 
-    this.getCartDetails();
+    this.fetchCoupons();
+
     this.ngxService.stop();
 
     // setTimeout(() => {
@@ -76,7 +78,6 @@ export class CartComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.total_price = cart_details.total_price;
-
     this.cd.detectChanges();
   }
 
@@ -98,7 +99,7 @@ export class CartComponent implements OnInit, AfterViewInit {
     this.formData.controls['comments'].setValue(cart_reponse.data.comments);
     if (cart_reponse.data.coupon_applied) {
       this.formData.controls['promocode'].setValue(cart_reponse.data.coupon_code);
-      this.applycode();
+
     }
 
   }
@@ -267,7 +268,13 @@ export class CartComponent implements OnInit, AfterViewInit {
         this.coupons.forEach((coupon: any) => {
           coupon.copied = false;
         });
+        if (this.coupons.length > 0) {
+          const coupon = this.coupons.find((c: any) => c.is_default == true);
+          this.formData.controls['promocode'].setValue(coupon.code);
+          this.applycode();
+        }
       }
+
       this.loading = false;
     } catch (error) {
       this.error = 'Failed to load coupons. Please try again later.';
@@ -286,7 +293,7 @@ export class CartComponent implements OnInit, AfterViewInit {
   }
 
   async viewCoupons(content: any): Promise<void> {
-    this.fetchCoupons();
+    // this.fetchCoupons();
     this.modalService.open(content, { size: 'xl', centered: true });
   }
 

@@ -183,7 +183,6 @@ export class OrderTrackingComponent implements OnInit {
     if (this.orderDatas && this.location_List.length > 0) {
       let location = this.location_List.find((data: any) => data.code == this.orderDatas.outlet_code);
       const mobile = location.loc_whatsapp.replace(/\+/g, '').replace(/\s/g, '');
-      console.log(mobile);
       if (location) {
         window.open(`tel:${mobile}`, '_self');
 
@@ -195,7 +194,6 @@ export class OrderTrackingComponent implements OnInit {
     if (this.orderDatas && this.location_List.length > 0) {
       let location = this.location_List.find((data: any) => data.code == this.orderDatas.outlet_code);
       const mobile = location.loc_whatsapp.replace(/\+/g, '').replace(/\s/g, '');
-      console.log(mobile);
       if (location) {
         window.open(`https://wa.me/${mobile}`, '_blank');
       }

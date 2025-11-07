@@ -111,9 +111,14 @@ export class AddressmodalComponent implements OnInit {
 
   async reverseGeocode(lat: number, lng: number): Promise<string> {
     const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${environment.googleMapsApiKey}`;
-
     try {
       const response = await this.http.get<any>(geocodeUrl).toPromise();
+      // const data: any = {};
+      // data.lat = lat;
+      // data.lng = lng;
+      // data.googleMapsApiKey = environment.googleMapsApiKey;
+      // const response = await this.restService.getAddressByReverseGeocode(data);
+
       if (response.status === 'OK' && response.results.length > 0) {
         return response.results[0]; // Return the first result's formatted address
       } else {

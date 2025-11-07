@@ -129,7 +129,6 @@
               placeholder="Any special instructions..."></textarea>
           </div>
 
-
           <h6 class="mb-2">Apply Promo Code</h6>
           <div class="input-group mb-3">
             <input class="form-control" type="text" placeholder="Enter promo code" formControlName="promocode"
@@ -185,8 +184,6 @@
             {{this.discount | number:'1.2-2'}}
           </span>
         </div>
-
-
       </div>
 
       <!-- Total and Checkout -->
@@ -211,7 +208,6 @@
 
 <app-footer></app-footer>
 
-
 <!-- Quick View Modal-->
 <ng-template #content role="document" let-modal>
   <div class="modal-content">
@@ -223,7 +219,6 @@
     <div class="modal-body d-flex flex-column">
       <ng-container *ngIf="coupons.length>0">
         <div class="coupons-section">
-
           <div *ngIf="loading" class="text-muted">Loading coupons...</div>
           <div *ngIf="error" class="text-danger">{{ error }}</div>
           <div *ngIf="coupons.length === 0 && !loading" class="text-muted">No coupons available.</div>
@@ -246,17 +241,13 @@
                   <p>
                     {{coupon.long_description}}
                   </p>
-
                 </div>
-
                 <div class="right-section">
-
                   <div class="code-box" [ngClass]="{'dotted-border': coupon.copied}">
                     <span class="coupon-code">{{ coupon.code }}</span>
                     <button class="copy-button" (click)="copyToClipboard(coupon)">
                       {{ coupon.copied ? 'Applied' : 'Apply Code' }}
                     </button>
-
                   </div>
                 </div>
               </div>

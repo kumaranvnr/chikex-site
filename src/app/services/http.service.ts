@@ -72,6 +72,13 @@ export class HttpService {
     }).toPromise();
     return reponse;
   }
+  async userRegisterSocial(data: any): Promise<any> {
+    const reponse = this.httpClient.post(this.base_url + "/users-srv/register/user/social", data, {
+      headers: this.prepareHeader()
+    }).toPromise();
+    return reponse;
+  }
+
 
   async userLogin(data: any): Promise<any> {
     data.main_role = 'user';
@@ -324,6 +331,12 @@ export class HttpService {
     }).toPromise();
   }
 
+  async getAddressByReverseGeocode(data: any): Promise<any> {
+    return await this.httpClient.post(this.base_url + "/locations-srv/geocode", data, {
+      headers: this.prepareAuthHeader()
+    }).toPromise();
+  }
+
   async getNearbyLocationListTest(data: any): Promise<any> {
     return await this.httpClient.post(this.base_url + "/locations-srv/nearby/web/test", data, {
       headers: this.prepareAuthHeader()
@@ -367,6 +380,18 @@ export class HttpService {
 
   async googlereviews(data: any): Promise<any> {
     return await this.httpClient.post(this.base_url + "/reviews-srv/googlereviews", data, {
+      headers: this.prepareAPIHeader()
+    }).toPromise();
+  }
+
+  async sendOtp(data: { mobile: string, country_id: string }): Promise<any> {
+    return await this.httpClient.post(this.base_url + '/whatsapp-auth-srv/send-otp', data, {
+      headers: this.prepareAPIHeader()
+    }).toPromise();
+  }
+
+  async verifyOtp(data: { mobile: string; otp: string }): Promise<any> {
+    return await this.httpClient.post(this.base_url + '/whatsapp-auth-srv/verify-otp', data, {
       headers: this.prepareAPIHeader()
     }).toPromise();
   }

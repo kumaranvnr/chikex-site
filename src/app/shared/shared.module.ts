@@ -18,7 +18,7 @@ import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { AddressmodalComponent } from './modals/addressmodal/addressmodal.component';
 import { AddresslistmodalComponent } from './modals/addresslistmodal/addresslistmodal.component';
 import { NewaddressmodalComponent } from './modals/newaddressmodal/newaddressmodal.component';
-import { WhatsappButtonComponent } from './whatsapp-button/whatsapp-button.component';
+
 
 
 @NgModule({
@@ -30,6 +30,7 @@ import { WhatsappButtonComponent } from './whatsapp-button/whatsapp-button.compo
     AddressmodalComponent,
     AddresslistmodalComponent,
     NewaddressmodalComponent,
+
   ],
   imports: [
     CommonModule,
@@ -49,6 +50,6 @@ import { WhatsappButtonComponent } from './whatsapp-button/whatsapp-button.compo
     FooterComponent,
     BreadcrumbsComponent
   ],
-
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SharedModule { }

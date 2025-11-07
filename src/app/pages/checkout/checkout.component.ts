@@ -27,8 +27,6 @@ export class CheckoutComponent implements OnInit, AfterViewInit, OnDestroy {
   checkoutInfo: any;
   current_address: any;
 
-
-
   message: string | any;
   subscription: Subscription | any;
 
