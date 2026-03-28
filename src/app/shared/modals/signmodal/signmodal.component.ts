@@ -96,11 +96,8 @@ export class SignmodalComponent implements OnInit {
 
   async signInWithGoogle(): Promise<void> {
     if (this.isGoogleSigningIn) return;
-
     this.isGoogleSigningIn = true;
-
     try {
-      // Sign in with Google
       const googleUser: any = await this.googleAuthService.signInWithGoogle();
 
       if (googleUser) {
@@ -118,12 +115,13 @@ export class SignmodalComponent implements OnInit {
         let login_data: any = {};
 
         login_data.main_role = 'user';
-        login_data.user_name = 'google';
+        login_data.user_name = googleUser.name;
         login_data.email = googleUser.email;
         login_data.name = googleUser.name;
         login_data.family_name = googleUser.family_name;
         login_data.given_name = googleUser.given_name;
         login_data.picture = googleUser.picture;
+        login_data.source = 'Site';
 
         let save_respose = await this.restService.userRegisterSocial(login_data);
         if (save_respose.success) {
@@ -159,39 +157,22 @@ export class SignmodalComponent implements OnInit {
       this.ngxService.stop();
       this.isGoogleSigningIn = false;
     }
-
-
   }
 
   private handleGoogleSignInError(errorMessage: string): void {
     this.isGoogleSigningIn = false;
     console.error('Google Sign-In error:', errorMessage);
-
-    // Show error message to user
     this.showErrorMessage(errorMessage);
   }
 
   private showSuccessMessage(message: string): void {
-    // Implement your success message display logic
     console.log('Success:', message);
-    // Example with a simple alert (replace with your notification system):
-    // alert(message);
-    // Or with a toast library:
-    // this.toastr.success(message);
   }
 
   private showErrorMessage(message: string): void {
-    // Implement your error message display logic
     console.error('Error:', message);
-    // Example with a simple alert (replace with your notification system):
-    // alert('Error: ' + message);
-    // Or with a toast library:
-    // this.toastr.error(message);
   }
 
-  /**
-  * Close modal
-  */
   closemodal() {
     // this.submitted = false;
     this.resetMobileOtpFlow();
@@ -231,10 +212,6 @@ export class SignmodalComponent implements OnInit {
     this.fieldTextType = !this.fieldTextType
   }
 
-
-  /**
- * Password Hide/Show
- */
   togglesignupPassfield() {
     this.signupPassfield = !this.signupPassfield;
   }
@@ -242,17 +219,10 @@ export class SignmodalComponent implements OnInit {
     this.signupConfirmPassfield = !this.signupConfirmPassfield;
   }
 
-
-  /**
- * Returns form
- */
   get form() {
     return this.signinformData.controls;
   }
 
-  /**
- * Returns signup form
- */
   get signupform() {
     return this.signupformData.controls;
   }
@@ -466,6 +436,7 @@ export class SignmodalComponent implements OnInit {
         }
         this.ngxService.start();
         login_data.main_role = 'user';
+        login_data.source = 'Site';
         let save_respose = await this.restService.userRegister(login_data);
 
         if (save_respose.success) {

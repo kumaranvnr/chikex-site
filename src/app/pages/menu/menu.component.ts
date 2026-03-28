@@ -8,6 +8,7 @@ import { CookieStore } from 'src/app/services/helpers/CookieStore';
 import { SignmodalComponent } from 'src/app/shared/modals/signmodal/signmodal.component';
 import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { appInfo } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-menu',
@@ -55,6 +56,7 @@ export class MenuComponent {
       this.loading = true;
       const query: any = {};
       query.sub = CookieStore.getUserInfo()?.sub;
+      query.country_id = appInfo.countryId;
 
       const coupon_response = await this.restService.getCoupons(query);
       if (coupon_response) {

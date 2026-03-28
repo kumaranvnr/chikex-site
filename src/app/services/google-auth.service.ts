@@ -43,8 +43,6 @@ export class GoogleAuthService {
   private validateOrigin(): boolean {
     const currentOrigin = this.getCurrentOrigin();
     const allowedOrigins = [
-      'http://localhost:4200',
-      'https://localhost:4200',
       'https://chikex.me'
     ];
 

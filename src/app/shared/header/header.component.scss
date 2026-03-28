@@ -30,3 +30,50 @@
         }
     }
 }
+
+.scrolling-ad {
+    background-color: #f8f9fa; // Light background for visibility
+    padding: 5px 0px; // Add padding for better appearance
+    position: relative;
+    overflow: hidden;
+
+    .ad-content {
+        white-space: nowrap;
+        animation: scroll 10s linear infinite; // Adjust speed as needed
+        display: inline-block;
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(100%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+    }
+}
+
+.bahrain-link {
+    margin-left: auto; // Push the link to the right
+    display: flex; // Flexbox for alignment
+    align-items: center; // Center vertically
+
+    .btn-link {
+        display: flex;
+        align-items: center;
+        background-color: #007bff; // Bootstrap primary color
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+        text-decoration: none;
+
+        i {
+            margin-left: 5px; // Space between text and icon
+        }
+
+        &:hover {
+            background-color: #0056b3; // Darker shade on hover
+        }
+    }
+}

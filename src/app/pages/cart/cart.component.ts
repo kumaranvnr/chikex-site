@@ -10,6 +10,7 @@ import { AddresslistmodalComponent } from 'src/app/shared/modals/addresslistmoda
 import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import Swal from 'sweetalert2';
+import { appInfo } from 'src/environments/environment.prod';
 //import * as google from 'google.maps';
 
 @Component({
@@ -261,6 +262,7 @@ export class CartComponent implements OnInit, AfterViewInit {
       this.loading = true;
       const query: any = {};
       query.sub = CookieStore.getUserInfo()?.sub;
+      query.country_id = appInfo.countryId;
 
       const coupon_response = await this.resetService.getCoupons(query);
       if (coupon_response) {

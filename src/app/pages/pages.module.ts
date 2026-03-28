@@ -26,6 +26,7 @@ import { OrderTrackingComponent } from './order-tracking/order-tracking.componen
 import { CheckoutCompleteComponent } from './checkout-complete/checkout-complete.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 
+
 const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
   direction: 'horizontal',
   slidesPerView: 'auto'
@@ -43,7 +44,7 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     UnderMaintenanceComponent,
     OrderTrackingComponent,
     CheckoutCompleteComponent,
-    ProductDetailsComponent
+    ProductDetailsComponent,
   ],
   imports: [
     CommonModule,

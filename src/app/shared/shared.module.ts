@@ -19,6 +19,7 @@ import { AddressmodalComponent } from './modals/addressmodal/addressmodal.compon
 import { AddresslistmodalComponent } from './modals/addresslistmodal/addresslistmodal.component';
 import { NewaddressmodalComponent } from './modals/newaddressmodal/newaddressmodal.component';
 
+import { SplashScreenPopupComponent } from './splash-screen-popup/splash-screen-popup.component';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { NewaddressmodalComponent } from './modals/newaddressmodal/newaddressmod
     AddressmodalComponent,
     AddresslistmodalComponent,
     NewaddressmodalComponent,
+    SplashScreenPopupComponent,
 
   ],
   imports: [
@@ -41,14 +43,15 @@ import { NewaddressmodalComponent } from './modals/newaddressmodal/newaddressmod
     FormsModule,
     TranslateModule,
     ReactiveFormsModule,
-
     ScrollToModule.forRoot()
   ],
   providers: [LanguageService],
   exports: [
     HeaderComponent,
+    SplashScreenPopupComponent,
     FooterComponent,
-    BreadcrumbsComponent
+    BreadcrumbsComponent,
+
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

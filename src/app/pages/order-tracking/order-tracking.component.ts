@@ -8,6 +8,7 @@ import { FromDataResolver } from 'src/app/services/helpers/FormDataResolver';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CookieStore } from 'src/app/services/helpers/CookieStore';
+import { appInfo } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-order-tracking',
@@ -111,7 +112,11 @@ export class OrderTrackingComponent implements OnInit {
         const order_data = await CookieStore.getDataAsync("order_info");
         this.order_no = order_data.order_no;
       }
-      let orderDetails = await this.restService.getOrderTrackingByOrderNo(this.order_no);
+      const order_data: any = {};
+      order_data.order_no = this.order_no;
+      order_data.country_id = appInfo.countryId;
+
+      let orderDetails = await this.restService.getOrderTrackingByOrderNo(order_data);
       if (orderDetails) {
         this.orderDatas = orderDetails.data;
         this.order_status = orderStatus;

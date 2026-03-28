@@ -26,8 +26,9 @@ export class IndexComponent implements OnInit {
   @ViewChild(SwiperDirective, { static: false }) directiveRef?: SwiperDirective;
 
   carouselImages: string[] = [
-    'assets/img/food-delivery/hero-bg.jpg',
-    'assets/img/food-delivery/discount20.png',
+    'https://friedchicken.blob.core.windows.net/general/hero-bg.jpg'
+    // 'https://friedchicken.blob.core.windows.net/general/MAIN_BANNER.jpg'
+
   ];
   slider_config: any = {
     autoplay: { delay: 1000, disableOnInteraction: true },

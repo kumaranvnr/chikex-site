@@ -1,0 +1,6 @@
+<div class="splash-screen-popup" *ngIf="isVisible">
+    <div class="popup-content">
+        <button class="close-button" (click)="closePopup()">✖</button>
+        <img [src]="adImages[currentImageIndex]" alt="Ad Poster" class="ad-image" />
+    </div>
+</div>

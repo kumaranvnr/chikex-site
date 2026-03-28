@@ -128,6 +128,10 @@ export class HeaderComponent implements OnInit {
     this.fieldTextType = !this.fieldTextType
   }
 
+  gotoJoinUsPage() {
+    this.router.navigate(['/pages/careers']);
+  }
+
   /**
  * Password Hide/Show
  */

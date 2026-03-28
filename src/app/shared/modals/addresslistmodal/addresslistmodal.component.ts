@@ -38,7 +38,6 @@ export class AddresslistmodalComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-
   async getUserAddressList(): Promise<any> {
     let user_address_response = await this.restService.getUserAddressList();
     if (user_address_response?.data) {

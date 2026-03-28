@@ -1,10 +1,11 @@
 <app-header></app-header>
+
 <!-- Page title-->
 <section class="bg-darker bg-size-cover bg-position-center py-5"
-    style="background-image: url(assets/img/food-delivery/restaurants/single/pt-bg.jpg);">
+    style="background-image: url(https://friedchicken.blob.core.windows.net/general/banner.png);">
     <div class="container py-md-4">
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
+            <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-lg-start">
                 <li class="breadcrumb-item"><a class="text-nowrap" href="javascript:void(0);" routerLink="/"><i
                             class="ci-home"></i>Home</a>
                 </li>
@@ -17,9 +18,9 @@
                 </ng-container>
             </ol>
         </nav>
-        <ng-container *ngIf="category_name_header">
+        <!-- <ng-container *ngIf="category_name_header">
             <h1 class="text-light text-center text-lg-start py-3">{{getCategoryDescription(category_name_header)}}</h1>
-        </ng-container>
+        </ng-container> -->
     </div>
 </section>
 
@@ -93,7 +94,7 @@
                                         <div class="d-flex">
                                             <img class="card-img-top" src="{{item?.img_url}}" alt="{{item?.title}}"
                                                 (click)="gotoProductView(item?._id)"
-                                                style="height: 125px; width: 125px; object-fit: cover; margin-left: 10px;">
+                                                style="height: 125px; width: 125px; object-fit: cover; margin-left: 0px; margin-right:10px">
                                             <div class="flex-grow-1">
                                                 <h3 class="product-title fs-md">{{item?.title}}</h3>
                                                 <p class="fs-ms text-muted">{{item?.description}}</p>
@@ -160,7 +161,7 @@
 <nav class="container" style="max-width: 100%;" *ngIf="category_list.length > 0">
     <div class="d-flex align-items-center bg-white rounded-3 shadow-lg py-2 ps-sm-2 pe-lg-2">
         <div class="ps-lg-3 w-100 text-end">
-
+            test
             <!-- <div class="coupon-cards-container">
                 <div class="coupon-cards-wrapper">
                     <div *ngFor="let coupon of coupons; let i = index; trackBy: fromDataResolver.identify;"

@@ -13,7 +13,7 @@
             <h2 class="h3 mb-2">We are hiring new talents</h2>
             <p class="fs-sm text-muted pb-2">If you want to be part of our team please submit you CV using
                 the form below:</p>
-            <form class="needs-validation row g-4" method="post" novalidate [formGroup]="aboutForm"
+            <form class="needs-validation row g-4" method="post" novalidate [formGroup]="careersForm"
                 (ngSubmit)="onSubmit()">
                 <div class="col-sm-6">
                     <input class="form-control" type="text" placeholder="Your name" required formControlName="name"
@@ -27,12 +27,36 @@
                     <textarea class="form-control" rows="4" placeholder="Message" required formControlName="message"
                         [ngClass]="{ 'is-invalid': submitted && form['message'].errors }"></textarea>
                 </div>
-                <div class="col-12">
-                    <input class="form-control" type="file" required formControlName="file"
-                        [ngClass]="{ 'is-invalid': submitted && form['file'].errors }">
+                <div class="form-group">
+                    <label for="img_url">Attchements</label>
+                    <input class="form-control" required="" type="file" id="img_url" multiple
+                        (change)="uploadAttachementImage($event)" accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,
+                           application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+                           application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,
+                           audio/*,video/*,text/plain">
+                    <ng-container *ngIf="request_submit">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Loading...
+                    </ng-container>
+                    <ng-container *ngIf='attachments.length>0'>
+                        <div *ngFor="let attchement of attachments;let i=index;trackBy:fromDataResolver.identify;">
+                            <a href="{{attchement}}" target="_blank" rel="noopener noreferrer"
+                                class="mr-2 mb-2">{{attchement}}</a><button class="btn btn-sm btn-danger" id="i"
+                                (click)="removeAttachment(i)"><i class="ci-close-circle"></i></button>
+                        </div>
+                    </ng-container>
                 </div>
                 <div class="col-12">
-                    <button class="btn btn-info btn-shadow" type="submit">Submit your CV</button>
+                    <div *ngIf="!mail_data_loading && !isSubmitting">
+                        <button class="btn btn-info btn-shadow" type="submit"> Submit your CV
+                        </button>
+                    </div>
+                    <div *ngIf="mail_data_loading || isSubmitting">
+                        <button class="btn btn-info btn-shadow" type="submit" [disabled]="true"> <span
+                                class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Sending...
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>

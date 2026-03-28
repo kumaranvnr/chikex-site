@@ -79,7 +79,6 @@ export class HttpService {
     return reponse;
   }
 
-
   async userLogin(data: any): Promise<any> {
     data.main_role = 'user';
     const reponse = this.httpClient.post(this.base_url + "/users-srv/login", data, {
@@ -199,8 +198,8 @@ export class HttpService {
 
     return Promise.resolve(order_info);
   }
-  async getOrderTrackingByOrderNo(orderNo: string): Promise<any> {
-    const order_info = await this.httpClient.get(this.base_url + `/orders-srv/orderstatus/${orderNo}`, {
+  async getOrderTrackingByOrderNo(data: any): Promise<any> {
+    const order_info = await this.httpClient.post(this.base_url + `/orders-srv/orderstatus`, data, {
       headers: this.prepareAPIHeader()
     }).toPromise();
 
@@ -360,6 +359,7 @@ export class HttpService {
       headers: this.prepareAuthHeader()
     }).toPromise();
   }
+
   async updatePaymentInfo(data: any): Promise<any> {
     return await this.httpClient.post(this.base_url + "/orders-srv/update-payment", data, {
       headers: this.prepareAuthHeader()
@@ -392,6 +392,20 @@ export class HttpService {
 
   async verifyOtp(data: { mobile: string; otp: string }): Promise<any> {
     return await this.httpClient.post(this.base_url + '/whatsapp-auth-srv/verify-otp', data, {
+      headers: this.prepareAPIHeader()
+    }).toPromise();
+  }
+
+  async uploadMailAttachment(formData: any): Promise<any> {
+    return await this.httpClient.post(this.base_url + '/mail-srv/utils/web/upload', formData, {
+      headers: this.prepareAPIHeader()
+    }).toPromise();
+  }
+
+
+  async sendEmail(data: any): Promise<any> {
+    data.userEmail = 'info.chikex@gmail.com';
+    return await this.httpClient.post(this.base_url + '/mail-srv/web/send-mail', data, {
       headers: this.prepareAPIHeader()
     }).toPromise();
   }

@@ -20,7 +20,7 @@
 @media (max-width: 768px) {
 
     .bg-darker {
-        background-size: contain; // Ensure the image is fully visible
+        background-size: cover; // Ensure the image is fully visible
         background-position: center; // Center the image
         background-repeat: no-repeat;
     }

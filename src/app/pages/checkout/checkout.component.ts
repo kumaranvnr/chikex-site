@@ -9,6 +9,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { SharedService } from 'src/app/services/shared.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { CommonErrorHelper } from 'src/app/services/helpers/CommonErrorHelper';
 
 @Component({
   selector: 'app-checkout',
@@ -149,70 +150,77 @@ export class CheckoutComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async completeorder(): Promise<void> {
+    try {
+      this.submitted = true;
+      this.cartproduct = cartdata;
+      if (this.cartproduct.length == 0) {
+        this.ngxService.stop(); this.submitted = false;
+        Swal.fire({ title: 'Message', text: `Cart is empty!.`, confirmButtonColor: '#364574', timer: 1500 });
+        return;
+      }
+      let checkoutData = this.formData.value;
+      if (checkoutData.payment_type == null || checkoutData.payment_type == '' || checkoutData.payment_type == undefined) {
+        this.ngxService.stop(); this.submitted = false;
+        Swal.fire({ title: 'Message', text: `Choose the payment options`, confirmButtonColor: '#364574', timer: 1500 });
+        return;
+      }
 
-    this.submitted = true;
-    this.cartproduct = cartdata;
-    if (this.cartproduct.length == 0) {
+      if (checkoutData.payment_type == 'Online') {
+        this.ngxService.stop(); this.submitted = false;
+        Swal.fire({ title: 'Message', text: `Technical issue with online payment.Please proceed with COD`, confirmButtonColor: '#364574', timer: 1500 });
+        return;
+      }
+
+      this.ngxService.start();
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = now.getMinutes();
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+      const formattedHours = hours < 10 ? '0' + hours : hours;
+      let currentTime = `${formattedHours}:${formattedMinutes} ${ampm}`;
+
+      var sub = CookieStore.getUserInfo()?.sub;
+
+      let obj = {
+        _id: cart_details._id,
+        sub: sub,
+        table_time: currentTime,
+        need_change_from: checkoutData.need_change_from,
+        comments: checkoutData.comments,
+        payment_type: checkoutData.payment_type,
+        outlet_code: this.current_address.nearbyStore,
+        table_type: 'Delivery',
+        currency: 'AED',
+        source: 'Site',
+        lat: this.lat,
+        long: this.long
+      }
+
+      await this.restService.updateCartRequirement(obj);
+
+      let cart_obj = { cart_id: cart_details._id, sub: sub, useraddress: this.current_address };
+      let order_response = await this.restService.convertCartToOrder(cart_obj);
+      console.log(order_response);
+
+      let order_obj = {
+        sub: sub,
+        order_no: order_response.data.orderNo,
+        payment_type: checkoutData.payment_type
+      };
+      let payment_response = await this.restService.updatePaymentInfo(order_obj);
+
+      CookieStore.saveDataAsync("order_info", order_response.data);
+      this.ngxService.stop();
+      window.location.href = '/order-confirmation';
+    } catch (error) {
+      console.log(error);
       this.ngxService.stop(); this.submitted = false;
-      Swal.fire({ title: 'Message', text: `Cart is empty!.`, confirmButtonColor: '#364574', timer: 1500 });
-      return;
+      alert(CommonErrorHelper.handleErrorMessagge(error, CommonErrorHelper.save));
+      // Swal.fire({ title: 'Error', text: `Something went wrong!.`, confirmButtonColor: '#364574', timer: 1500 });
     }
-    let checkoutData = this.formData.value;
-    if (checkoutData.payment_type == null || checkoutData.payment_type == '' || checkoutData.payment_type == undefined) {
-      this.ngxService.stop(); this.submitted = false;
-      Swal.fire({ title: 'Message', text: `Choose the payment options`, confirmButtonColor: '#364574', timer: 1500 });
-      return;
-    }
-
-    if (checkoutData.payment_type == 'Online') {
-      this.ngxService.stop(); this.submitted = false;
-      Swal.fire({ title: 'Message', text: `Technical issue with online payment.Please proceed with COD`, confirmButtonColor: '#364574', timer: 1500 });
-      return;
-    }
-
-    this.ngxService.start();
-    const now = new Date();
-    let hours = now.getHours();
-    const minutes = now.getMinutes();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
-    const formattedHours = hours < 10 ? '0' + hours : hours;
-    let currentTime = `${formattedHours}:${formattedMinutes} ${ampm}`;
-
-    var sub = CookieStore.getUserInfo()?.sub;
-
-    let obj = {
-      _id: cart_details._id,
-      sub: sub,
-      table_time: currentTime,
-      need_change_from: checkoutData.need_change_from,
-      comments: checkoutData.comments,
-      payment_type: checkoutData.payment_type,
-      outlet_code: this.current_address.nearbyStore,
-      table_type: 'Delivery',
-      currency: 'AED',
-      source: 'Site',
-      lat: this.lat,
-      long: this.long
-    }
-
-    await this.restService.updateCartRequirement(obj);
-
-    let cart_obj = { cart_id: cart_details._id, sub: sub, useraddress: this.current_address };
-    let order_response = await this.restService.convertCartToOrder(cart_obj);
-
-    let order_obj = {
-      sub: sub,
-      order_no: order_response.data.orderNo,
-      payment_type: checkoutData.payment_type
-    };
-    let payment_response = await this.restService.updatePaymentInfo(order_obj);
-
-    CookieStore.saveDataAsync("order_info", order_response.data);
-    this.ngxService.stop();
-    window.location.href = '/order-confirmation';
   }
 
   setprice(price: any) {

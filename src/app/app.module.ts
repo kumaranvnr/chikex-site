@@ -14,10 +14,10 @@ import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
 // Language
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-
 import { NgxUiLoaderConfig, NgxUiLoaderModule, PB_DIRECTION, POSITION, SPINNER } from 'ngx-ui-loader';
-import { WhatsappButtonComponent } from './shared/whatsapp-button/whatsapp-button.component';
 import { QrcodeComponent } from './pages/qrcode/qrcode.component';
+import { WhatsappButtonComponent } from './shared/whatsapp-button/whatsapp-button.component';
+import { SnowfallComponent } from './shared/snowfall/snowfall.component';
 
 
 export function createTranslateLoader(http: HttpClient): any {
@@ -42,9 +42,9 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    WhatsappButtonComponent,
     QrcodeComponent,
-
+    WhatsappButtonComponent,
+    SnowfallComponent
   ],
   imports: [
     TranslateModule.forRoot({
